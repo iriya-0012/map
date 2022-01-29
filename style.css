@@ -1,0 +1,103 @@
+body {
+    background:#004000;
+    color:white;
+    font-size: 14px;
+    font-weight: 100;
+    margin: 0px 0px 0px 0px;
+}
+th {
+    background:#008000;
+    border: solid 1px;
+    padding: 0px 10px 0px 10px;
+}
+td {
+    border: solid 1px;
+    padding: 0px 10px 0px 10px;
+}
+select {
+    background:#e0ffff;
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    color:green;
+    height: 28px;
+    padding: 0px 0px 0px 0px;
+}
+#div_main, #div_config, #div_act {
+    z-index: 1;
+}
+#div_fset, #div_gps {
+    position: absolute;
+    z-index: 1;
+}
+#div_gen {
+    position: absolute;
+    z-index: 2;   
+}
+#act_key {
+    width: 205px;
+}
+#act_value {
+    width: 300px;
+}
+.button_30, .button_a, .text_a, .text_b, .text_c, .text_f {
+    background:#e0ffff;
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    color:green;
+    margin: 0px 3px 0px 0px;
+    padding: 0px 3px 0px 3px;
+}
+.button_30 {
+    height: 27px;
+    width: 30px;
+}
+.button_a {
+    height: 27px;
+}
+.button_e, .text_gps {
+    background:#f6d9f0;
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    color:red;
+    height: 27px;
+    margin: 0px 3px 0px 0px;
+    padding: 0px 3px 0px 3px;
+}
+.text_gps {
+    width: 60px;
+}
+.button_30:hover, .button_a:hover {
+    background:#70ffff;
+}
+.button_e:hover {
+    background:#f3a5d5;
+}
+.canvas_a {
+    position: relative;
+}
+.canvas_a > canvas {
+    position: absolute;
+}
+.switch {
+    background:#00000000;
+    border-style: none;
+    height: 27px;
+    margin: 0px 3px 0px 0px;
+    padding: 0px 3px 0px 3px;
+}
+.text_a {
+    height: 20px;
+    width: 80px;
+}
+.text_b {
+    height: 20px;
+    width: 105px;
+}
+.text_c {
+    height: 20px;
+    width: 40px;
+}
+.text_f {
+    height: 20px;
+    width: 300px;
+}
