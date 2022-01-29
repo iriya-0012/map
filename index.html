@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width" >
+  <title>Map</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body id="body">
+  <!-- main -->
+  <div id="div_main">
+    <button id="main_c" class="button_30" >C</button>
+    <button id="main_d" class="button_30" >D</button>
+    <button id="main_i" class="button_30" >I</button>
+    <select id="main_sel_d">
+      <option value="allDisp">全表示</option>
+      <option value="selDisp">選択表示</option>
+      <option value="sumDisp">集計表示</option>
+      <option value="allSave">全保存</option>
+      <option value="cfhSave">cfh保存</option>
+      <option value="selSave">選択保存</option>
+      <option value="fileAdd">保存追加</option>  
+      <option value="selDel">選択削除</option>
+    </select>
+    <select id="main_sel_h"></select>
+    <button id="main_exe" class="button_a" value="">実行</button>
+    <button id="main_flag" class="button_a" value="">flag</button>
+    <button id="main_log" class="button_a" value="">log</button>
+    <button id="main_map" class="button_a">地図</button>
+    <input id="main_file" type="file" style="display:none">
+    <input id="main_name" type="text" class="text_a">
+    <button id="main_m" class="button_30">M</button> 
+    <select id="main_sel_m"> 
+      <option value="genSet">現在設定</option>
+      <option value="mapDisp">地図表示</option>
+      <option value="flagSet">Flag設定</option>
+      <option value="genGet">位置計測</option>
+    </select>
+    <button id="main_n" class="switch">🔵</button>
+    <button id="main_y" class="switch">🔴</button>
+    <button id="main_err" class="button_e"></button>
+  </div>
+  <!-- canvas -->
+  <div id="div_canvas" class="canvas_a">
+    <canvas id="canvas_main"></canvas>
+    <canvas id="canvas_flag"></canvas> 
+    <canvas id="canvas_log"></canvas>
+  </div> 
+  <!-- config -->
+  <div id="div_config">
+    <br>  
+    <input type="text" class="text_b" value="長押(秒)">
+    <input id="config_long" type="text" class="text_c" value="0002">
+    <br>
+    <input type="text" class="text_b" value="現在地取得(秒)">
+    <input id="config_timerG" type="text" class="text_c" value="0005">
+    <br>
+    <input type="text" class="text_b" value="ログ保存(秒)">
+    <input id="config_timerL" type="text" class="text_c" value="0600">
+    <br>
+    <input type="text" class="text_b" value="全時間表示">
+    <button id="config_time_n" class="button_30">－</button>
+    <button id="config_time_y" class="button_30">✔</button>
+    <br> 
+    <input type="text" class="text_b" value="線表示">
+    <button id="config_line_n" class="button_30">－</button>
+    <button id="config_line_y" class="button_30">✔</button>
+    <br>
+    <input type="text" class="text_b" value="info表示"> 
+    <button id="config_info_n" class="button_30">－</button>
+    <button id="config_info_y" class="button_30">✔</button>
+  </div>
+  <!-- act -->
+  <div id="div_act">
+    <input id="act_key" type="text" class="text_a">
+    <button id="act_ins" class="button_30">+</button>
+    <button id="act_upd" class="button_30">C</button>
+    <button id="act_del" class="button_30">D</button>
+    <br>
+    <input id="act_value" type="text" class="text_a">
+  </div>
+  <!-- all -->
+  <div id="div_all">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (all)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_all"></tbody>
+    </table>
+  </div>
+  <!-- ctrl -->
+  <div id="div_ctrl">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (ctrl)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_ctrl"></tbody>
+    </table>
+  </div>
+  <!-- head -->
+  <div id="div_head">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (head)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_head"></tbody>
+    </table>
+  </div>
+  <!-- flag -->
+  <div id="div_flag">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (flag)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_flag"></tbody>
+    </table>
+  </div>
+  <!-- log -->
+  <div id="div_log">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (log)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_log"></tbody>
+    </table>
+  </div>
+  <!-- summ -->
+  <div id="div_summ">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>log , flag</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_summ"></tbody>
+    </table>
+  </div>
+  <!-- info -->
+  <div id="div_info">
+    <pre id="pre_info"></pre>
+  </div>
+  <!-- fset -->
+  <div id="div_fset">
+    <input id="fset_text" type="text" class="text_f">
+    <br>
+    <button id="fset_ins" class="button_a">追加</button>
+    <button id="fset_upd" class="button_a">修正</button>
+    <button id="fset_del" class="button_a">削除</button>
+  </div>
+  <!-- gen -->
+  <div id="div_gen">
+    <input type="text" class="text_b" value="現在地の変更">
+    <br>
+    <button id="gen_ok" class="button_a">OK</button>
+    <button id="gen_ng" class="button_a">Cancel</button>
+  </div>
+  <!-- gps -->
+  <div id="div_gps">
+    <input type="text" class="text_gps" value="GPS位置">
+  </div>  
+  <!-- script -->
+  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="class.js"></script>
+</body>
+</html>
