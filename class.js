@@ -244,9 +244,9 @@ class Head {
 }
 // 時間の色
 const COLOR_T = [
-    "#000000","#000000","#000000","#000000","#000000","#0000ff","#8f0000","#8f8f00",
-    "#008f00","#8f00ff","#ff00ff","#ff8f00","#ff0000","#ff8f00","#ff00ff","#8f00ff",
-    "#008f00","#8f8f00","#8f0000","#0000ff","#000000","#000000","#000000","#000000"];
+    "#000000","#000000","#000000","#000000","#000000","#000000","#0000ff","#8f0000",
+    "#8f8f00","#008f00","#8f00ff","#ff00ff","#ff0000","#ff00ff","#8f00ff","#008f00",
+    "#8f8f00","#8f0000","#0000ff","#000000","#000000","#000000","#000000","#000000"];
 // ログ      
 class Log {
     constructor() {
@@ -536,8 +536,15 @@ class Scene {
                 this.m_i      = "inline";
                 this.m_map    = "inline";
                 this.m_name   = "inline";
+                this.d_config = "block";
+                break;
+            case "地図選択":
+                this.m_d      = "inline";
+                this.m_i      = "inline";
+                this.m_map    = "inline";
+                this.m_name   = "inline";
                 this.m_m      = "inline";
-                this.d_config = "block";               
+                this.d_config = "block";
                 break;
             case "データ":
                 this.m_c      = "inline";
