@@ -17,10 +17,19 @@ document.getElementById("main_d").addEventListener("click",() => cScene.set("デ
 document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
 // to map
 document.getElementById("main_m").addEventListener("click",() => {
-    if (con_file == "") {
-        err_disp("地図未選択");
-        return;
-    }
+    main_sel_m.value = "genSet";
+    // 地図情報セット
+    canvas_main.width   = cImage.width;
+    canvas_main.height  = cImage.height;
+    canvas_flag.width   = cImage.width;
+    canvas_flag.height  = cImage.height;
+    canvas_log.width    = cImage.width;
+    canvas_log.height   = cImage.height;
+    div_main.style.width = cImage.width + "px";
+    cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
+    cGen.clear();
+    // 消去 地図表示
+    scr_reset("main","log","flag");
     cScene.set("地図表示");
     if (!con_posF) {
         navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
@@ -37,20 +46,8 @@ document.getElementById("main_map").addEventListener("click",() => {
 });
 // file読込完了
 cImage.onload = () => {
-    // 地図情報セット
-    canvas_main.width   = cImage.width;
-    canvas_main.height  = cImage.height;
-    canvas_flag.width   = cImage.width;
-    canvas_flag.height  = cImage.height;
-    canvas_log.width    = cImage.width;
-    canvas_log.height   = cImage.height;
-    div_main.style.width = cImage.width + "px";
-    cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
-    cGen.clear();
     // 現在地設定へ
-    main_sel_m.value = "genSet";
-    // 消去 地図表示
-    scr_reset("main","log","flag");
+    cScene.set("地図選択");
 }
 // main_file file選択
 document.getElementById("main_file").addEventListener("change",(e) => {
@@ -289,6 +286,12 @@ document.getElementById("gen_ok").addEventListener("click",() => {
 });
 // gen_ng 現在地の変更 NG
 document.getElementById("gen_ng").addEventListener("click",() => {
+    // 再表示
+    scr_reset("flag");
+    cScene.set("地図表示");
+});
+// gps_ok 現在地の変更 NG
+document.getElementById("gps_ok").addEventListener("click",() => {
     // 再表示
     scr_reset("flag");
     cScene.set("地図表示");
