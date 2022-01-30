@@ -537,14 +537,7 @@ class Scene {
                 this.m_map    = "inline";
                 this.m_name   = "inline";
                 this.d_config = "block";
-                break;
-            case "地図選択":
-                this.m_d      = "inline";
-                this.m_i      = "inline";
-                this.m_map    = "inline";
-                this.m_name   = "inline";
-                this.m_m      = "inline";
-                this.d_config = "block";
+                if (main_file.value != "") this.m_m = "inline";
                 break;
             case "データ":
                 this.m_c      = "inline";
