@@ -5,6 +5,11 @@ body {
     font-weight: 100;
     margin: 0px 0px 0px 0px;
 }
+button, input {
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    padding: 0px 3px 0px 3px;
+}
 th {
     background:#008000;
     border: solid 1px;
@@ -34,18 +39,14 @@ select {
     z-index: 2;   
 }
 #act_key {
-    width: 205px;
+    width: 200px;
 }
 #act_value {
     width: 300px;
 }
 .button_30, .button_a, .text_a, .text_b, .text_c, .text_f {
     background:#e0ffff;
-    border: solid 3px;
-    border-radius: 5px / 5px;
     color:green;
-    margin: 0px 3px 0px 0px;
-    padding: 0px 3px 0px 3px;
 }
 .button_30 {
     height: 27px;
@@ -56,12 +57,8 @@ select {
 }
 .button_e, .text_gps {
     background:#f6d9f0;
-    border: solid 3px;
-    border-radius: 5px / 5px;
     color:red;
     height: 27px;
-    margin: 0px 3px 0px 0px;
-    padding: 0px 3px 0px 3px;
 }
 .text_gps {
     width: 60px;
@@ -83,7 +80,7 @@ select {
     border-style: none;
     height: 27px;
     margin: 0px 3px 0px 0px;
-    padding: 0px 3px 0px 3px;
+
 }
 .text_a {
     height: 20px;
