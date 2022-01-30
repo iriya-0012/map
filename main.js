@@ -44,11 +44,6 @@ document.getElementById("main_map").addEventListener("click",() => {
     main_file.value = "";
     main_file.click();
 });
-// file読込完了
-cImage.onload = () => {
-    // 現在地設定へ
-    cScene.set("地図選択");
-}
 // main_file file選択
 document.getElementById("main_file").addEventListener("change",(e) => {
     if (e.target.files.length == 0) return;
@@ -56,7 +51,6 @@ document.getElementById("main_file").addEventListener("change",(e) => {
     let file = e.target.files[0];
     let file_url = window.URL.createObjectURL(file);
     let file_name = file.name.replace(".png","");
-    main_name.value = file_name;
     // 地図情報検索
     con_file = "";
     for (let i = 0; i < headA.length; i++) {
@@ -78,6 +72,7 @@ document.getElementById("main_file").addEventListener("change",(e) => {
     con_posF  = false;
     // 地図読込
     cImage.src = file_url;
+    main_name.value = file_name;
 });
 // main_exe 実行
 document.getElementById("main_exe").addEventListener("click",() => {
@@ -132,6 +127,7 @@ document.getElementById("main_exe").addEventListener("click",() => {
 });
 // main_flag 選択削除 flag
 document.getElementById("main_flag").addEventListener("click",() => {
+    if( !confirm('flag 削除 OK')) return;
     for (item of flagT) localStorage.removeItem(item);
     tbody_detete(tbo_head);
     tbody_detete(tbo_log);
@@ -468,6 +464,8 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
     mouse_up(obj.pageX,obj.pageY);
 });
+// 地図読込完了
+cImage.onload = () => cScene.set("ロード");
 // ロード時
 window.onload = () => {
     main_sel_d.value = "";
@@ -577,13 +575,9 @@ function gen_ok_m(gen) {
 // 現在地取得成功 Timer
 function gen_ok_timer(gen) {
     // 現在地・GPS位置消去、Log再表示
-    if (cGen.view) {
-        scr_reset("error","flag");
-        err_clear();
-        cGen.view = false;
-    } else {
-        err_clear();
-    }
+    if (cGen.view) scr_reset("error","flag");
+    err_clear();
+    cGen.view = false;
     cGen.set(gen);
     if (cGen.adjL) {
         // 設定地 log 出力
@@ -692,8 +686,14 @@ function main_sel_h_disp() {
 }
 // マウスdown
 function mouse_down(e,mt) {
+
+    info_disp(`mouse_down mt:${mt},lemgth:${e.targetTouches.length}`);
+
     // 3本指タッチは戻る
     if (mt == "t" && e.targetTouches.length > 2) {
+        
+        info_disp("true");
+
         sel_map.value = "";
         cScene.set("ロード");
     }
