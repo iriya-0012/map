@@ -462,8 +462,18 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => mouse
 // タッチend
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
-    //mouse_up(obj.pageX,obj.pageY);
-    mouse_up(obj.offsetX,obj.offsetY);
+    //mouse_up(obj.pageX,obj.pageY); 下にずれる
+    //mouse_up(obj.offsetX,obj.offsetY); error ???
+    let touchX = obj.pageX ;
+	let touchY = obj.pageY ;
+	// 要素の位置を取得
+	let clientRect = this.getBoundingClientRect() ;
+	let positionX = clientRect.left + window.pageXOffset ;
+	let positionY = clientRect.top + window.pageYOffset ;
+	// 要素内におけるタッチ位置を計算
+	let x = touchX - positionX ;
+	let y = touchY - positionY ;
+    mouse_up(x,y);
 });
 // 地図読込完了
 cImage.onload = () => cScene.set("ロード");
