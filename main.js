@@ -465,15 +465,19 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     //mouse_up(obj.pageX,obj.pageY); 下にずれる
     //mouse_up(obj.offsetX,obj.offsetY); error ???
     let touchX = obj.pageX ;
-	let touchY = obj.pageY ;
-	// 要素の位置を取得
-	let clientRect = this.getBoundingClientRect() ;
-	let positionX = clientRect.left + window.pageXOffset ;
-	let positionY = clientRect.top + window.pageYOffset ;
-	// 要素内におけるタッチ位置を計算
-	let x = touchX - positionX ;
-	let y = touchY - positionY ;
+    let touchY = obj.pageY ;
+    info_disp(`x1 touchX=${touchX},touchY=${touchY}`);//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // 要素の位置を取得
+    let clientRect = this.getBoundingClientRect() ;
+    let positionX = clientRect.left + window.pageXOffset ;
+    let positionY = clientRect.top + window.pageYOffset ;
+    info_disp(`x2 positionX=${positionX},positionY=${positionY}`);
+    // 要素内におけるタッチ位置を計算
+    let x = touchX - positionX ;
+    let y = touchY - positionY ;
+    info_disp(`x3 x=${x},y=${y}`);
     mouse_up(x,y);
+
 });
 // 地図読込完了
 cImage.onload = () => cScene.set("ロード");
