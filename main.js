@@ -704,11 +704,7 @@ function main_sel_h_disp() {
 function mouse_down(e,mt) {
     mouseDownDate = new Date();
     // 3本指タッチは戻る
-    if (mt == "t" && e.targetTouches.length == 3) {
-        window.scrollTo(0,0);
-        //cScene.set("ロード");
-        info_disp("a3");
-    }
+    if (mt == "t" && e.targetTouches.length == 3) cScene.set("ロード");
 }
 // マウスup
 function mouse_up(x,y) {
