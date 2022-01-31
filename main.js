@@ -465,17 +465,17 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     //mouse_up(obj.pageX,obj.pageY); 下にずれる
     //mouse_up(obj.offsetX,obj.offsetY); error ???
     let touchX = obj.pageX ;
-    let touchY = obj.pageY ;
+	let touchY = obj.pageY ;
     info_disp(`x1 touchX=${touchX},touchY=${touchY}`);//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // 要素の位置を取得
-    let clientRect = this.getBoundingClientRect() ;
-    let positionX = clientRect.left + window.pageXOffset ;
-    let positionY = clientRect.top + window.pageYOffset ;
-    info_disp(`x2 positionX=${positionX},positionY=${positionY}`);
-    // 要素内におけるタッチ位置を計算
-    let x = touchX - positionX ;
-    let y = touchY - positionY ;
-    info_disp(`x3 x=${x},y=${y}`);
+	// 要素の位置を取得
+	let positionX = canvas_log.left + window.pageXOffset ;
+	let positionY = canvas_log.top + window.pageYOffset ;
+    info_disp(`x2 w.pageXOffset=${window.pageXOffset},w.pageYOffset=${window.pageYOffset}`);
+    info_disp(`x3 positionX=${positionX},positionY=${positionY}`);
+	// 要素内におけるタッチ位置を計算
+	let x = touchX - positionX ;
+	let y = touchY - positionY ;
+    info_disp(`x4 x=${x},y=${y}`);
     mouse_up(x,y);
 
 });
@@ -704,9 +704,12 @@ function mouse_down(e,mt) {
     mouseDownDate = new Date();
     // 3本指タッチは戻る
     if (mt == "t" && e.targetTouches.length == 3) {
+        info_disp("a1");//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        window.scrollTo({top:0,left:0,behavior:'smooth'});
+        info_disp("a2");    
         main_sel_m.value = "";
         cScene.set("ロード");
-        window.scrollTo({top:0,left:0,behavior:'smooth'});
+        info_disp("a3");
     }
 }
 // マウスup
