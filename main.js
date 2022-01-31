@@ -702,7 +702,7 @@ function mouse_down(e,mt) {
     if (mt == "t" && e.targetTouches.length == 3) {
         main_sel_m.value = "";
         cScene.set("ロード");
-        windowName.moveTo(x, y);
+        window.scrollTo({top:0,left:0,behavior:'smooth'});
     }
 }
 // マウスup
