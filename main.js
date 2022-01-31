@@ -686,18 +686,13 @@ function main_sel_h_disp() {
 }
 // マウスdown
 function mouse_down(e,mt) {
-
-    info_disp(`mouse_down mt:${mt},lemgth:${e.targetTouches.length}`);
-
-    // 3本指タッチは戻る
-    if (mt == "t" && e.targetTouches.length > 2) {
-        
-        info_disp("true");
-
-        sel_map.value = "";
-        cScene.set("ロード");
-    }
     mouseDownDate = new Date();
+    // 3本指タッチは戻る
+    if (mt == "t" && e.targetTouches.length == 3) {
+        main_sel_m.value = "";
+        cScene.set("ロード");
+        windowName.moveTo(x, y);
+    }
 }
 // マウスup
 function mouse_up(x,y) {
