@@ -462,7 +462,8 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => mouse
 // タッチend
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
-    mouse_up(obj.pageX,obj.pageY);
+    //mouse_up(obj.pageX,obj.pageY);
+    mouse_up(obj.offsetX,obj.offsetY);
 });
 // 地図読込完了
 cImage.onload = () => cScene.set("ロード");
