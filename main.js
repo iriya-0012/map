@@ -705,10 +705,7 @@ function mouse_down(e,mt) {
     mouseDownDate = new Date();
     // 3本指タッチは戻る
     if (mt == "t" && e.targetTouches.length == 3) {
-        //info_disp("a1");//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        window.scrollTo({top:0,left:0,behavior:'smooth'});
-        //info_disp("a2");    
-        //main_sel_m.value = "";
+        window.scrollTo(0,0);
         //cScene.set("ロード");
         info_disp("a3");
     }
