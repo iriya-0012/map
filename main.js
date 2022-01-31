@@ -468,14 +468,15 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
 	let touchY = obj.pageY ;
     info_disp(`x1 touchX=${touchX},touchY=${touchY}`);//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	// 要素の位置を取得
-	let positionX = canvas_log.left + window.pageXOffset ;
-	let positionY = canvas_log.top + window.pageYOffset ;
-    info_disp(`x2 w.pageXOffset=${window.pageXOffset},w.pageYOffset=${window.pageYOffset}`);
-    info_disp(`x3 positionX=${positionX},positionY=${positionY}`);
+	let positionX = obj.left + window.pageXOffset;
+	let positionY = obj.top + window.pageYOffset;
+    info_disp(`x2 obj.left=${obj.left},obj.top=${obj.top}`);
+    info_disp(`x3 w.pageXOffset=${window.pageXOffset},w.pageYOffset=${window.pageYOffset}`);
+    info_disp(`x4 positionX=${positionX},positionY=${positionY}`);
 	// 要素内におけるタッチ位置を計算
 	let x = touchX - positionX ;
 	let y = touchY - positionY ;
-    info_disp(`x4 x=${x},y=${y}`);
+    info_disp(`x5 x=${x},y=${y}`);
     mouse_up(x,y);
 
 });
@@ -704,11 +705,11 @@ function mouse_down(e,mt) {
     mouseDownDate = new Date();
     // 3本指タッチは戻る
     if (mt == "t" && e.targetTouches.length == 3) {
-        info_disp("a1");//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        //info_disp("a1");//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         window.scrollTo({top:0,left:0,behavior:'smooth'});
-        info_disp("a2");    
-        main_sel_m.value = "";
-        cScene.set("ロード");
+        //info_disp("a2");    
+        //main_sel_m.value = "";
+        //cScene.set("ロード");
         info_disp("a3");
     }
 }
