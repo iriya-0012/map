@@ -463,21 +463,12 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => mouse
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
     //mouse_up(obj.pageX,obj.pageY); 下にずれる
+    mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop); 下にずれる
     //mouse_up(obj.offsetX,obj.offsetY); error ???
-    let touchX = obj.pageX ;
-	let touchY = obj.pageY ;
-    info_disp(`x1 touchX=${touchX},touchY=${touchY}`);//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// 要素の位置を取得
-	let positionX = obj.left + window.pageXOffset;
-	let positionY = obj.top + window.pageYOffset;
-    info_disp(`x2 obj.left=${obj.left},obj.top=${obj.top}`);
-    info_disp(`x3 w.pageXOffset=${window.pageXOffset},w.pageYOffset=${window.pageYOffset}`);
-    info_disp(`x4 positionX=${positionX},positionY=${positionY}`);
-	// 要素内におけるタッチ位置を計算
-	let x = touchX - positionX ;
-	let y = touchY - positionY - div_canvas.offsetTop;;
-    info_disp(`x5 x=${x},y=${y}`);
-    mouse_up(x,y);
+    
+    //info_disp(`obj.pageX=${obj.pageX},obj.pageY=${obj.pageY},div_canvas.offsetTop=${div_canvas.offsetTop}`);
+    
+    //mouse_up(x,y);
 
 });
 // 地図読込完了
