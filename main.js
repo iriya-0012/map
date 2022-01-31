@@ -475,7 +475,7 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     info_disp(`x4 positionX=${positionX},positionY=${positionY}`);
 	// 要素内におけるタッチ位置を計算
 	let x = touchX - positionX ;
-	let y = touchY - positionY ;
+	let y = touchY - positionY - div_canvas.offsetTop;;
     info_disp(`x5 x=${x},y=${y}`);
     mouse_up(x,y);
 
