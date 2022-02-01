@@ -658,9 +658,39 @@ class Scene {
         div_canvas.style.display = this.d_canvas;
         // 補正
         scr_rec();
-        scr_dispTime();
-        scr_dispLine();
-        scr_dispInfo();
+    }
+    // info表示
+    info_set(yn) {(yn == "y") ? config_info.innerHTML = "✓" : config_info.innerHTML = "－";}
+    info_change(yn) {
+        if (yn == "n") {
+            con_dispInfo = "y";
+            config_info.innerHTML = "✓";
+        } else {
+            con_dispInfo = "n";
+            config_info.innerHTML = "－";
+        }
+    }
+    // 線表示
+    line_set(yn) {(yn == "y") ? config_line.innerHTML = "✓" : config_line.innerHTML = "－";}
+    line_change(yn) {
+        if (yn == "n") {
+            con_dispLine = "y";
+            config_line.innerHTML = "✓";
+        } else {
+            con_dispLine = "n";
+            config_line.innerHTML = "－";
+        }
+    }
+    // 全時間表示
+    time_set(yn) {(yn == "y") ? config_time.innerHTML = "✓" : config_time.innerHTML = "－";}
+    time_change(yn) {
+        if (yn == "n") {
+            con_dispTime = "y";
+            config_time.innerHTML = "✓";
+        } else {
+            con_dispTime = "n";
+            config_time.innerHTML = "－";
+        }
     }
 }
 // Text処理
