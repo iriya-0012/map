@@ -158,35 +158,26 @@ document.getElementById("main_y").addEventListener("click",() => {
 });
 // main_err エラー消去
 document.getElementById("main_err").addEventListener("click",() => err_clear());
-// config_time_n 全時間表示 n --> y
-document.getElementById("config_time_n").addEventListener("click",() => {
-    con_dispTime = "y";
-    scr_dispTime();
-});
-// config_time_y 全時間表示 y --> n
-document.getElementById("config_time_y").addEventListener("click",() => {
-    con_dispTime = "n";
-    scr_dispTime()
-});
-// config_line_n 線表示 n --> y
-document.getElementById("config_line_n").addEventListener("click",() => {
-    con_dispLine = "y";
-    scr_dispLine();
-});
-// config_line_y 線表示 y --> n
-document.getElementById("config_line_y").addEventListener("click",() => {
-    con_dispLine = "n";
-    scr_dispLine();
-});
-// config_info_n info表示 n --> y
-document.getElementById("config_info_n").addEventListener("click",() => {
-    con_dispInfo = "y";
-    scr_dispInfo();
-});
-// config_info_y info表示 y --> n
-document.getElementById("config_info_y").addEventListener("click",() => {
-    con_dispInfo = "n";
-    scr_dispInfo();
+// config_time 全時間表示 yn
+document.getElementById("config_time").addEventListener("click",() => cScene.time_change(con_dispTime));
+// config_time 線表示 yn
+document.getElementById("config_line").addEventListener("click",() => cScene.line_change(con_dispLine));
+// config_time info表示 yn
+document.getElementById("config_info").addEventListener("click",() => cScene.info_change(con_dispInfo));
+// config_upd 更新
+document.getElementById("config_upd").addEventListener("click",() => {
+    let long = ("0000" + Number(config_long.value)).slice(-4);
+    let timerG = ("0000" + Number(config_timerG.value)).slice(-4);
+    let timerL = ("0000" + Number(config_timerL.value)).slice(-4);
+    let time = (config_time_y.style.display == "none") ? "n" : "y";
+    let line = (config_line_y.style.display == "none") ? "n" : "y";
+    let info = (config_info_y.style.display == "none") ? "n" : "y";
+    let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
+    console.info(str);
+    config_long.value = long;
+    config_timerG.value = timerG;
+    config_timerL.value = timerL;
+    localStorage.setItem(MAP_CTRL,str);
 });
 // act_ins 追加
 document.getElementById("act_ins").addEventListener("click",() => {
@@ -462,14 +453,7 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => mouse
 // タッチend
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
-    //mouse_up(obj.pageX,obj.pageY); 下にずれる
-    mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop); 下にずれる
-    //mouse_up(obj.offsetX,obj.offsetY); error ???
-    
-    //info_disp(`obj.pageX=${obj.pageX},obj.pageY=${obj.pageY},div_canvas.offsetTop=${div_canvas.offsetTop}`);
-    
-    //mouse_up(x,y);
-
+    mouse_up(obj.pageX,obj.pageY- div_canvas.offsetTop);
 });
 // 地図読込完了
 cImage.onload = () => cScene.set("ロード");
@@ -492,14 +476,15 @@ window.onload = () => {
         config_long.value = x.slice(0,4);
         config_timerG.value = x.slice(5,9);
         config_timerL.value = x.slice(10,14);
-        main_name.value = x.slice(19,39).trim();
         con_long = Number(config_long.value) * 1000;
         con_timerG = Number(config_timerG.value);
         con_timerL = Number(config_timerL.value) / 60;
         con_dispTime = x.slice(15,16);
         con_dispLine = x.slice(16,17);
         con_dispInfo = x.slice(17,18);
-        con_file = main_name.value;
+        cScene.time_set(con_dispTime);
+        cScene.line_set(con_dispLine);
+        cScene.info_set(con_dispInfo);
     }
     cScene.set("ロード");
     // headA 作成
@@ -649,6 +634,7 @@ function headA_set() {
 }
 // info 表示
 function info_disp(info) {
+    if (con_dispInfo == "n") return;
     if (info == info_save && info_cnt < 9) {
         info_cnt++;
         pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
@@ -730,36 +716,6 @@ function scr_rec() {
         main_err.style.display = "none";
     } else {
         main_err.style.display = "inline";
-    }
-}
-// 全時間表示
-function scr_dispTime() {
-    if (con_dispTime == "n") {
-        config_time_n.style.display = "inline";
-        config_time_y.style.display = "none";
-    } else {
-        config_time_n.style.display = "none";
-        config_time_y.style.display = "inline";
-    }
-}
-// 線表示
-function scr_dispLine() {
-    if (con_dispLine == "n") {
-        config_line_n.style.display = "inline";
-        config_line_y.style.display = "none";
-    } else {
-        config_line_n.style.display = "none";
-        config_line_y.style.display = "inline";
-    }
-}
-// info表示
-function scr_dispInfo() {
-    if (con_dispInfo == "n") {
-        config_info_n.style.display = "inline";
-        config_info_y.style.display = "none";
-    } else {
-        config_info_n.style.display = "none";
-        config_info_y.style.display = "inline";
     }
 }
 // リセット
