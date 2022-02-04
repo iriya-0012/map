@@ -450,6 +450,19 @@ class Scene {
         this.d_summ;
         this.d_info;
         this.d_canvas;
+        // info data
+        this.info_cnt = 0;
+        this.info_save = "";
+    }
+    // エラー消去
+    err_clear() {
+        main_err.value = "";
+        main_err.style.display = "none";
+    }
+    // エラー表示
+    err_disp(mess) {
+        main_err.textContent = mess;
+        main_err.style.display = "inline";
     }
     // 現在地
     gen(con,x,y) {
@@ -505,6 +518,79 @@ class Scene {
         div_gps.style.top  = yy + 50 + "px";
         div_gps.style.display = "block";
     }
+    // info表示・変更
+    info_set(yn) {(yn == "y") ? config_info.innerHTML = "✓" : config_info.innerHTML = "－";}
+    info_change(yn) {
+        if (yn == "n") {
+            con_dispInfo = "y";
+            config_info.innerHTML = "✓";
+        } else {
+            con_dispInfo = "n";
+            config_info.innerHTML = "－";
+        }
+    }
+    // info 初期化
+    info_clear() {
+        this.info_cnt = 0;
+        this.info_save = "";
+        pre_info.innerHTML = "";
+    }
+    // info 表示
+    info_disp(info) {
+        if (con_dispInfo == "n") return;
+        if (info == this.info_save && this.info_cnt < 9) {
+            this.info_cnt++;
+            pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
+        } else {
+            let dt = new Date();
+            let HH = ("00" + (dt.getHours())).slice(-2);
+            let MM = ("00" + (dt.getMinutes())).slice(-2);
+            pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
+            this.info_cnt = 0;
+            this.info_save = info;
+        }
+    }
+    // 線表示・変更
+    line_set(yn) {(yn == "y") ? config_line.innerHTML = "✓" : config_line.innerHTML = "－";}
+    line_change(yn) {
+        if (yn == "n") {
+            con_dispLine = "y";
+            config_line.innerHTML = "✓";
+        } else {
+            con_dispLine = "n";
+            config_line.innerHTML = "－";
+        }
+    }
+    // 全時間表示・変更
+    time_set(yn) {(yn == "y") ? config_time.innerHTML = "✓" : config_time.innerHTML = "－";}
+    time_change(yn) {
+        if (yn == "n") {
+            con_dispTime = "y";
+            config_time.innerHTML = "✓";
+        } else {
+            con_dispTime = "n";
+            config_time.innerHTML = "－";
+        }
+    }
+    // 記録変更
+    rec_change() {(main_rec.value == "y") ? this.rec_set_n() : this.rec_set_y()}
+    // 記録初期化
+    rec_clear() {
+        main_rec.value = ""
+        main_rec.style.display = "none";
+    }
+    // 記録n
+    rec_set_n() {
+        main_rec.value ="n";
+        main_rec.innerHTML = "🔵";
+        main_rec.style.display = "inline";
+    }
+    // 記録y
+    rec_set_y() {
+        main_rec.value ="y";
+        main_rec.style.display = "inline";
+        main_rec.innerHTML = "🔴";
+    }
     // セット
     set(key) {
         // none セット
@@ -514,6 +600,7 @@ class Scene {
         this.m_sel_d  = "none";
         this.m_sel_h  = "none";
         this.m_exe    = "none";
+        this.m_erase  = "none";
         this.m_flag   = "none";
         this.m_log    = "none";
         this.m_map    = "none";
@@ -616,6 +703,7 @@ class Scene {
                 break;
             case "info":
                 this.m_c      = "inline";
+                this.m_erase  = "inline";
                 this.d_info   = "block";
                 break;
             case "地図表示":
@@ -632,6 +720,7 @@ class Scene {
         main_sel_d.style.display = this.m_sel_d;
         main_sel_h.style.display = this.m_sel_h;
         main_exe.style.display   = this.m_exe;
+        main_erase.style.display = this.m_erase;
         main_flag.style.display  = this.m_flag;
         main_log.style.display   = this.m_log;
         main_map.style.display   = this.m_map;
@@ -650,46 +739,41 @@ class Scene {
         div_summ.style.display   = this.d_summ;
         // info
         div_info.style.display   = this.d_info;
-        // fset, gen, gps
-        div_fset.style.display   = "none";
-        div_gen.style.display    = "none";
-        div_gps.style.display    = "none";
         // canvas
         div_canvas.style.display = this.d_canvas;
-        // 補正
-        scr_rec();
-    }
-    // info表示
-    info_set(yn) {(yn == "y") ? config_info.innerHTML = "✓" : config_info.innerHTML = "－";}
-    info_change(yn) {
-        if (yn == "n") {
-            con_dispInfo = "y";
-            config_info.innerHTML = "✓";
+        // error
+        if (main_err.value == "") {
+            main_err.style.display = "none";
         } else {
-            con_dispInfo = "n";
-            config_info.innerHTML = "－";
+            main_err.style.display = "inline";
         }
-    }
-    // 線表示
-    line_set(yn) {(yn == "y") ? config_line.innerHTML = "✓" : config_line.innerHTML = "－";}
-    line_change(yn) {
-        if (yn == "n") {
-            con_dispLine = "y";
-            config_line.innerHTML = "✓";
-        } else {
-            con_dispLine = "n";
-            config_line.innerHTML = "－";
-        }
-    }
-    // 全時間表示
-    time_set(yn) {(yn == "y") ? config_time.innerHTML = "✓" : config_time.innerHTML = "－";}
-    time_change(yn) {
-        if (yn == "n") {
-            con_dispTime = "y";
-            config_time.innerHTML = "✓";
-        } else {
-            con_dispTime = "n";
-            config_time.innerHTML = "－";
+    }   
+    // リセット
+    reset(...act) {
+        for (let i = 0 ; i < act.length ; i++){
+            switch (act[i]) {
+                case "flag":
+                    CON_FLAG.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    storage_get();
+                    for (item of flagA) cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
+                    div_ctrl.style.display = "none";
+                    break;
+                case "log":
+                    CON_LOG.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    break;
+                case "main":
+                    CON_MAIN.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    CON_MAIN.drawImage(cImage,0,0);
+                    break;
+                case "fset":
+                    div_fset.style.display = "none";
+                    break;
+                case "gen":
+                    div_gen.style.display = "none";
+                    break;
+                case "gps":
+                    div_gps.style.display = "none";
+            }
         }
     }
 }
