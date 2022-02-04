@@ -75,10 +75,10 @@ select {
 .canvas_a > canvas {
     position: absolute;
 }
-.switch {
+.button_r {
     background:#00000000;
     border-style: none;
-    height: 27px;
+    height: 25px;
     margin: 0px 3px 0px 0px;
 
 }
