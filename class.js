@@ -286,11 +286,7 @@ class Log {
             this.x = ax;
             this.y = ay;            
         }
-        if (v.length == 3) {
-            this.dir = v[2];
-        } else {
-            this.dir = "e";
-        }
+        this.dir = (v.length == 3) ? v[2] : "e";
     }
     // Web Storage 出力
     storage(map,id,md,hm,opt,long,lat,ax,ay) {
@@ -372,27 +368,20 @@ class Log {
         // 時間吹出判定
         let draw = false;
         let minute = hm.substr(0,2) * 60 + Number(hm.substr(2,2));
-        switch (sel) {
-            // 表示時間・表示線時
-            case "aDispT":
-            case "aDispB":
-                draw = true;
-                break;
-            // 表示・表示線
-            default:
-                if (this.l_first) {
-                    this.l_md = md;
-                    this.l_minute = minute + con_timerL;    // 次の分
-                    draw = true;
-                } else if (md != this.l_md) {
-                    this.l_md = md;
-                    this.l_minute = 0;
-                    draw = true;
-                } else if (minute >= this.l_minute) {
-                    this.l_minute = minute + con_timerL;             
-                    draw = true;
-                }
-                break;                
+        // 全時間表示
+        if (con_dispTime == "y") {
+            draw = true;
+        } else if (this.l_first) {
+            this.l_md = md;
+            this.l_minute = minute + con_timerL;    // 次の分
+            draw = true;
+        } else if (md != this.l_md) {
+            this.l_md = md;
+            this.l_minute = 0;
+            draw = true;
+        } else if (minute >= this.l_minute) {
+            this.l_minute = minute + con_timerL;
+            draw = true;
         }
         // 時間吹出作成
         if (draw) {
@@ -412,7 +401,7 @@ class Log {
             con.stroke();           
         }
         // 丸～丸の線作成
-        if ((sel == "aDispB" || sel == "aDispL") && (!this.l_first)) {
+        if ((con_dispLine == "y") && (!this.l_first)) {
             con.beginPath();
             con.lineWidth = 2;
             con.strokeStyle = "black";
@@ -519,15 +508,10 @@ class Scene {
         div_gps.style.display = "block";
     }
     // info表示・変更
-    info_set(yn) {(yn == "y") ? config_info.innerHTML = "✓" : config_info.innerHTML = "－";}
+    info_set(yn) { config_info.innerHTML = (yn == "y") ? "✓" : "-";}
     info_change(yn) {
-        if (yn == "n") {
-            con_dispInfo = "y";
-            config_info.innerHTML = "✓";
-        } else {
-            con_dispInfo = "n";
-            config_info.innerHTML = "－";
-        }
+        con_dispInfo = (yn == "n") ? "y" : "n";
+        config_info.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // info 初期化
     info_clear() {
@@ -551,26 +535,16 @@ class Scene {
         }
     }
     // 線表示・変更
-    line_set(yn) {(yn == "y") ? config_line.innerHTML = "✓" : config_line.innerHTML = "－";}
+    line_set(yn) { config_line.innerHTML = (yn == "y") ? "✓" : "-";}
     line_change(yn) {
-        if (yn == "n") {
-            con_dispLine = "y";
-            config_line.innerHTML = "✓";
-        } else {
-            con_dispLine = "n";
-            config_line.innerHTML = "－";
-        }
+        con_dispLine = (yn == "n") ? "y" : "n";
+        config_line.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // 全時間表示・変更
-    time_set(yn) {(yn == "y") ? config_time.innerHTML = "✓" : config_time.innerHTML = "－";}
+    time_set(yn) { config_time.innerHTML = (yn == "y") ? "✓" : "-";}
     time_change(yn) {
-        if (yn == "n") {
-            con_dispTime = "y";
-            config_time.innerHTML = "✓";
-        } else {
-            con_dispTime = "n";
-            config_time.innerHTML = "－";
-        }
+        con_dispTime = (yn == "n") ? "y" : "n";
+        config_time.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // 記録変更
     rec_change() {(main_rec.value == "y") ? this.rec_set_n() : this.rec_set_y()}
@@ -600,6 +574,7 @@ class Scene {
         this.m_sel_d  = "none";
         this.m_sel_h  = "none";
         this.m_exe    = "none";
+        this.m_close  = "none";    
         this.m_erase  = "none";
         this.m_flag   = "none";
         this.m_log    = "none";
@@ -624,7 +599,7 @@ class Scene {
                 this.m_map    = "inline";
                 this.m_name   = "inline";
                 this.d_config = "block";
-                if (main_file.value != "") this.m_m = "inline";
+                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "データ":
                 this.m_c      = "inline";
@@ -686,6 +661,13 @@ class Scene {
             case "保存追加":
                 this.m_c      = "inline";
                 this.m_sel_d  = "inline";
+                this.m_exe    = "inline";
+                this.d_all    = "block";
+                break;
+            case "終了":
+                this.m_c      = "inline";
+                this.m_sel_d  = "inline";
+                this.m_close  = "inline";
                 break;
             case "選択削除":
                 this.m_c      = "inline";
@@ -710,6 +692,7 @@ class Scene {
                 this.m_c      = "inline";
                 this.m_d      = "inline";
                 this.m_sel_m  = "inline";
+                if (main_file_m.value != "") this.m_m = "inline";                
                 this.d_canvas = "block";
                 break;
         }
@@ -720,6 +703,7 @@ class Scene {
         main_sel_d.style.display = this.m_sel_d;
         main_sel_h.style.display = this.m_sel_h;
         main_exe.style.display   = this.m_exe;
+        main_close.style.display = this.m_close;        
         main_erase.style.display = this.m_erase;
         main_flag.style.display  = this.m_flag;
         main_log.style.display   = this.m_log;
@@ -742,11 +726,7 @@ class Scene {
         // canvas
         div_canvas.style.display = this.d_canvas;
         // error
-        if (main_err.value == "") {
-            main_err.style.display = "none";
-        } else {
-            main_err.style.display = "inline";
-        }
+        main_err.style.display = (main_err.value == "") ? "none" : "inline";
     }   
     // リセット
     reset(...act) {
