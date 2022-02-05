@@ -17,23 +17,17 @@ document.getElementById("main_d").addEventListener("click",() => cScene.set("デ
 document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
 // to map
 document.getElementById("main_m").addEventListener("click",() => {
-    main_sel_m.value = "genSet";
-    // 地図情報セット
-    canvas_main.width   = cImage.width;
-    canvas_main.height  = cImage.height;
-    canvas_flag.width   = cImage.width;
-    canvas_flag.height  = cImage.height;
-    canvas_log.width    = cImage.width;
-    canvas_log.height   = cImage.height;
-    div_main.style.width = cImage.width + "px";
-    cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
-    cGen.clear();
+    if (!cGen.adjF) {
+        cScene.reset("flag","log");
+        cScene.set("地図表示");
+        navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
+        return;
+    }
     // 消去 地図表示
     cScene.reset("main","log","flag","fset","gen","gps");
+    cLog.first;
+    for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
     cScene.set("地図表示");
-    if (!con_posF) {
-        navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
-    }   
 });
 // main_map 地図選択
 document.getElementById("main_map").addEventListener("click",() => {
@@ -41,11 +35,33 @@ document.getElementById("main_map").addEventListener("click",() => {
         cScene.err_disp("記録中は地図の選択不可");
         return;
     }
-    main_file.value = "";
-    main_file.click();
+    main_file_m.value = "";
+    main_file_m.click();
 });
-// main_file file選択
-document.getElementById("main_file").addEventListener("change",(e) => {
+// main_file_h 保存データ選択
+document.getElementById("main_file_h").addEventListener("change",(e) => {
+    if (e.target.files.length == 0) return;
+    // ファイルのブラウザ上でのURLを取得する
+    let file = e.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.readAsText(file);
+    // ファイル読込終了後
+    fileReader.onload = () => {
+        key_all = [];
+        val_all = [];        
+        let strs = fileReader.result.split("\n");
+        for (str of strs) {
+            let text = str.split("\t");
+            if (text.length == 2) {
+                key_all.push(text[0]);
+                val_all.push(text[1]);
+                tbody_append(tbo_all,text[0],text[1]);
+            }
+        }
+    }
+});
+// main_file_m 地図データ選択
+document.getElementById("main_file_m").addEventListener("change",(e) => {
     if (e.target.files.length == 0) return;
     // ファイルのブラウザ上でのURLを取得する
     let file = e.target.files[0];
@@ -68,8 +84,6 @@ document.getElementById("main_file").addEventListener("change",(e) => {
     info_cnt = 0;
     info_save = "";
     pre_info.innerHTML = "";
-    // 現在地を未設定
-    con_posF  = false;
     // 地図読込
     cImage.src = file_url;
     main_name.value = file_name;
@@ -120,13 +134,13 @@ document.getElementById("main_exe").addEventListener("click",() => {
         // 保存データ追加
         case "fileAdd":
             for (let i = 0; i < key_all.length; i++) localStorage.setItem(key_all[i],val_all[i]);
-            cScene.set("保存追加");
+            cScene.set("終了");
             main_sel_d.value = "";
             break;
     }        
 });
 // main_erase 消去
-document.getElementById("main_erase").addEventListener("click",() => cScene.info_clear);
+document.getElementById("main_erase").addEventListener("click",() => cScene.info_clear());
 // main_flag 選択削除 flag
 document.getElementById("main_flag").addEventListener("click",() => {
     if( !confirm('flag 削除 OK')) return;
@@ -167,11 +181,10 @@ document.getElementById("config_upd").addEventListener("click",() => {
     let long = ("0000" + Number(config_long.value)).slice(-4);
     let timerG = ("0000" + Number(config_timerG.value)).slice(-4);
     let timerL = ("0000" + Number(config_timerL.value)).slice(-4);
-    let time = (config_time_y.style.display == "none") ? "n" : "y";
-    let line = (config_line_y.style.display == "none") ? "n" : "y";
-    let info = (config_info_y.style.display == "none") ? "n" : "y";
+    let time = (config_time.innerHTML == "-") ? "n" : "y";
+    let line = (config_line.innerHTML == "-") ? "n" : "y";
+    let info = (config_info.innerHTML == "-") ? "n" : "y";
     let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
-    console.info(str);
     config_long.value = long;
     config_timerG.value = timerG;
     config_timerL.value = timerL;
@@ -321,7 +334,7 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
             break;
         // 保存追加
         case "fileAdd":
-            main_file.click();
+            main_file_h.click();
             tbody_detete(tbo_all);
             cScene.set("保存追加");            
             break;
@@ -332,7 +345,7 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
             break;
     }        
 });
-// main_sel_h Data処理
+// main_sel_h Data処理2
 document.getElementById("main_sel_h").addEventListener("change",() => {
     tbody_detete(tbo_head);
     tbody_detete(tbo_flag);
@@ -355,7 +368,7 @@ document.getElementById("main_sel_h").addEventListener("change",() => {
             break;
     }
 });
-// main_sel_m Data処理
+// main_sel_m 地図処理
 document.getElementById("main_sel_m").addEventListener("change",() => {
     switch (main_sel_m.value) {
         // 現在地設定
@@ -367,11 +380,13 @@ document.getElementById("main_sel_m").addEventListener("change",() => {
         // 地図表示
         case "mapDisp":
             if (!cGen.adjF) {
-                cScene.err_disp("現在地未設定");
+                cScene.reset("flag","log");
+                cScene.set("地図表示");
+                navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
                 return;
             }
             // 消去・地図表示
-            cScene.reset("flag","log");
+            cScene.reset("main","log","flag","fset","gen","gps");
             cLog.first;
             for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
             cScene.set("地図表示");
@@ -461,7 +476,23 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     mouse_up(obj.pageX,obj.pageY- div_canvas.offsetTop);
 });
 // 地図読込完了
-cImage.onload = () => cScene.set("ロード");
+cImage.onload = () => {
+    main_sel_m.value = "genSet";
+    // 地図情報セット
+    canvas_main.width   = cImage.width;
+    canvas_main.height  = cImage.height;
+    canvas_flag.width   = cImage.width;
+    canvas_flag.height  = cImage.height;
+    canvas_log.width    = cImage.width;
+    canvas_log.height   = cImage.height;
+    div_main.style.width = cImage.width + "px";
+    cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
+    cGen.clear();
+    //cScene.set("ロード");
+    cScene.reset("main","log","flag","fset","gen","gps");
+    cScene.set("地図表示");    
+    navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
+}
 // ロード時
 window.onload = () => {
     main_sel_d.value = "";
@@ -893,7 +924,6 @@ let adjY = 0;           // 調整 y
 let can_rect = canvas_main.getBoundingClientRect();
 let con_file = "";      // 地図file名
 let con_long = 2;       // 長押し(2秒)
-let con_posF = false;   // 現在地設定
 let con_timerId;        // タイマーid
 let con_timerF = false; // タイマー起動状態
 let con_timerG = 10;    // 現在地取得間隔(10秒)
