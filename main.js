@@ -162,8 +162,10 @@ document.getElementById("main_log").addEventListener("click",() => {
 document.getElementById("main_rec").addEventListener("click",() => {
     cScene.rec_change();
     if (main_rec.value == "y") {
+        let timerG = Number(config_timerG.value);
+        if (timerG < 1) timerG = 1;
         // 現在地取得 開始
-        con_timerId = setInterval(gen_get,con_timerG * 1000); // 秒→ミリ秒 
+        con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
     } else {
         clearInterval(con_timerId);
     }
@@ -488,7 +490,6 @@ cImage.onload = () => {
     div_main.style.width = cImage.width + "px";
     cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
     cGen.clear();
-    //cScene.set("ロード");
     cScene.reset("main","log","flag","fset","gen","gps");
     cScene.set("地図表示");    
     navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
