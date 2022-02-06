@@ -55,6 +55,12 @@ select {
 .button_a {
     height: 27px;
 }
+.button_b {
+    background:black;
+    color:yellow;
+    height: 27px;
+    width: 100px;
+}
 .button_e, .text_gps {
     background:#f6d9f0;
     color:red;
@@ -65,6 +71,10 @@ select {
 }
 .button_30:hover, .button_a:hover {
     background:#70ffff;
+}
+.button_b:hover {
+    background:#fcfcac;
+    color: black;
 }
 .button_e:hover {
     background:#f3a5d5;
