@@ -12,7 +12,10 @@ let cImage      = new Image;
 // to config
 document.getElementById("main_c").addEventListener("click",() => cScene.set("ロード"));
 // to data
-document.getElementById("main_d").addEventListener("click",() => cScene.set("データ"));
+document.getElementById("main_d").addEventListener("click",() => {
+    main_sel_d.value = "";
+    cScene.set("データ")
+});
 // to info
 document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
 // to map
@@ -260,13 +263,13 @@ document.getElementById("fset_ins").addEventListener("click",() => {
     // 追加    
     let no  = (`00${free}`).slice(-2);
     let key = `${MAP_FLAG}${cHead.id}_${no}`;
-    localStorage.setItem(key,in_ctrl_text.value);
+    localStorage.setItem(key,fset_text.value);
     // 再表示
     cScene.reset("flag");
 });
 // fset_upd flag修正
 document.getElementById("fset_upd").addEventListener("click",() => {
-    localStorage.setItem(flagT[flagApos],in_ctrl_text.value);
+    localStorage.setItem(flagT[flagApos],fset_text.value);
     // 再表示
     cScene.reset("flag");
 });
@@ -464,7 +467,7 @@ document.getElementById("canvas_log").addEventListener('mousedown',(e) => {
 // マウスup
 document.getElementById("canvas_log").addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
 // タッチstart
-document.getElementById("canvas_log").addEventListener("touchstart",(e) =>{ 
+document.getElementById("canvas_log").addEventListener("touchstart",(e) => { 
     // 3本指タッチは戻る
     if (e.targetTouches.length == 3) {
         main_sel_m.value = "";
@@ -824,7 +827,54 @@ function tbo_summ_disp() {
     }
     // 表示
     let xHead = new Head;
-    for (xHead of headA) tbody_append(tbo_summ,xHead.key,`${xHead.logCount} , ${xHead.flagCount}`);
+    for (xHead of headA) {
+        let k = document.createTextNode(xHead.key);
+        let f = document.createTextNode(xHead.flagCount);
+        let fx = document.createTextNode(xHead.flagCount > 0 ? "del" : "");
+        let l = document.createTextNode(xHead.logCount);
+        let lx = document.createTextNode(xHead.logCount > 0 ? "del" : "");
+        let row = document.getElementById("tbo_summ").insertRow();
+        row.insertCell().appendChild(k);
+        row.insertCell().appendChild(f);
+        row.insertCell().appendChild(fx);
+        row.insertCell().appendChild(l);
+        row.insertCell().appendChild(lx);
+        // onclick イベント追加
+        if (fx.data == "del") {
+            let rc = tbo_summ.rows[row.sectionRowIndex].cells[2];
+            rc.onclick = function() {tbo_summ_flag_del(k)}
+        }
+        if (lx.data == "del") {
+            let rc = tbo_summ.rows[row.sectionRowIndex].cells[4];
+            rc.onclick = function() {tbo_summ_log_del(k)}
+        }
+    }
+}
+// flag 削除
+function tbo_summ_flag_del(k) {
+    if( !confirm(`${k.data} flag 削除 OK`)) return;
+    let key = k.data.slice(0,11).replace(MAP_HEAD,MAP_FLAG);
+    flagA = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let x = localStorage.key(i);
+        if (x.slice(0,11) == key) flagA.push(x);       
+    }
+    for (item of flagA) localStorage.removeItem(item);
+    tbody_detete(tbo_summ);
+    tbo_summ_disp();
+}
+// log 削除
+function tbo_summ_log_del(k) {
+    if( !confirm(`${k.data} log 削除 OK`)) return;
+    let key = k.data.slice(0,11).replace(MAP_HEAD,MAP_LOG);
+    logA = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let x = localStorage.key(i);
+        if (x.slice(0,11) == key) logA.push(x);       
+    }
+    for (item of logA) localStorage.removeItem(item);
+    tbody_detete(tbo_summ);
+    tbo_summ_disp();
 }
 // tbo_hfl 表示
 function tbo_hfl_disp() {
