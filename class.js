@@ -474,7 +474,7 @@ class Scene {
         con.fill();
         con.stroke();
         // div_gen 表示
-        div_gen.style.left = x - 30 + "px";
+        div_gen.style.left = x + "px";
         div_gen.style.top  = y + 50 + "px";
         div_gen.style.display = "block";
         gen_ok.style.display = "inline";
@@ -503,12 +503,12 @@ class Scene {
         con.fill();
         con.stroke();
         // div_gps 表示
-        div_gps.style.left = xx - 30 + "px";
+        div_gps.style.left = xx + "px";
         div_gps.style.top  = yy + 50 + "px";
         div_gps.style.display = "block";
     }
     // info表示・変更
-    info_set(yn) { config_info.innerHTML = (yn == "y") ? "✓" : "-";}
+    info_set(yn) { config_info.innerHTML = (yn == "y") ? "✓" : "-"}
     info_change(yn) {
         con_dispInfo = (yn == "n") ? "y" : "n";
         config_info.innerHTML = (yn == "n") ? "✓" : "-";
@@ -535,13 +535,13 @@ class Scene {
         }
     }
     // 線表示・変更
-    line_set(yn) { config_line.innerHTML = (yn == "y") ? "✓" : "-";}
+    line_set(yn) { config_line.innerHTML = (yn == "y") ? "✓" : "-"}
     line_change(yn) {
         con_dispLine = (yn == "n") ? "y" : "n";
         config_line.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // 全時間表示・変更
-    time_set(yn) { config_time.innerHTML = (yn == "y") ? "✓" : "-";}
+    time_set(yn) { config_time.innerHTML = (yn == "y") ? "✓" : "-"}
     time_change(yn) {
         con_dispTime = (yn == "n") ? "y" : "n";
         config_time.innerHTML = (yn == "n") ? "✓" : "-";
@@ -550,7 +550,7 @@ class Scene {
     rec_change() {(main_rec.value == "y") ? this.rec_set_n() : this.rec_set_y()}
     // 記録初期化
     rec_clear() {
-        main_rec.value = ""
+        main_rec.value = "";
         main_rec.style.display = "none";
     }
     // 記録n
