@@ -20,15 +20,8 @@ document.getElementById("main_d").addEventListener("click",() => {
 document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
 // to map
 document.getElementById("main_m").addEventListener("click",() => {
-    if (!cGen.adjF) {
-        cScene.reset("flag","log");
-        cScene.set("地図表示");
-        navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
-        return;
-    }
     // 消去 地図表示
     cScene.reset("main","log","flag","fset","gen","gps");
-    cLog.first;
     for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
     cScene.set("地図表示");
 });
@@ -163,14 +156,21 @@ document.getElementById("main_log").addEventListener("click",() => {
 });
 // main_rec 記録 yn
 document.getElementById("main_rec").addEventListener("click",() => {
-    cScene.rec_change();
-    if (main_rec.value == "y") {
-        let timerG = Number(config_timerG.value);
-        if (timerG < 1) timerG = 1;
-        // 現在地取得 開始
-        con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
+    // 現在地設定チェック
+    if (cGen.adjF) {
+        // 設定済
+        cScene.rec_change();
+        if (main_rec.value == "y") {
+            let timerG = Number(config_timerG.value);
+            if (timerG < 1) timerG = 1;
+            // 現在地取得 開始
+            con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
+        } else {
+            clearInterval(con_timerId);
+        }
     } else {
-        clearInterval(con_timerId);
+        // 未設定
+        cScene.err_disp("現在地未設定");  
     }
 });
 // main_err エラー消去
@@ -381,18 +381,12 @@ document.getElementById("main_sel_m").addEventListener("change",() => {
             // 消去・地図表示
             cScene.reset("flag","log");
             cScene.set("地図表示");
+            navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
             break;
         // 地図表示
         case "mapDisp":
-            if (!cGen.adjF) {
-                cScene.reset("flag","log");
-                cScene.set("地図表示");
-                navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
-                return;
-            }
-            // 消去・地図表示
+            // 消去・地図表示           
             cScene.reset("main","log","flag","fset","gen","gps");
-            cLog.first;
             for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
             cScene.set("地図表示");
             break;
@@ -493,6 +487,8 @@ cImage.onload = () => {
     div_main.style.width = cImage.width + "px";
     cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
     cGen.clear();
+    cLog.first;
+    cScene.rec_clear();
     cScene.reset("main","log","flag","fset","gen","gps");
     cScene.set("地図表示");    
     navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
@@ -631,7 +627,7 @@ function gen_err(err) {
 	} ;
 	cGen.m = gen_mess[err.code];
     cScene.info_disp(cGen.m);
-    cScene.err_disp(cGen.m);  
+    cScene.err_disp(cGen.m);
 }
 // オプション・オブジェクト
 let gen_opt = {
