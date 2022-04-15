@@ -604,6 +604,7 @@ class Scene {
             case "データ":
                 this.m_c      = "inline";
                 this.m_sel_d  = "inline";
+                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "全表示":
                 this.m_c      = "inline";
@@ -687,12 +688,12 @@ class Scene {
                 this.m_c      = "inline";
                 this.m_erase  = "inline";
                 this.d_info   = "block";
+                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "地図表示":
                 this.m_c      = "inline";
                 this.m_d      = "inline";
                 this.m_sel_m  = "inline";
-                if (main_file_m.value != "") this.m_m = "inline";                
                 this.d_canvas = "block";
                 break;
         }
