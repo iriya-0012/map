@@ -156,21 +156,20 @@ document.getElementById("main_log").addEventListener("click",() => {
 });
 // main_rec 記録 yn
 document.getElementById("main_rec").addEventListener("click",() => {
-    // 現在地設定チェック
-    if (cGen.adjF) {
-        // 設定済
-        cScene.rec_change();
-        if (main_rec.value == "y") {
-            let timerG = Number(config_timerG.value);
-            if (timerG < 1) timerG = 1;
-            // 現在地取得 開始
-            con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
-        } else {
-            clearInterval(con_timerId);
-        }
+    // 初期状態時は記録n
+    if (main_rec.value == "") {
+        cScene.rec_set_n();
+        return;
+    }
+    // 記録状態変更
+    cScene.rec_change();
+    if (main_rec.value == "y") {
+        let timerG = Number(config_timerG.value);
+        if (timerG < 1) timerG = 1;
+        // 現在地取得 開始
+        con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
     } else {
-        // 未設定
-        cScene.err_disp("現在地未設定");  
+        clearInterval(con_timerId);    
     }
 });
 // main_err エラー消去
@@ -285,7 +284,7 @@ document.getElementById("gen_ok").addEventListener("click",() => {
     cGen.adjust(true,true,adjX,adjY);
     // 再表示
     cScene.reset("flag","gen","gps");
-    cScene.rec_set_n();
+    if (main_rec.value == "") cScene.rec_set_n();
 });
 // gen_ng 現在地の変更 NG
 document.getElementById("gen_ng").addEventListener("click",() => cScene.reset("flag","gen","gps"));
@@ -295,7 +294,7 @@ document.getElementById("gps_ok").addEventListener("click",() => {
     cGen.adjust(true,true,0,0);
     // 再表示
     cScene.reset("flag","gen","gps");
-    cScene.rec_set_n();
+    if (main_rec.value == "") cScene.rec_set_n();    
 });
 // main_sel_d Data処理
 document.getElementById("main_sel_d").addEventListener("change",() => {
@@ -522,7 +521,6 @@ window.onload = () => {
         cScene.line_set(con_dispLine);
         cScene.info_set(con_dispInfo);
     }
-    cScene.rec_clear();
     cScene.reset("fset","gen","gps");
     cScene.set("ロード");
     // headA 作成
@@ -825,10 +823,10 @@ function tbo_summ_disp() {
     let xHead = new Head;
     for (xHead of headA) {
         let k = document.createTextNode(xHead.key);
-        let f = document.createTextNode(xHead.flagCount);
-        let fx = document.createTextNode(xHead.flagCount > 0 ? "del" : "");
-        let l = document.createTextNode(xHead.logCount);
-        let lx = document.createTextNode(xHead.logCount > 0 ? "del" : "");
+        let f = document.createTextNode(xHead.flagCount > 0 ? xHead.flagCount : "");
+        let fx = document.createTextNode(xHead.flagCount > 0 ? "d" : "");
+        let l = document.createTextNode(xHead.logCount > 0 ? xHead.logCount : "");
+        let lx = document.createTextNode(xHead.logCount > 0 ? "d" : "");
         let row = document.getElementById("tbo_summ").insertRow();
         row.insertCell().appendChild(k);
         row.insertCell().appendChild(f);
@@ -836,11 +834,11 @@ function tbo_summ_disp() {
         row.insertCell().appendChild(l);
         row.insertCell().appendChild(lx);
         // onclick イベント追加
-        if (fx.data == "del") {
+        if (fx.data == "d") {
             let rc = tbo_summ.rows[row.sectionRowIndex].cells[2];
             rc.onclick = function() {tbo_summ_flag_del(k)}
         }
-        if (lx.data == "del") {
+        if (lx.data == "d") {
             let rc = tbo_summ.rows[row.sectionRowIndex].cells[4];
             rc.onclick = function() {tbo_summ_log_del(k)}
         }
