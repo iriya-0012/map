@@ -95,6 +95,8 @@ class Flag {
             if (s == "w") this.tx = Number(this.tx) - 50;
             if (s == "e") this.tx = Number(this.tx) + 50;
         }
+        // 吹出位置指定なし:10px右
+        if (this.tx == this.px && this.ty == this.py) this.tx = Number(this.tx) + 10;
     }
     // 吹出 flag 描画
     display(con,px,py,tx,ty,color,text) {
@@ -109,17 +111,19 @@ class Flag {
         con.stroke();
         // 四角形作成
         con.beginPath();
-        con.lineWidth = 2;    
+        con.lineWidth = 2;
         con.fillStyle = color;
         con.strokeRect(tx-5,ty-12,len.width+10,25);
         // 文字列描画
         con.fillText(text,tx,Number(ty)+8);
         // 直線作成
+        let ct = tx + len.width / 2;        // 中心  
+        let xx = (px < ct) ? tx - 5 : tx + len.width + 5;  
         con.beginPath();
         con.lineWidth = 2;
         con.strokeStyle = color;
         con.moveTo(px,py);
-        con.lineTo(tx-5,ty);
+        con.lineTo(xx,ty);
         con.stroke();
     }
 }
@@ -562,8 +566,8 @@ class Scene {
     // 記録y
     rec_set_y() {
         main_rec.value ="y";
-        main_rec.style.display = "inline";
         main_rec.innerHTML = "🔴";
+        main_rec.style.display = "inline";    
     }
     // セット
     set(key) {
