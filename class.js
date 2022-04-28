@@ -316,7 +316,7 @@ class Log {
         this.s_first = false;
     }
     // 吹出 log 描画
-    display(con,sel,md,hm,long,ax,lat,ay,dir) {
+    display(con,md,hm,long,ax,lat,ay,dir) {
         // 色の選択
         let color = COLOR_T[Number(hm.substr(0,2))]; 
         // 箱・線の位置
@@ -571,7 +571,7 @@ class Scene {
     }
     // セット
     set(key) {
-        // none セット
+        // 初期セット
         this.m_c      = "none";
         this.m_d      = "none";
         this.m_i      = "none";
@@ -584,7 +584,7 @@ class Scene {
         this.m_log    = "none";
         this.m_map    = "none";
         this.m_name   = "none";
-        this.m_m      = "none";
+        this.m_m      = "inline";
         this.m_sel_m  = "none";
         this.d_config = "none";
         this.d_act    = "none";
@@ -603,12 +603,10 @@ class Scene {
                 this.m_map    = "inline";
                 this.m_name   = "inline";
                 this.d_config = "block";
-                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "データ":
                 this.m_c      = "inline";
                 this.m_sel_d  = "inline";
-                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "全表示":
                 this.m_c      = "inline";
@@ -692,15 +690,16 @@ class Scene {
                 this.m_c      = "inline";
                 this.m_erase  = "inline";
                 this.d_info   = "block";
-                if (main_file_m.value != "") this.m_m = "inline";
                 break;
             case "地図表示":
                 this.m_c      = "inline";
                 this.m_d      = "inline";
                 this.m_sel_m  = "inline";
+                this.m_m      = "none";
                 this.d_canvas = "block";
                 break;
         }
+        if (main_file_m.value == "") this.m_m = "none";
         // main
         main_c.style.display     = this.m_c;
         main_d.style.display     = this.m_d;
@@ -731,16 +730,17 @@ class Scene {
         // canvas
         div_canvas.style.display = this.d_canvas;
         // error
-        main_err.style.display = (main_err.value == "") ? "none" : "inline";
+        main_err.style.display   = (main_err.value == "") ? "none" : "inline";
     }   
     // リセット
-    reset(...act) {
+    reset(...act) {       
         for (let i = 0 ; i < act.length ; i++){
             switch (act[i]) {
                 case "flag":
                     CON_FLAG.clearRect(0,0,canvas_main.width, canvas_main.height);
-                    storage_get();
-                    for (item of flagA) cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
+                    for (item of flagA) {
+                        cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
+                    }
                     div_ctrl.style.display = "none";
                     break;
                 case "log":
@@ -766,16 +766,13 @@ class Scene {
 class Text {
     // 保存
     save(file,key,text) {
-        let str = "data:text/csv;charset=utf-8,";   // 出力方法追加
+        let str = "";                                   // 出力データ作成
         for (let i = 0; i < key.length; i++) str += `${key[i]}\t${text[i]}\n`;
-        let uri = encodeURI(str);                   // エンコード化
-        let ele = document.createElement("a");      // a要素作成
-        ele.setAttribute("href", uri);              // a要素に出力データ追加
-        ele.setAttribute("download",`${file}.txt`); // a要素に出力情報追加
-        ele.style.visibility = "hidden";            // 非表示
-        document.body.appendChild(ele);             // コントロール追加
-        ele.click();                                // クリックイベント発生
-        document.body.removeChild(ele);             // コントロール削除
+        let blob = new Blob([str],{type:"text/plain"}); // Blobオブジェクトを作成
+        let ele = document.createElement("a");          // a要素作成
+        ele.href = URL.createObjectURL(blob);           // BlobオブジェクトをURLに変換
+        ele.download = `${file}.txt`;                   // ファイル名を指定
+        ele.click();                                    // クリックイベント発生
     }
 }
 let cConv  = new Convert;
