@@ -21,8 +21,7 @@ document.getElementById("main_i").addEventListener("click",() => cScene.set("inf
 // to map
 document.getElementById("main_m").addEventListener("click",() => {
     // 消去 地図表示
-    cScene.reset("main","log","flag","fset","gen","gps");
-    for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
+    cScene.reset("flag","fset","gen","gps");
     cScene.set("地図表示");
 });
 // main_map 地図選択
@@ -263,20 +262,26 @@ document.getElementById("fset_ins").addEventListener("click",() => {
     let no  = (`00${free}`).slice(-2);
     let key = `${MAP_FLAG}${cHead.id}_${no}`;
     localStorage.setItem(key,fset_text.value);
+    storage_get();
     // 再表示
     cScene.reset("flag");
+    cScene.set("地図表示");
 });
 // fset_upd flag修正
 document.getElementById("fset_upd").addEventListener("click",() => {
     localStorage.setItem(flagT[flagApos],fset_text.value);
+    storage_get();
     // 再表示
     cScene.reset("flag");
+    cScene.set("地図表示");
 });
 // fset_del flag削除
 document.getElementById("fset_del").addEventListener("click",() => {
     localStorage.removeItem(flagT[flagApos]);
+    storage_get();
     // 再表示
     cScene.reset("flag");
+    cScene.set("地図表示");
 });
 // gen_ok 現在地の変更 OK
 document.getElementById("gen_ok").addEventListener("click",() => {
@@ -284,6 +289,7 @@ document.getElementById("gen_ok").addEventListener("click",() => {
     cGen.adjust(true,true,adjX,adjY);
     // 再表示
     cScene.reset("flag","gen","gps");
+    cScene.set("地図表示");
     if (main_rec.value == "") cScene.rec_set_n();
 });
 // gen_ng 現在地の変更 NG
@@ -378,27 +384,26 @@ document.getElementById("main_sel_m").addEventListener("change",() => {
         // 現在地設定
         case "genSet":
             // 消去・地図表示
-            cScene.reset("flag","log");
+            cScene.reset("flag");
             cScene.set("地図表示");
             navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
             break;
         // 地図表示
         case "mapDisp":
             // 消去・地図表示           
-            cScene.reset("main","log","flag","fset","gen","gps");
-            for (item of logA) cLog.display(CON_LOG,main_sel_m.value,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
+            cScene.reset("flag","gen","gps");
             cScene.set("地図表示");
             break;
         // Flag設定
         case "flagSet":
             // 消去・地図表示
-            cScene.reset("flag","log");
+            cScene.reset("flag");
             cScene.set("地図表示");
             break;
         // 位置計測
         case "genGet":
             // 消去・地図表示
-            cScene.reset("flag","log");
+            cScene.reset("flag");
             cScene.set("地図表示");
             break;
     }
@@ -484,18 +489,18 @@ cImage.onload = () => {
     canvas_log.width    = cImage.width;
     canvas_log.height   = cImage.height;
     div_main.style.width = cImage.width + "px";
+    storage_get();
     cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
     cGen.clear();
     cLog.first;
     cScene.rec_clear();
     cScene.reset("main","log","flag","fset","gen","gps");
-    cScene.set("地図表示");    
+    for (item of logA) cLog.display(CON_LOG,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
+    cScene.set("地図表示");
     navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
 }
 // ロード時
 window.onload = () => {
-    main_sel_d.value = "";
-    main_sel_m.value = "";
     // control 取得
     let ctrl = -1;   
     for (let i = 0; i < localStorage.length; i++) {
@@ -600,7 +605,7 @@ function gen_ok_timer(gen) {
         // 設定地 log 出力
         cScene.info_disp(`設定:${cGen.long} ${cGen.lat} ${cGen.adjX} ${cGen.adjY}`);
         cLog.storage(MAP_LOG,cHead.id,cGen.adjMd,cGen.adjHm,"a",cGen.long,cGen.lat,cGen.adjX,cGen.adjY);
-        cLog.display(CON_LOG,main_sel_m.value,cGen.adjMd,cGen.adjHm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
+        cLog.display(CON_LOG,cGen.adjMd,cGen.adjHm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
         cGen.adjL = false;
     }
     // 現在地 log 出力
@@ -613,7 +618,7 @@ function gen_ok_timer(gen) {
     let Hm = `${HH}${MM}`;
     cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
-    cLog.display(CON_LOG,main_sel_m.value,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
+    cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
 }
 // 現在地取得失敗
 function gen_err(err) {
