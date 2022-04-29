@@ -30,7 +30,6 @@ document.getElementById("main_map").addEventListener("click",() => {
         cScene.err_disp("記録中は地図の選択不可");
         return;
     }
-    main_file_m.value = "";
     main_file_m.click();
 });
 // main_file_h 保存データ選択
