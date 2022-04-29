@@ -699,7 +699,7 @@ class Scene {
                 this.d_canvas = "block";
                 break;
         }
-        if (main_file_m.value == "") this.m_m = "none";
+        if (main_name.value == "") this.m_m = "none";
         // main
         main_c.style.display     = this.m_c;
         main_d.style.display     = this.m_d;
