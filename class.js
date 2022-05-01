@@ -578,7 +578,7 @@ class Scene {
         this.m_sel_d  = "none";
         this.m_sel_h  = "none";
         this.m_exe    = "none";
-        this.m_close  = "none";    
+        this.m_close  = "none";
         this.m_erase  = "none";
         this.m_flag   = "none";
         this.m_log    = "none";
@@ -586,6 +586,7 @@ class Scene {
         this.m_name   = "none";
         this.m_m      = "inline";
         this.m_sel_m  = "none";
+        this.d_canvas = "none";
         this.d_config = "none";
         this.d_act    = "none";
         this.d_all    = "none";
@@ -595,7 +596,9 @@ class Scene {
         this.d_log    = "none";
         this.d_summ   = "none";
         this.d_info   = "none";
-        this.d_canvas = "none";
+        this.d_fset   = "none";
+        this.d_gen    = "none";
+        this.d_gps    = "none";
         switch (key) {
             case "ロード":
                 this.m_d      = "inline";
@@ -715,6 +718,8 @@ class Scene {
         main_name.style.display  = this.m_name;
         main_m.style.display     = this.m_m;
         main_sel_m.style.display = this.m_sel_m;
+        // canvas
+        div_canvas.style.display = this.d_canvas;
         // config
         div_config.style.display = this.d_config;
         // data
@@ -727,8 +732,12 @@ class Scene {
         div_summ.style.display   = this.d_summ;
         // info
         div_info.style.display   = this.d_info;
-        // canvas
-        div_canvas.style.display = this.d_canvas;
+        // fset
+        div_fset.style.display   = this.d_fset;
+        // gen
+        div_gen.style.display    = this.d_gen;
+        // gps
+        div_gps.style.display    = this.d_gps;
         // error
         main_err.style.display   = (main_err.value == "") ? "none" : "inline";
     }   
