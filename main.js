@@ -21,7 +21,7 @@ document.getElementById("main_i").addEventListener("click",() => cScene.set("inf
 // to map
 document.getElementById("main_m").addEventListener("click",() => {
     // 消去 地図表示
-    cScene.reset("flag","fset","gen","gps");
+    cScene.reset("flag");
     cScene.set("地図表示");
 });
 // main_map 地図選択
@@ -318,8 +318,8 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
         // 集計表示
         case "sumDisp":
             tbody_detete(tbo_summ);
-            cScene.set("集計表示");                
-            tbo_summ_disp();    
+            cScene.set("集計表示");
+            tbo_summ_disp();
             break;
         // 全保存
         case "allSave":
@@ -330,7 +330,7 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
         // cfh保存
         case "cfhSave":
             tbody_detete(tbo_all);
-            cScene.set("cfh保存");             
+            cScene.set("cfh保存");
             tbo_cfh_disp();
             break;
         // 選択保存
@@ -345,12 +345,12 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
         case "fileAdd":
             main_file_h.click();
             tbody_detete(tbo_all);
-            cScene.set("保存追加");            
+            cScene.set("保存追加");
             break;
         // 選択削除
         case "selDel":
             cScene.set("選択削除");
-            main_sel_h_disp();            
+            main_sel_h_disp();
             break;
     }        
 });
@@ -390,7 +390,7 @@ document.getElementById("main_sel_m").addEventListener("change",() => {
         // 地図表示
         case "mapDisp":
             // 消去・地図表示           
-            cScene.reset("flag","gen","gps");
+            cScene.reset("flag");
             cScene.set("地図表示");
             break;
         // Flag設定
@@ -493,7 +493,7 @@ cImage.onload = () => {
     cGen.clear();
     cLog.first;
     cScene.rec_clear();
-    cScene.reset("main","log","flag","fset","gen","gps");
+    cScene.reset("main","log","flag");
     for (item of logA) cLog.display(CON_LOG,item.md,item.hm,item.long,item.x,item.lat,item.y,item.dir);
     cScene.set("地図表示");
     navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
@@ -525,8 +525,6 @@ window.onload = () => {
         cScene.line_set(con_dispLine);
         cScene.info_set(con_dispInfo);
     }
-    main_name.value = "";
-    cScene.reset("fset","gen","gps");
     cScene.set("ロード");
     // headA 作成
     headA_set();
@@ -581,7 +579,7 @@ function gen_ok_long(gen) {
     let y    = cConv.lat_py(lat);
     adjX     = mouseUpX - x; // 調整 x
     adjY     = mouseUpY - y; // 調整 y
-    cScene.reset("error","flag");
+    cScene.reset("flag");
     cScene.gps(CON_FLAG,x,y);
     cScene.gen(CON_FLAG,mouseUpX,mouseUpY);
 }
@@ -591,13 +589,13 @@ function gen_ok_m(gen) {
     let lat  = Math.round(gen.coords.latitude * 1000000) / 1000000;
     let x    = cConv.long_px(long);
     let y    = cConv.lat_py(lat);
-    cScene.reset("error","flag");
+    cScene.reset("flag");
     cScene.gps(CON_FLAG,x,y);
 }
 // 現在地取得成功 Timer
 function gen_ok_timer(gen) {
     // 現在地・GPS位置消去、Log再表示
-    if (cGen.view) cScene.reset("error","flag");
+    if (cGen.view) cScene.reset("flag");
     cScene.err_clear();
     cGen.view = false;
     cGen.set(gen);
@@ -794,19 +792,19 @@ function tbo_summ_disp() {
     // headA 作成
     headA_set();
     // flag,log 取得
-    flagA = [];
-    logA = [];
+    fgA = [];
+    lgA = [];
     for (let i = 0; i < localStorage.length; i++) {
         let x = localStorage.key(i);
         if (x.slice(0,8) == MAP_FLAG) {
-            flagA.push(x);
+            fgA.push(x);
         } else if (x.slice(0,8) == MAP_LOG) {
-            logA.push(x);
+            lgA.push(x);
         }
     }
     // flag 集計
-    for (flag of flagA) {
-        let id = flag.substr(8,2);
+    for (fg of fgA) {
+        let id = fg.substr(8,2);
         for (let i = 0; i < headA.length; i++) {
             if (id == headA[i].id) {
                 headA[i].flagCount++;
@@ -815,8 +813,8 @@ function tbo_summ_disp() {
         }
     }
     // log 集計
-    for (log of logA) {
-        let id = log.substr(8,2);
+    for (lg of lgA) {
+        let id = lg.substr(8,2);
         for (let i = 0; i < headA.length; i++) {
             if (id == headA[i].id) {
                 headA[i].logCount++;
