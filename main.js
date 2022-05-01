@@ -525,6 +525,7 @@ window.onload = () => {
         cScene.line_set(con_dispLine);
         cScene.info_set(con_dispInfo);
     }
+    main_name.value = "";
     cScene.reset("fset","gen","gps");
     cScene.set("ロード");
     // headA 作成
