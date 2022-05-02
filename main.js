@@ -139,17 +139,13 @@ document.getElementById("main_erase").addEventListener("click",() => cScene.info
 document.getElementById("main_flag").addEventListener("click",() => {
     if( !confirm('flag 削除 OK')) return;
     for (item of flagT) localStorage.removeItem(item);
-    tbody_detete(tbo_head);
-    tbody_detete(tbo_log);
-    tbody_detete(tbo_flag);
+    tbody_detete(tbo_head,tbo_flag,tbo_log);    
     tbo_hfl_disp();
 });
 // main_log 選択削除 log
 document.getElementById("main_log").addEventListener("click",() => {
     for (item of logT) localStorage.removeItem(item);
-    tbody_detete(tbo_head);
-    tbody_detete(tbo_log);
-    tbody_detete(tbo_flag);
+    tbody_detete(tbo_head,tbo_flag,tbo_log);
     tbo_hfl_disp();
 });
 // main_rec 記録 yn
@@ -203,9 +199,7 @@ document.getElementById("act_ins").addEventListener("click",() => {
         tbody_detete(tbo_all);    
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head);
-        tbody_detete(tbo_flag);    
-        tbody_detete(tbo_log);
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
         tbo_hfl_disp();
     }
 });
@@ -223,9 +217,7 @@ document.getElementById("act_upd").addEventListener("click",() => {
         tbody_detete(tbo_all);  
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head);
-        tbody_detete(tbo_flag);
-        tbody_detete(tbo_log);
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
         tbo_hfl_disp();
     }
 });
@@ -240,9 +232,7 @@ document.getElementById("act_del").addEventListener("click",() => {
         tbody_detete(tbo_all);  
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head);
-        tbody_detete(tbo_flag);    
-        tbody_detete(tbo_log);
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
         tbo_hfl_disp();
     }
 });
@@ -329,15 +319,13 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
             break;
         // cfh保存
         case "cfhSave":
-            tbody_detete(tbo_all);
+            tbody_detete(tbo_ctrl,tbo_head,tbo_flag);
             cScene.set("cfh保存");
             tbo_cfh_disp();
             break;
         // 選択保存
         case "selSave":
-            tbody_detete(tbo_head);
-            tbody_detete(tbo_flag);
-            tbody_detete(tbo_log);
+            tbody_detete(tbo_head,tbo_flag,tbo_log);
             cScene.set("選択保存");
             main_sel_h_disp();
             break;
@@ -356,9 +344,7 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
 });
 // main_sel_h Data処理2
 document.getElementById("main_sel_h").addEventListener("change",() => {
-    tbody_detete(tbo_head);
-    tbody_detete(tbo_flag);
-    tbody_detete(tbo_log);
+    tbody_detete(tbo_head,tbo_flag,tbo_log);    
     switch (main_sel_d.value) {
         // 選択表示
         case "selDisp":
@@ -963,8 +949,10 @@ function tbody_append(ctrl,key,value) {
     cell.appendChild(v);
 }
 // tbody 行削除
-function tbody_detete(ctrl) {
-    for (let i = ctrl.rows.length - 1; i > -1; i--) ctrl.deleteRow(i);    
+function tbody_detete(...ctrl) {
+    for (let i = 0 ; i < ctrl.length ; i++){    
+        for (let j = ctrl[i].rows.length - 1; j > -1; j--) ctrl[i].deleteRow(j);
+    }
 };
 // 開始
 let adjX = 0;           // 調整 x
