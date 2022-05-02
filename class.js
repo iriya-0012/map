@@ -775,6 +775,19 @@ class Scene {
 class Text {
     // 保存
     save(file,key,text) {
+        let str = "data:text/txt;charset=utf-8,";   // 出力方法追加
+        for (let i = 0; i < key.length; i++) str += `${key[i]}\t${text[i]}\n`;
+        let uri = encodeURI(str);                   // エンコード化
+        let ele = document.createElement("a");      // a要素作成
+        ele.setAttribute("href", uri);              // a要素に出力データ追加
+        ele.setAttribute("download",`${file}.txt`); // a要素に出力情報追加
+        ele.style.visibility = "hidden";            // 非表示
+        document.body.appendChild(ele);             // コントロール追加
+        ele.click();                                // クリックイベント発生
+        document.body.removeChild(ele);             // コントロール削除
+    }    
+    /*/ 保存
+    save(file,key,text) {
         let str = "";                                   // 出力データ作成
         for (let i = 0; i < key.length; i++) str += `${key[i]}\t${text[i]}\n`;
         let blob = new Blob([str],{type:"text/plain"}); // Blobオブジェクトを作成
@@ -782,7 +795,7 @@ class Text {
         ele.href = URL.createObjectURL(blob);           // BlobオブジェクトをURLに変換
         ele.download = `${file}.txt`;                   // ファイル名を指定
         ele.click();                                    // クリックイベント発生
-    }
+    }*/
 }
 let cConv  = new Convert;
 let cFlag  = new Flag;
