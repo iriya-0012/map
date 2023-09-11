@@ -22,11 +22,12 @@ class Arrow {
         else if (x < 0) {arrow = this.set_left_over(y)}
         else if (y < 0) {arrow = "⇑"}
         else if (y >= this.height) {arrow = "⇓"}
+        else if (x == bx && y == by) {arrow = "□"}
+        else if (Math.abs(x - bx) < 2 && Math.abs(y - by) < 2) {arrow = "・"}
         else if (x > bx) {arrow = this.set_right(by,y)}
         else if (x < bx) {arrow = this.set_left(by,y)}
         else if (y < by) {arrow = "↑"}
-        else if (y > by) {arrow = "↓"}
-        else {arrow = "□"}
+        else {arrow = "↓"}
         // 矢印追加
         if (this.text.length < 20) {
             this.text += arrow;
