@@ -44,7 +44,7 @@ select {
 #act_value {
     width: 300px;
 }
-.button_30, .button_a, .text_a, .text_b, .text_c, .text_f {
+.button_30, .button_a, .button_a120, .text_a, .text_b, .text_c, .text_f {
     background:#e0ffff;
     color:green;
 }
@@ -55,19 +55,38 @@ select {
 .button_a {
     height: 27px;
 }
-.button_b {
+.button_a120 {
+    height: 27px;
+    width: 120px;
+}
+.button_b100 {
     background:black;
     color:yellow;
     height: 27px;
     width: 100px;
 }
-.button_e, .text_gps {
+.button_r {
     background:#f6d9f0;
     color:red;
     height: 27px;
 }
-.text_gps {
-    width: 60px;
+.button_rec {
+    background:#00000000;
+    border-style: none;
+    height: 25px;
+    margin: 0px 3px 0px 0px;
+}
+.button_r84 {
+    background:#f6d9f0;
+    color:red;
+    height: 27px;
+    width: 84px;
+}
+.button_r120 {
+    background:#f6d9f0;
+    color:red;
+    height: 27px;
+    width: 120px;
 }
 .button_30:hover, .button_a:hover {
     background:#70ffff;
@@ -76,7 +95,7 @@ select {
     background:#fcfcac;
     color: black;
 }
-.button_e:hover {
+.button_r:hover, .button_r84:hover, .button_r120:hover {
     background:#f3a5d5;
 }
 .canvas_a {
@@ -84,13 +103,6 @@ select {
 }
 .canvas_a > canvas {
     position: absolute;
-}
-.button_r {
-    background:#00000000;
-    border-style: none;
-    height: 25px;
-    margin: 0px 3px 0px 0px;
-
 }
 .text_a {
     height: 20px;
