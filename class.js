@@ -1,3 +1,74 @@
+// 矢印
+class Arrow {
+    // 地図のサイズ
+    size(width,height) {
+        this.array = [];
+        this.arrayMax = 0;
+        this.beforeX = 0;
+        this.beforeY = 0;
+        this.text = "";
+        this.width = width;
+        this.height = height;
+    }
+    //  矢印セット
+    set(x,y) {
+        // 矢印決定
+        let bx = this.beforeX;
+        let by = this.beforeY;
+        this.beforeX = x;
+        this.beforeY = y;
+        let arrow;
+        if (x >= this.width) {arrow = this.set_right_over(y)}
+        else if (x < 0) {arrow = this.set_left_over(y)}
+        else if (y < 0) {arrow = "⇑"}
+        else if (y >= this.height) {arrow = "⇓"}
+        else if (x > bx) {arrow = this.set_right(by,y)}
+        else if (x < bx) {arrow = this.set_left(by,y)}
+        else if (y < by) {arrow = "↑"}
+        else if (y > by) {arrow = "↓"}
+        else {arrow = "□"}
+        // 矢印追加
+        if (this.text.length < 20) {
+            this.text += arrow;
+            this.array[this.arrayMax] = this.text;
+        } else if (this.arrayMax < 4) {
+            this.arrayMax++;
+            this.text = arrow;
+            this.array[this.arrayMax] = this.text;
+        } else {
+            this.array[0] = this.array[1];
+            this.array[1] = this.array[2];
+            this.array[2] = this.array[3];
+            this.array[3] = this.array[4];
+            this.array[4] = arrow;
+            this.text = arrow;
+        }
+        // 戻し値作成
+        let ret = "";
+        for (let p = this.arrayMax; p > -1; p--) ret += this.array[p] + "\n";
+        return ret;
+    }
+    set_left(by,y) {
+        if (y < by) return "↖";
+        if (y > by) return "↙";
+        return "←";
+    }
+    set_left_over(y) {
+        if (y < 0) return "⇖";
+        if (y >= this.height) return "⇙";
+        return "⇐";
+    }
+    set_right(by,y) {
+        if (y < by) return "↗";
+        if (y > by) return "↘";
+        return "→";
+    }
+    set_right_over(y) {
+        if (y < 0) return "⇗";
+        if (y >= this.height) return "⇘";
+        return "⇒";
+    }
+}
 // 変換
 class Convert {
     set(left,right,bottom,top,width,height){
@@ -488,6 +559,8 @@ class Scene {
     gps(con,x,y) {
         let xx = Math.min(Math.max(0,x),canvas_main.width);
         let yy = Math.min(Math.max(0,y),canvas_main.height);
+        // scroll
+        window.scrollTo(xx - 20,yy - 20);
         // 丸
         con.beginPath();
         con.arc(xx,yy,15,0,Math.PI*2,true);
@@ -745,12 +818,12 @@ class Scene {
     reset(...act) {       
         for (let i = 0 ; i < act.length ; i++){
             switch (act[i]) {
+                case "ctrl":
+                    div_ctrl.style.display = "none";
+                    break;
                 case "flag":
                     CON_FLAG.clearRect(0,0,canvas_main.width, canvas_main.height);
-                    for (item of flagA) {
-                        cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
-                    }
-                    div_ctrl.style.display = "none";
+                    for (item of flagA) cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
                     break;
                 case "log":
                     CON_LOG.clearRect(0,0,canvas_main.width, canvas_main.height);
@@ -784,6 +857,7 @@ class Text {
         ele.click();                                    // クリックイベント発生
     }
 }
+let cArrow = new Arrow;
 let cConv  = new Convert;
 let cFlag  = new Flag;
 let cGen   = new Genzai;
