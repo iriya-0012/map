@@ -24,7 +24,7 @@
     </select>
     <select id="main_sel_h"></select>
     <button id="main_exe" class="button_a" value="">実行</button>
-    <button id="main_close" class="button_b" value="">終了</button> 
+    <button id="main_close" class="button_b100" value="">終了</button> 
     <button id="main_erase" class="button_a" value="">消去</button>
     <button id="main_flag" class="button_a" value="">flag</button>
     <button id="main_log" class="button_a" value="">log</button>
@@ -39,8 +39,8 @@
       <option value="genGet">位置計測</option>
     </select>
     <button id="main_m" class="button_30">M</button> 
-    <button id="main_rec" class="button_r" value=""></button>
-    <button id="main_err" class="button_e"></button>
+    <button id="main_rec" class="button_rec" value=""></button>
+    <button id="main_err" class="button_r"></button>
   </div>
   <!-- canvas -->
   <div id="div_canvas" class="canvas_a">
@@ -70,6 +70,10 @@
     <button id="config_info" class="button_30"></button>
     <br>
     <button id="config_upd" class="button_a">更新</button>
+    <input id="test_text" type="text" class="text_a" value="100,200">
+    <button id="test_1" class="button_a">test</button>
+    <br>
+    <pre id="config_arrow"></pre>
   </div>
   <!-- act -->
   <div id="div_act">
@@ -169,16 +173,16 @@
   </div>
   <!-- gen -->
   <div id="div_gen">
-    <input type="text" class="text_b" value="現在地の変更">
-    <br>
-    <button id="gen_ok" class="button_a">OK</button>
+    <button id="gen_ok" class="button_a120">現在地の変更 OK</button>
     <button id="gen_ng" class="button_a">Cancel</button>
   </div>
   <!-- gps -->
   <div id="div_gps">
-    <input type="text" class="text_gps" value="GPS位置">
+    <button id="gps_ok" class="button_r">GPS位置 OK</button>
     <br>
-    <button id="gps_ok" class="button_e">OK</button>    
+    <button id="gps_rec" class="button_r120">OK+地図表示+🔴</button>
+    <br>
+    <button id="gps_get" class="button_r84">GPS再取得</button>
   </div>  
   <!-- script -->
   <script type="text/javascript" src="main.js"></script>
