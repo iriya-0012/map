@@ -472,7 +472,8 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => {
         main_sel_m.value = "";
         cScene.set("ロード");
         // scroll
-        window.scrollTo(0,0);
+        // window.scrollTo(0,0);
+	window.scrollTo({top:0,left:0,behavior:'smooth'});
     }   
     mouseDownDate = new Date();    
 });
