@@ -10,8 +10,37 @@ class Arrow {
         this.width = width;
         this.height = height;
     }
-    //  矢印セット
-    set(x,y) {
+    // 矢印セット ok
+    set_ok(x,y) {
+        // 矢印決定
+        let bx = this.beforeX;
+        let by = this.beforeY;
+        this.beforeX = x;
+        this.beforeY = y;
+        let arrow;
+        if (x >= this.width) {arrow = this.set_right_over(y)}
+        else if (x < 0) {arrow = this.set_left_over(y)}
+        else if (y < 0) {arrow = "⇑"}
+        else if (y >= this.height) {arrow = "⇓"}
+        else if (x == bx && y == by) {arrow = "□"}
+        else if (Math.abs(x - bx) < 2 && Math.abs(y - by) < 2) {arrow = "・"}
+        else if (x > bx) {arrow = this.set_right(by,y)}
+        else if (x < bx) {arrow = this.set_left(by,y)}
+        else if (y < by) {arrow = "↑"}
+        else {arrow = "↓"}
+        // 矢印追加
+        this.text = arrow + this.text;
+        this.text = this.text.slice(0,20);
+        return this.text
+    }
+    // 矢印セット ng
+    set_ng() {
+        this.text = "x" + this.text;
+        this.text = this.text.slice(0,20);
+        return this.text
+    }
+    // 矢印セット
+    set_xxx(x,y) {
         // 矢印決定
         let bx = this.beforeX;
         let by = this.beforeY;
