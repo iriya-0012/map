@@ -302,6 +302,9 @@ document.getElementById("gps_rec").addEventListener("click",() => {
     cGen.adjust(true,true,0,0);
     // 再表示
     cScene.reset("ctrl","flag","gen","gps");
+    // x document.getElementById("body").scrollTo(0,0);
+    // o window.scrollTo(0,0);
+    window.scrollTo({top:0,left:0,behavior:'smooth'}); // @@@@@@
     // 記録状態 y
     cScene.rec_set_y();
     let timerG = Number(con_timerG);
@@ -472,15 +475,14 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => {
         main_sel_m.value = "";
         cScene.set("ロード");
         // scroll
-        // window.scrollTo(0,0);
-	window.scrollTo({top:0,left:0,behavior:'smooth'});
+        window.scrollTo({top:0,left:0,behavior:'smooth'});
     }   
     mouseDownDate = new Date();    
 });
 // タッチend
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
-    mouse_up(obj.pageX,obj.pageY- div_canvas.offsetTop);
+    mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop);
 });
 // test
 document.getElementById("test_1").addEventListener("click",() => {
@@ -630,8 +632,8 @@ function gen_ok_timer(gen) {
     cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
     cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");
-    //  矢印セット
-    config_arrow.innerHTML = cArrow.set(cGen.x,cGen.y);
+    // 矢印セット
+    main_arrow.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
 }
 // 現在地取得失敗
 function gen_err(err) {
@@ -644,6 +646,7 @@ function gen_err(err) {
 	cGen.m = gen_mess[err.code];
     cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
+    main_arrow.innerHTML = cArrow.set_ng();
 }
 // オプション・オブジェクト
 let gen_opt = {
