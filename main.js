@@ -487,8 +487,9 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => {
         // scroll
         //window.scrollTo({top:0,left:0,behavior:'smooth'});
         let obj = e.changedTouches[0];
-        cScene.iii(obj.offsetX,obj.offsetY + 100);
-    }   
+        // cScene.iii(obj.offsetX,obj.offsetY + 100);
+	cScene.iii(obj.pageX,obj.pageY - div_canvas.offsetTop);
+    }
     mouseDownDate = new Date();    
 });
 // タッチend
