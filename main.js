@@ -9,6 +9,146 @@ const MAP_FLAG  = "map.1_f_";
 const MAP_HEAD  = "map.1_h_";
 const MAP_LOG   = "map.1_l_";
 let cImage      = new Image;
+// act_ins 追加
+document.getElementById("act_ins").addEventListener("click",() => {
+    let key = act_key.value;
+    let val = act_value.value;
+    let rtn = confirm(`追加 キー:${key},内容:${val}`);
+    if (rtn) localStorage.setItem(key,val);
+    // 更新後表示
+    if (main_sel_d.value == "addDisp") {
+        tbody_detete(tbo_all);    
+        tbo_all_disp();
+    } else {
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbo_hfl_disp();
+    }
+});
+// act_upd 修正
+document.getElementById("act_upd").addEventListener("click",() => {
+    let key = act_key.value;
+    let val = act_value.value;
+    let rtn = confirm(`修正 キー:${key},内容:${val}`);
+    if (rtn) {
+        localStorage.removeItem(key_save);
+        localStorage.setItem(key,val);
+    }
+    // 更新後表示
+    if (main_sel_d.value == "allDisp") {
+        tbody_detete(tbo_all);  
+        tbo_all_disp();
+    } else {
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbo_hfl_disp();
+    }
+});
+// act_del 削除
+document.getElementById("act_del").addEventListener("click",() => {
+    let key = act_key.value;
+    let val = act_value.value;
+    let rtn = confirm(`削除 キー:${key},内容:${val}`);
+    if (rtn) {localStorage.removeItem(key)}
+    // 更新後表示
+    if (main_sel_d.value == "allDisp") {
+        tbody_detete(tbo_all);  
+        tbo_all_disp();
+    } else {
+        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbo_hfl_disp();
+    }
+});
+// config_time 全時間表示 yn
+document.getElementById("config_time").addEventListener("click",() => cScene.time_change(con_dispTime));
+// config_time 線表示 yn
+document.getElementById("config_line").addEventListener("click",() => cScene.line_change(con_dispLine));
+// config_time info表示 yn
+document.getElementById("config_info").addEventListener("click",() => cScene.info_change(con_dispInfo));
+// config_upd 更新
+document.getElementById("config_upd").addEventListener("click",() => {
+    let long = ("0000" + Number(config_long.value)).slice(-4);
+    let timerG = ("0000" + Number(config_timerG.value)).slice(-4);
+    let timerL = ("0000" + Number(config_timerL.value)).slice(-4);
+    let time = (config_time.innerHTML == "-") ? "n" : "y";
+    let line = (config_line.innerHTML == "-") ? "n" : "y";
+    let info = (config_info.innerHTML == "-") ? "n" : "y";
+    let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
+    config_long.value = long;
+    config_timerG.value = timerG;
+    config_timerL.value = timerL;
+    localStorage.setItem(MAP_CTRL,str);
+});
+// fset_ins flag追加
+document.getElementById("fset_ins").addEventListener("click",() => {
+    // 追加no検索
+    let free = 0;
+    for (let i = 0; i < flagT.length; i++) {
+        if (flagT[i].slice(-2) != i + 1) {
+            free = i + 1;
+            break;
+        }
+    }
+    if (free == 0) free = flagT.length + 1;
+    // 追加    
+    let no  = (`00${free}`).slice(-2);
+    let key = `${MAP_FLAG}${cHead.id}_${no}`;
+    localStorage.setItem(key,fset_text.value);
+    storage_get();
+    // 再表示
+    cScene.reset("ctrl","flag");
+    cScene.set("地図表示");
+});
+// fset_upd flag修正
+document.getElementById("fset_upd").addEventListener("click",() => {
+    localStorage.setItem(flagT[flagApos],fset_text.value);
+    storage_get();
+    // 再表示
+    cScene.reset("ctrl","flag");
+    cScene.set("地図表示");
+});
+// fset_del flag削除
+document.getElementById("fset_del").addEventListener("click",() => {
+    localStorage.removeItem(flagT[flagApos]);
+    storage_get();
+    // 再表示
+    cScene.reset("ctrl","flag");
+    cScene.set("地図表示");
+});
+// gen_ok 現在地の変更 OK
+document.getElementById("gen_ok").addEventListener("click",() => {
+    // 調整セット
+    cGen.adjust(true,true,adjX,adjY);
+    // 再表示
+    cScene.reset("ctrl","flag","gen","gps");
+    cScene.set("地図表示");
+    if (main_rec.value == "") cScene.rec_set_n();
+});
+// gen_ng 現在地の変更 NG
+document.getElementById("gen_ng").addEventListener("click",() => cScene.reset("ctrl","flag","gen","gps"));
+// gps_ok GPSの値に変更 OK
+document.getElementById("gps_ok").addEventListener("click",() => {
+    // 調整セット
+    cGen.adjust(true,true,0,0);
+    // 再表示
+    cScene.reset("ctrl","flag","gen","gps");
+    if (main_rec.value == "") cScene.rec_set_n();
+});
+// gps_get GPS再取得
+document.getElementById("gps_get").addEventListener("click",() => {
+    navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
+});
+// gps_rec GPSの値に変更 OK+地図表示+🔴
+document.getElementById("gps_rec").addEventListener("click",() => {
+    // 調整セット
+    cGen.adjust(true,true,0,0);
+    // 再表示
+    cScene.reset("ctrl","flag","gen","gps");
+    // 記録状態 y
+    cScene.rec_set_y();
+    let timerG = Number(con_timerG);
+    if (timerG < 1) timerG = 1;
+    // 現在地取得 開始
+    con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
+});
 // to config
 document.getElementById("main_c").addEventListener("click",() => cScene.set("ロード"));
 // to data
@@ -150,168 +290,9 @@ document.getElementById("main_log").addEventListener("click",() => {
     tbo_hfl_disp();
 });
 // main_rec 記録 yn
-document.getElementById("main_rec").addEventListener("click",() => {
-    // 初期状態時は記録n
-    if (main_rec.value == "") {
-        cScene.rec_set_n();
-        return;
-    }
-    // 記録状態変更
-    cScene.rec_change();
-    if (main_rec.value == "y") {
-        let timerG = Number(con_timerG);
-        if (timerG < 1) timerG = 1;
-        // 現在地取得 開始
-        con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
-    } else {
-        clearInterval(con_timerId);
-    }
-});
+document.getElementById("main_rec").addEventListener("click",() => rec_yn());
 // main_err エラー消去
 document.getElementById("main_err").addEventListener("click",() => cScene.err_clear());
-// config_time 全時間表示 yn
-document.getElementById("config_time").addEventListener("click",() => cScene.time_change(con_dispTime));
-// config_time 線表示 yn
-document.getElementById("config_line").addEventListener("click",() => cScene.line_change(con_dispLine));
-// config_time info表示 yn
-document.getElementById("config_info").addEventListener("click",() => cScene.info_change(con_dispInfo));
-// config_upd 更新
-document.getElementById("config_upd").addEventListener("click",() => {
-    let long = ("0000" + Number(config_long.value)).slice(-4);
-    let timerG = ("0000" + Number(config_timerG.value)).slice(-4);
-    let timerL = ("0000" + Number(config_timerL.value)).slice(-4);
-    let time = (config_time.innerHTML == "-") ? "n" : "y";
-    let line = (config_line.innerHTML == "-") ? "n" : "y";
-    let info = (config_info.innerHTML == "-") ? "n" : "y";
-    let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
-    config_long.value = long;
-    config_timerG.value = timerG;
-    config_timerL.value = timerL;
-    localStorage.setItem(MAP_CTRL,str);
-});
-// act_ins 追加
-document.getElementById("act_ins").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
-    let rtn = confirm(`追加 キー:${key},内容:${val}`);
-    if (rtn) localStorage.setItem(key,val);
-    // 更新後表示
-    if (main_sel_d.value == "addDisp") {
-        tbody_detete(tbo_all);    
-        tbo_all_disp();
-    } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
-        tbo_hfl_disp();
-    }
-});
-// act_upd 修正
-document.getElementById("act_upd").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
-    let rtn = confirm(`修正 キー:${key},内容:${val}`);
-    if (rtn) {
-        localStorage.removeItem(key_save);
-        localStorage.setItem(key,val);
-    }
-    // 更新後表示
-    if (main_sel_d.value == "allDisp") {
-        tbody_detete(tbo_all);  
-        tbo_all_disp();
-    } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
-        tbo_hfl_disp();
-    }
-});
-// act_del 削除
-document.getElementById("act_del").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
-    let rtn = confirm(`削除 キー:${key},内容:${val}`);
-    if (rtn) {localStorage.removeItem(key)}
-    // 更新後表示
-    if (main_sel_d.value == "allDisp") {
-        tbody_detete(tbo_all);  
-        tbo_all_disp();
-    } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
-        tbo_hfl_disp();
-    }
-});
-// fset_ins flag追加
-document.getElementById("fset_ins").addEventListener("click",() => {
-    // 追加no検索
-    let free = 0;
-    for (let i = 0; i < flagT.length; i++) {
-        if (flagT[i].slice(-2) != i + 1) {
-            free = i + 1;
-            break;
-        }
-    }
-    if (free == 0) free = flagT.length + 1;
-    // 追加    
-    let no  = (`00${free}`).slice(-2);
-    let key = `${MAP_FLAG}${cHead.id}_${no}`;
-    localStorage.setItem(key,fset_text.value);
-    storage_get();
-    // 再表示
-    cScene.reset("ctrl","flag");
-    cScene.set("地図表示");
-});
-// fset_upd flag修正
-document.getElementById("fset_upd").addEventListener("click",() => {
-    localStorage.setItem(flagT[flagApos],fset_text.value);
-    storage_get();
-    // 再表示
-    cScene.reset("ctrl","flag");
-    cScene.set("地図表示");
-});
-// fset_del flag削除
-document.getElementById("fset_del").addEventListener("click",() => {
-    localStorage.removeItem(flagT[flagApos]);
-    storage_get();
-    // 再表示
-    cScene.reset("ctrl","flag");
-    cScene.set("地図表示");
-});
-// gen_ok 現在地の変更 OK
-document.getElementById("gen_ok").addEventListener("click",() => {
-    // 調整セット
-    cGen.adjust(true,true,adjX,adjY);
-    // 再表示
-    cScene.reset("ctrl","flag","gen","gps");
-    cScene.set("地図表示");
-    if (main_rec.value == "") cScene.rec_set_n();
-});
-// gen_ng 現在地の変更 NG
-document.getElementById("gen_ng").addEventListener("click",() => cScene.reset("ctrl","flag","gen","gps"));
-// gps_ok GPSの値に変更 OK
-document.getElementById("gps_ok").addEventListener("click",() => {
-    // 調整セット
-    cGen.adjust(true,true,0,0);
-    // 再表示
-    cScene.reset("ctrl","flag","gen","gps");
-    if (main_rec.value == "") cScene.rec_set_n();
-});
-// gps_get GPS再取得
-document.getElementById("gps_get").addEventListener("click",() => {
-    navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
-});
-// gps_rec GPSの値に変更 OK+地図表示+🔴
-document.getElementById("gps_rec").addEventListener("click",() => {
-    // 調整セット
-    cGen.adjust(true,true,0,0);
-    // 再表示
-    cScene.reset("ctrl","flag","gen","gps");
-    // x document.getElementById("body").scrollTo(0,0);
-    // o window.scrollTo(0,0);
-    window.scrollTo({top:0,left:0,behavior:'smooth'}); // @@@@@@
-    // 記録状態 y
-    cScene.rec_set_y();
-    let timerG = Number(con_timerG);
-    if (timerG < 1) timerG = 1;
-    // 現在地取得 開始
-    con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
-});
 // main_sel_d Data処理
 document.getElementById("main_sel_d").addEventListener("change",() => {
     switch (main_sel_d.value) {
@@ -414,6 +395,29 @@ document.getElementById("main_sel_m").addEventListener("change",() => {
             break;
     }
 });
+// iii_00 移動
+document.getElementById("iii_00").addEventListener('click',() => {
+    cScene.set("地図表示");
+    window.scrollTo({top:0,left:0,behavior:'smooth'});
+});
+// iii_gps 移動
+document.getElementById("iii_gps").addEventListener('click',() => {
+    cScene.set("地図表示");
+    let scroll = {behavior:'smooth'};
+    scroll.top = cGen.y + 7;
+    scroll.left = cGen.x - 20;
+    window.scrollTo(scroll);
+});
+// iii_config 移動
+document.getElementById("iii_config").addEventListener('click',() => {
+    main_sel_m.value = "";
+    cScene.set("ロード");
+    window.scrollTo({top:0,left:0,behavior:'smooth'});
+});
+// iii_rec 記録 yn
+document.getElementById("iii_rec").addEventListener("click",() => rec_yn());
+// iii_x 消去
+document.getElementById("iii_x").addEventListener("click",() => cScene.reset('iii'));
 // canvas click
 document.getElementById("canvas_log").addEventListener("click",(e) => {
     // mouse click 位置
@@ -465,17 +469,25 @@ document.getElementById("canvas_log").addEventListener("click",(e) => {
     }
 });
 // マウスdown
-document.getElementById("canvas_log").addEventListener('mousedown',(e) => mouseDownDate = new Date());
+document.getElementById("canvas_log").addEventListener('mousedown',(e) => {
+    mouseDownDate = new Date();
+    // 右クリック
+    if (e.button == 2) {
+        cScene.iii(e.offsetX,e.offsetY + 100);
+    }
+});
 // マウスup
 document.getElementById("canvas_log").addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
 // タッチstart
 document.getElementById("canvas_log").addEventListener("touchstart",(e) => { 
     // 3本指タッチは戻る
     if (e.targetTouches.length == 3) {
-        main_sel_m.value = "";
-        cScene.set("ロード");
+        //main_sel_m.value = "";
+        //cScene.set("ロード");
         // scroll
-        window.scrollTo({top:0,left:0,behavior:'smooth'});
+        //window.scrollTo({top:0,left:0,behavior:'smooth'});
+        let obj = e.changedTouches[0];
+        cScene.iii(obj.offsetX,obj.offsetY + 100);
     }   
     mouseDownDate = new Date();    
 });
@@ -486,9 +498,7 @@ document.getElementById("canvas_log").addEventListener("touchend",(e) => {
 });
 // test
 document.getElementById("test_1").addEventListener("click",() => {
-    let arr = test_text.value.split(",");
-    ret = cArrow.set(Number(arr[0]),Number(arr[1]))
-    config_arrow.innerHTML = ret;
+    cScene.iii(300,300);
 });
 // 地図読込完了
 cImage.onload = () => {
@@ -600,12 +610,9 @@ function gen_ok_long(gen) {
 }
 // 現在地取得成功 M クリック時
 function gen_ok_m(gen) {
-    let long = Math.round(gen.coords.longitude * 1000000) / 1000000;
-    let lat  = Math.round(gen.coords.latitude * 1000000) / 1000000;
-    let x    = cConv.long_px(long);
-    let y    = cConv.lat_py(lat);
+    cGen.set(gen);
     cScene.reset("gps");
-    cScene.gps(CON_FLAG,x,y);
+    cScene.gps(CON_FLAG,cGen.x,cGen.y);
 }
 // 現在地取得成功 Timer
 function gen_ok_timer(gen) {
@@ -642,7 +649,7 @@ function gen_err(err) {
 		1: "位置情報の取得不許可",
 		2: "位置情報の取得不可",
 		3: "位置情報の取得タイムアウト",
-	} ;
+	};
 	cGen.m = gen_mess[err.code];
     cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
@@ -718,6 +725,24 @@ function mouse_up(x,y) {
     // 現在地設定、地図表示は、長押しで現在地取得
     if (main_sel_m.value == "mapDisp" || main_sel_m.value == "genSet") {
         navigator.geolocation.getCurrentPosition(gen_ok_long,gen_err,gen_opt);
+    }
+}
+// 記録 yn
+function rec_yn() {
+    // 初期状態時は記録n
+    if (main_rec.value == "") {
+        cScene.rec_set_n();
+        return;
+    }
+    // 記録状態変更
+    cScene.rec_change();
+    if (main_rec.value == "y") {
+        let timerG = Number(con_timerG);
+        if (timerG < 1) timerG = 1;
+        // 現在地取得 開始
+        con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒 
+    } else {
+        clearInterval(con_timerId);
     }
 }
 // Web Storage 読込
