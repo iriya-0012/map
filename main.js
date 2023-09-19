@@ -488,6 +488,7 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => {
         //window.scrollTo({top:0,left:0,behavior:'smooth'});
         let obj = e.changedTouches[0];
         // cScene.iii(obj.offsetX,obj.offsetY + 100);
+	main_arrow.innerHTML = `x:${obj.pageX},y:${obj.pageY},t:${div_canvas.offsetTop}`;
 	cScene.iii(obj.pageX,obj.pageY - div_canvas.offsetTop);
     }
     mouseDownDate = new Date();    
