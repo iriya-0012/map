@@ -22,21 +22,21 @@ class Arrow {
         else if (x < 0) {arrow = this.set_left_over(y)}
         else if (y < 0) {arrow = "⇑"}
         else if (y >= this.height) {arrow = "⇓"}
-        else if (x == bx && y == by) {arrow = "□"}
-        else if (Math.abs(x - bx) < 2 && Math.abs(y - by) < 2) {arrow = "・"}
+        else if (x == bx && y == by) {arrow = "・"}
+        else if (Math.abs(x - bx) < 2 && Math.abs(y - by) < 2) {arrow = "□"}
         else if (x > bx) {arrow = this.set_right(by,y)}
         else if (x < bx) {arrow = this.set_left(by,y)}
         else if (y < by) {arrow = "↑"}
         else {arrow = "↓"}
         // 矢印追加
         this.text = arrow + this.text;
-        this.text = this.text.slice(0,20);
+        this.text = this.text.slice(0,50);
         return this.text
     }
     // 矢印セット ng
     set_ng() {
         this.text = "x" + this.text;
-        this.text = this.text.slice(0,20);
+        this.text = this.text.slice(0,50);
         return this.text
     }
     // 矢印セット
@@ -542,6 +542,7 @@ class Scene {
         this.d_flag;
         this.d_log;
         this.d_summ;
+        this.d_iii;
         this.d_info;
         this.d_canvas;
         // info data
@@ -590,7 +591,7 @@ class Scene {
         let xx = Math.min(Math.max(0,x),canvas_main.width);
         let yy = Math.min(Math.max(0,y),canvas_main.height);
         // scroll
-        window.scrollTo(xx - 20,yy - 20);
+        window.scrollTo(xx - 20,yy + 7);
         // 丸
         con.beginPath();
         con.arc(xx,yy,15,0,Math.PI*2,true);
@@ -613,6 +614,12 @@ class Scene {
         div_gps.style.left = xx + "px";
         div_gps.style.top  = yy + 50 + "px";
         div_gps.style.display = "block";
+    }
+    // iii
+    iii(x,y) {
+        div_iii.style.left = x + "px";
+        div_iii.style.top  = y + "px";
+        div_iii.style.display = "block";
     }
     // info表示・変更
     info_set(yn) { config_info.innerHTML = (yn == "y") ? "✓" : "-"}
@@ -659,18 +666,23 @@ class Scene {
     rec_clear() {
         main_rec.value = "";
         main_rec.style.display = "none";
+        iii_rec.style.display = "none";
     }
     // 記録n
     rec_set_n() {
         main_rec.value ="n";
         main_rec.innerHTML = "🔵";
         main_rec.style.display = "inline";
+        iii_rec.innerHTML = "🔵";
+        iii_rec.style.display = "inline";
     }
     // 記録y
     rec_set_y() {
         main_rec.value ="y";
         main_rec.innerHTML = "🔴";
-        main_rec.style.display = "inline";    
+        main_rec.style.display = "inline";
+        iii_rec.innerHTML = "🔴";
+        iii_rec.style.display = "inline";
     }
     // セット
     set(key) {
@@ -702,6 +714,7 @@ class Scene {
         this.d_fset   = "none";
         this.d_gen    = "none";
         this.d_gps    = "none";
+        this.d_iii    = "none";
         switch (key) {
             case "ロード":
                 this.m_d      = "inline";
@@ -821,6 +834,7 @@ class Scene {
         main_name.style.display  = this.m_name;
         main_m.style.display     = this.m_m;
         main_sel_m.style.display = this.m_sel_m;
+        main_err.style.display   = (main_err.value == "") ? "none" : "inline";
         // canvas
         div_canvas.style.display = this.d_canvas;
         // config
@@ -841,8 +855,8 @@ class Scene {
         div_gen.style.display    = this.d_gen;
         // gps
         div_gps.style.display    = this.d_gps;
-        // error
-        main_err.style.display   = (main_err.value == "") ? "none" : "inline";
+        // iii
+        div_iii.style.display    = this.d_iii;
     }   
     // リセット
     reset(...act) {       
@@ -855,6 +869,15 @@ class Scene {
                     CON_FLAG.clearRect(0,0,canvas_main.width, canvas_main.height);
                     for (item of flagA) cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
                     break;
+                case "gen":
+                    div_gen.style.display = "none";
+                    break;
+                case "gps":
+                    div_gps.style.display = "none";
+                    break;
+                case "iii":
+                    div_iii.style.display = "none";
+                    break;
                 case "log":
                     CON_LOG.clearRect(0,0,canvas_main.width, canvas_main.height);
                     break;
@@ -865,11 +888,6 @@ class Scene {
                 case "fset":
                     div_fset.style.display = "none";
                     break;
-                case "gen":
-                    div_gen.style.display = "none";
-                    break;
-                case "gps":
-                    div_gps.style.display = "none";
             }
         }
     }
