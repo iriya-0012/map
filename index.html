@@ -9,9 +9,9 @@
 <body id="body">
   <!-- main -->
   <div id="div_main">
-    <button id="main_c" class="button_30" >C</button>
-    <button id="main_d" class="button_30" >D</button>
-    <button id="main_i" class="button_30" >I</button>
+    <button id="main_c" class="button_a30" >C</button>
+    <button id="main_d" class="button_a30" >D</button>
+    <button id="main_i" class="button_a30" >I</button>
     <select id="main_sel_d" value="">
       <option value="allDisp">全表示</option>
       <option value="selDisp">選択表示</option>
@@ -38,8 +38,8 @@
       <option value="flagSet">Flag設定</option>
       <option value="genGet">位置計測</option>
     </select>
-    <button id="main_m" class="button_30">M</button> 
-    <button id="main_rec" class="button_rec" value=""></button>
+    <button id="main_m" class="button_a30">M</button> 
+    <button id="main_rec" class="button_rec"></button>
     <button id="main_err" class="button_r"></button>
     <label id="main_arrow"></label>
   </div>
@@ -62,13 +62,13 @@
     <input id="config_timerL" type="text" class="text_c" value="0600">
     <br>
     <input type="text" class="text_b" value="全時間表示">
-    <button id="config_time" class="button_30"></button>
+    <button id="config_time" class="button_a30"></button>
     <br> 
     <input type="text" class="text_b" value="線表示">
-    <button id="config_line" class="button_30"></button>
+    <button id="config_line" class="button_a30"></button>
     <br>
     <input type="text" class="text_b" value="info表示"> 
-    <button id="config_info" class="button_30"></button>
+    <button id="config_info" class="button_a30"></button>
     <br>
     <button id="config_upd" class="button_a">更新</button>
     <input id="test_text" type="text" class="text_a" value="100,200">
@@ -79,9 +79,9 @@
   <!-- act -->
   <div id="div_act">
     <input id="act_key" type="text" class="text_a">
-    <button id="act_ins" class="button_30">+</button>
-    <button id="act_upd" class="button_30">C</button>
-    <button id="act_del" class="button_30">D</button>
+    <button id="act_ins" class="button_a30">+</button>
+    <button id="act_upd" class="button_a30">C</button>
+    <button id="act_del" class="button_a30">D</button>
     <br>
     <input id="act_value" type="text" class="text_a">
   </div>
@@ -185,7 +185,16 @@
     <button id="gps_rec" class="button_r120">OK+地図表示+🔴</button>
     <br>
     <button id="gps_get" class="button_r84">GPS再取得</button>
-  </div>  
+  </div>
+  <!-- iii -->
+  <div id="div_iii">
+    <button id="iii_00" class="button_a60">移動0,0</button>
+    <button id="iii_gps" class="button_a60">GPS</button>
+    <button id="iii_config" class="button_a60">config</button>
+    <button id="iii_x" class="button_a">X</button>
+    <br>
+    <button id="iii_rec" class="button_rec"></button>
+  </div>
   <!-- script -->
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="class.js"></script>
