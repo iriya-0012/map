@@ -30,7 +30,7 @@ select {
 #div_main, #div_config, #div_act {
     z-index: 1;
 }
-#div_fset, #div_gps {
+#div_fset, #div_gen, #div_gps, #div_iii {
     position: absolute;
     z-index: 1;
 }
@@ -44,16 +44,20 @@ select {
 #act_value {
     width: 300px;
 }
-.button_30, .button_a, .button_a120, .text_a, .text_b, .text_c, .text_f {
+.button_a, .button_a30, .button_a60, .button_a120, .text_a, .text_b, .text_c, .text_f {
     background:#e0ffff;
     color:green;
 }
-.button_30 {
+.button_a {
+    height: 27px;
+}
+.button_a30 {
     height: 27px;
     width: 30px;
 }
-.button_a {
+.button_a60 {
     height: 27px;
+    width: 60px;
 }
 .button_a120 {
     height: 27px;
@@ -88,7 +92,7 @@ select {
     height: 27px;
     width: 120px;
 }
-.button_30:hover, .button_a:hover {
+.button_a:hover, .button_a30:hover, .button_a60:hover {
     background:#70ffff;
 }
 .button_b:hover {
