@@ -482,14 +482,11 @@ document.getElementById("canvas_log").addEventListener('mouseup',(e) => mouse_up
 document.getElementById("canvas_log").addEventListener("touchstart",(e) => { 
     // 3本指タッチは戻る
     if (e.targetTouches.length == 3) {
-        //main_sel_m.value = "";
-        //cScene.set("ロード");
-        // scroll
-        //window.scrollTo({top:0,left:0,behavior:'smooth'});
         let obj = e.changedTouches[0];
-        // cScene.iii(obj.offsetX,obj.offsetY + 100);
-	main_arrow.innerHTML = `x:${obj.pageX},y:${obj.pageY},t:${div_canvas.offsetTop}`;
-	cScene.iii(obj.pageX,obj.pageY - div_canvas.offsetTop);
+        let x = Math.round(obj.pageX);
+        let y = Math.round(obj.pageY);
+        main_arrow.innerHTML = `x:${x},y:${y},t:${div_canvas.offsetTop}`;
+        cScene.iii(x,y - div_canvas.offsetTop);
     }
     mouseDownDate = new Date();    
 });
