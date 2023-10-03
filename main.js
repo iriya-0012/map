@@ -656,9 +656,9 @@ function gen_err(err) {
 }
 // オプション・オブジェクト
 let gen_opt = {
-	"enableHighAccuracy": false,
-	"timeout": 8000,
-	"maximumAge": 5000,
+	"enableHighAccuracy": true,
+	"timeout": 5000,
+	"maximumAge": 0,
 }
 // headA 作成
 function headA_set() {
