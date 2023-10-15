@@ -10,37 +10,8 @@ class Arrow {
         this.width = width;
         this.height = height;
     }
-    // 矢印セット ok
-    set_ok(x,y) {
-        // 矢印決定
-        let bx = this.beforeX;
-        let by = this.beforeY;
-        this.beforeX = x;
-        this.beforeY = y;
-        let arrow;
-        if (x >= this.width) {arrow = this.set_right_over(y)}
-        else if (x < 0) {arrow = this.set_left_over(y)}
-        else if (y < 0) {arrow = "⇑"}
-        else if (y >= this.height) {arrow = "⇓"}
-        else if (x == bx && y == by) {arrow = "・"}
-        else if (Math.abs(x - bx) < 2 && Math.abs(y - by) < 2) {arrow = "□"}
-        else if (x > bx) {arrow = this.set_right(by,y)}
-        else if (x < bx) {arrow = this.set_left(by,y)}
-        else if (y < by) {arrow = "↑"}
-        else {arrow = "↓"}
-        // 矢印追加
-        this.text = arrow + this.text;
-        this.text = this.text.slice(0,50);
-        return this.text
-    }
-    // 矢印セット ng
-    set_ng() {
-        this.text = "x" + this.text;
-        this.text = this.text.slice(0,50);
-        return this.text
-    }
     // 矢印セット
-    set_xxx(x,y) {
+    set_ok(x,y) {
         // 矢印決定
         let bx = this.beforeX;
         let by = this.beforeY;
@@ -57,25 +28,24 @@ class Arrow {
         else if (x < bx) {arrow = this.set_left(by,y)}
         else if (y < by) {arrow = "↑"}
         else {arrow = "↓"}
-        // 矢印追加
-        if (this.text.length < 20) {
-            this.text += arrow;
-            this.array[this.arrayMax] = this.text;
-        } else if (this.arrayMax < 4) {
-            this.arrayMax++;
-            this.text = arrow;
-            this.array[this.arrayMax] = this.text;
-        } else {
-            this.array[0] = this.array[1];
-            this.array[1] = this.array[2];
-            this.array[2] = this.array[3];
-            this.array[3] = this.array[4];
-            this.array[4] = arrow;
-            this.text = arrow;
-        }
+        return this.set_str(arrow);
+    }
+    // 矢印追加
+    set_str(str) {
+        this.text = str + this.text;
+        if (this.text.length > 100) {this.text = this.text.slice(0,100)}
+        // 1 ～ 10 → 0
+        // 11 ～ 20 → 1
+        // 99 ～ 100 → 9
+        let p_max = Math.trunc((this.text.length - 1) / 10);
         // 戻し値作成
         let ret = "";
-        for (let p = this.arrayMax; p > -1; p--) ret += this.array[p] + "\n";
+        for (let p = 0; p <= p_max; p++) {
+            let p_start = p * 10;
+            let p_end = p_start + 10;
+            ret += this.text.slice(p_start,p_end);
+            if (p < p_max) {ret += "\n"}
+        }
         return ret;
     }
     set_left(by,y) {
