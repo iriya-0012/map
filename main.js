@@ -8,6 +8,7 @@ const MAP_CTRL  = "map.1_c";
 const MAP_FLAG  = "map.1_f_";
 const MAP_HEAD  = "map.1_h_";
 const MAP_LOG   = "map.1_l_";
+const III_ARROW = document.getElementById("iii_arrow");
 let cImage      = new Image;
 // act_ins 追加
 document.getElementById("act_ins").addEventListener("click",() => {
@@ -480,24 +481,19 @@ document.getElementById("canvas_log").addEventListener('mousedown',(e) => {
 document.getElementById("canvas_log").addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
 // タッチstart
 document.getElementById("canvas_log").addEventListener("touchstart",(e) => { 
-    // 3本指タッチは戻る
+    // 3本指はiii表示
     if (e.targetTouches.length == 3) {
         let obj = e.changedTouches[0];
         let x = Math.round(obj.pageX);
         let y = Math.round(obj.pageY);
-        main_arrow.innerHTML = `x:${x},y:${y},t:${div_canvas.offsetTop}`;
         cScene.iii(x,y - div_canvas.offsetTop);
     }
-    mouseDownDate = new Date();    
+    mouseDownDate = new Date();
 });
 // タッチend
 document.getElementById("canvas_log").addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
     mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop);
-});
-// test
-document.getElementById("test_1").addEventListener("click",() => {
-    cScene.iii(300,300);
 });
 // 地図読込完了
 cImage.onload = () => {
@@ -638,8 +634,7 @@ function gen_ok_timer(gen) {
     cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
     cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");
-    // 矢印セット
-    main_arrow.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
+    III_ARROW.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
 }
 // 現在地取得失敗
 function gen_err(err) {
@@ -652,7 +647,7 @@ function gen_err(err) {
 	cGen.m = gen_mess[err.code];
     cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
-    main_arrow.innerHTML = cArrow.set_ng();
+    III_ARROW.innerHTML = cArrow.set_str("x");
 }
 // オプション・オブジェクト
 let gen_opt = {
