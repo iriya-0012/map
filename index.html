@@ -41,7 +41,6 @@
     <button id="main_m" class="button_a30">M</button> 
     <button id="main_rec" class="button_rec"></button>
     <button id="main_err" class="button_r"></button>
-    <label id="main_arrow"></label>
   </div>
   <!-- canvas -->
   <div id="div_canvas" class="canvas_a">
@@ -51,30 +50,26 @@
   </div> 
   <!-- config -->
   <div id="div_config">
-    <br>  
-    <input type="text" class="text_b" value="長押(秒)">
-    <input id="config_long" type="text" class="text_c" value="0002">
     <br>
-    <input type="text" class="text_b" value="現在地取得(秒)">
-    <input id="config_timerG" type="text" class="text_c" value="0005">
+    <input class="text_c" id="config_long" type="text" value="0002">
+    <label for="config_long">長押(秒)</label>
     <br>
-    <input type="text" class="text_b" value="ログ表示(秒)">
-    <input id="config_timerL" type="text" class="text_c" value="0600">
+    <input class="text_c" id="config_timerG" type="text" value="0005">
+    <label for="config_timerG">現在地取得(秒)</label>
     <br>
-    <input type="text" class="text_b" value="全時間表示">
-    <button id="config_time" class="button_a30"></button>
-    <br> 
-    <input type="text" class="text_b" value="線表示">
-    <button id="config_line" class="button_a30"></button>
+    <input class="text_c" id="config_timerL" type="text" value="0600">
+    <label for="config_timerL">ログ表示(秒)</label>
     <br>
-    <input type="text" class="text_b" value="info表示"> 
-    <button id="config_info" class="button_a30"></button>
+    <button class="button_a30" id="config_time"></button>
+    <label for="config_time">全時間表示</label>
     <br>
-    <button id="config_upd" class="button_a">更新</button>
-    <input id="test_text" type="text" class="text_a" value="100,200">
-    <button id="test_1" class="button_a">t_1</button>
+    <button class="button_a30" id="config_line"></button>
+    <label for="config_line">線表示</label>
     <br>
-    <pre id="config_arrow"></pre>
+    <button class="button_a30" id="config_info"></button>
+    <label for="config_info">info表示</label>
+    <br>
+    <button class="button_a" id="config_upd">更新</button>
   </div>
   <!-- act -->
   <div id="div_act">
@@ -190,10 +185,12 @@
   <div id="div_iii">
     <button id="iii_00" class="button_a60">移動0,0</button>
     <button id="iii_gps" class="button_a60">GPS</button>
+    <br>
     <button id="iii_config" class="button_a60">config</button>
     <button id="iii_x" class="button_a">X</button>
-    <br>
     <button id="iii_rec" class="button_rec"></button>
+    <br>
+    <pre id="iii_arrow" class="pre_a"></pre>
   </div>
   <!-- script -->
   <script type="text/javascript" src="main.js"></script>
