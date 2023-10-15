@@ -3,7 +3,7 @@ body {
     color:white;
     font-size: 14px;
     font-weight: 100;
-    margin: 0px 0px 0px 0px;
+    margin: 0;
 }
 button, input {
     border: solid 3px;
@@ -25,7 +25,7 @@ select {
     border-radius: 5px / 5px;
     color:green;
     height: 28px;
-    padding: 0px 0px 0px 0px;
+    padding: 0;
 }
 #div_main, #div_config, #div_act {
     z-index: 1;
@@ -107,6 +107,15 @@ select {
 }
 .canvas_a > canvas {
     position: absolute;
+}
+.pre_a {
+    background:#e0ffff;
+    border: solid 3px;
+    border-radius: 5px / 5px;
+    color:green;
+    height: 140px;
+    width: 140px;
+    margin: 0;
 }
 .text_a {
     height: 20px;
