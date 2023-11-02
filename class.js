@@ -1,5 +1,9 @@
 // 矢印
 class Arrow {
+    // 表示内容消去
+    clear() {
+        this.text = "";
+    }
     // 地図のサイズ
     size(width,height) {
         this.array = [];
@@ -601,7 +605,7 @@ class Scene {
     info_clear() {
         this.info_cnt = 0;
         this.info_save = "";
-        pre_info.innerHTML = "";
+        INFO_ARROW.innerHTML = "";
     }
     // info 表示
     info_disp(info) {
@@ -657,7 +661,7 @@ class Scene {
     // セット
     set(key) {
         // 初期セット
-        this.m_c      = "none";
+        this.m_s      = "none";
         this.m_d      = "none";
         this.m_i      = "none";
         this.m_sel_d  = "none";
@@ -669,7 +673,6 @@ class Scene {
         this.m_log    = "none";
         this.m_map    = "none";
         this.m_name   = "none";
-        this.m_m      = "inline";
         this.m_sel_m  = "none";
         this.d_canvas = "none";
         this.d_config = "none";
@@ -686,30 +689,34 @@ class Scene {
         this.d_gps    = "none";
         this.d_iii    = "none";
         switch (key) {
-            case "ロード":
-                this.m_d      = "inline";
+            case "start":
                 this.m_i      = "inline";
+                this.m_d      = "inline";
                 this.m_map    = "inline";
                 this.m_name   = "inline";
                 this.d_config = "block";
                 break;
             case "データ":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 break;
             case "全表示":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.d_act    = "block";
                 this.d_all    = "block";
                 break;
             case "選択表示":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline";
                 break;
             case "選択表示2":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline";
                 this.d_act    = "block";
@@ -718,18 +725,21 @@ class Scene {
                 this.d_log    = "block";
                 break;
             case "集計表示":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.d_summ   = "inline";
                 break;
             case "全保存":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_exe    = "inline";
                 this.d_all    = "block";
                 break;
             case "cfh保存":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_exe    = "inline";
                 this.d_ctrl   = "block";             
@@ -737,12 +747,14 @@ class Scene {
                 this.d_flag   = "block";               
                 break;
             case "選択保存":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline";
                 break;
             case "選択保存2":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline";                
                 this.m_exe    = "inline";
@@ -751,23 +763,27 @@ class Scene {
                 this.d_log    = "block";
                 break;
             case "保存追加":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_exe    = "inline";
                 this.d_all    = "block";
                 break;
             case "終了":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_close  = "inline";
                 break;
             case "選択削除":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline";
                 break;
             case "選択削除2":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_sel_h  = "inline"; 
                 this.m_flag   = "inline";
@@ -776,21 +792,21 @@ class Scene {
                 this.d_log    = "block";
                 break;
             case "info":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
+                this.m_d      = "inline";
                 this.m_erase  = "inline";
                 this.d_info   = "block";
                 break;
             case "地図表示":
-                this.m_c      = "inline";
+                this.m_s      = "inline";
                 this.m_d      = "inline";
+                this.m_i      = "inline";
                 this.m_sel_m  = "inline";
-                this.m_m      = "none";
                 this.d_canvas = "block";
                 break;
         }
-        if (main_name.value == "") this.m_m = "none";
         // main
-        main_c.style.display     = this.m_c;
+        main_s.style.display     = this.m_s;
         main_d.style.display     = this.m_d;
         main_i.style.display     = this.m_i;
         main_sel_d.style.display = this.m_sel_d;
@@ -802,7 +818,6 @@ class Scene {
         main_log.style.display   = this.m_log;
         main_map.style.display   = this.m_map;
         main_name.style.display  = this.m_name;
-        main_m.style.display     = this.m_m;
         main_sel_m.style.display = this.m_sel_m;
         main_err.style.display   = (main_err.value == "") ? "none" : "inline";
         // canvas
