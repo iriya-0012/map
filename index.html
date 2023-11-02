@@ -9,9 +9,9 @@
 <body id="body">
   <!-- main -->
   <div id="div_main">
-    <button id="main_c" class="button_a30" >C</button>
-    <button id="main_d" class="button_a30" >D</button>
-    <button id="main_i" class="button_a30" >I</button>
+    <button id="main_s" class="button_a30">S</button>
+    <button id="main_d" class="button_a30">D</button>
+    <button id="main_i" class="button_a30">I</button>
     <select id="main_sel_d" value="">
       <option value="allDisp">全表示</option>
       <option value="selDisp">選択表示</option>
@@ -19,27 +19,26 @@
       <option value="allSave">全保存</option>
       <option value="cfhSave">cfh保存</option>
       <option value="selSave">選択保存</option>
-      <option value="fileAdd">保存追加</option>  
+      <option value="fileAdd">保存追加</option>
       <option value="selDel">選択削除</option>
     </select>
     <select id="main_sel_h"></select>
     <button id="main_exe" class="button_a" value="">実行</button>
-    <button id="main_close" class="button_b100" value="">終了</button> 
+    <button id="main_close" class="button_b100" value="">終了</button>
     <button id="main_erase" class="button_a" value="">消去</button>
     <button id="main_flag" class="button_a" value="">flag</button>
     <button id="main_log" class="button_a" value="">log</button>
     <button id="main_map" class="button_a">地図</button>
+    <span id="main_name"></span>
     <input id="main_file_h" type="file" style="display:none">
     <input id="main_file_m" type="file" style="display:none">
-    <input id="main_name" type="text" class="text_a">
-    <select id="main_sel_m" value=""> 
+    <select id="main_sel_m" value="">
       <option value="genSet">現在設定</option>
       <option value="mapDisp">地図表示</option>
       <option value="flagSet">Flag設定</option>
       <option value="genGet">位置計測</option>
     </select>
-    <button id="main_m" class="button_a30">M</button> 
-    <button id="main_rec" class="button_rec"></button>
+    <button id="main_rec" class="button_rec">-</button>
     <button id="main_err" class="button_r"></button>
   </div>
   <!-- canvas -->
@@ -157,7 +156,8 @@
   </div>
   <!-- info -->
   <div id="div_info">
-    <pre id="pre_info"></pre>
+    <br>
+    <pre id="info_arrow" class="pre_a"></pre>
   </div>
   <!-- fset -->
   <div id="div_fset">
@@ -186,11 +186,12 @@
     <button id="iii_00" class="button_a60">移動0,0</button>
     <button id="iii_gps" class="button_a60">GPS</button>
     <br>
-    <button id="iii_config" class="button_a60">config</button>
+    <button id="iii_start" class="button_a60">start</button>
     <button id="iii_x" class="button_a">X</button>
     <button id="iii_rec" class="button_rec"></button>
     <br>
-    <pre id="iii_arrow" class="pre_a"></pre>
+
+    <button id="iii_log_d" class="button_a60">log削除</button>
   </div>
   <!-- script -->
   <script type="text/javascript" src="main.js"></script>
