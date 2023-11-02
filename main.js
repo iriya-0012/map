@@ -167,7 +167,7 @@ document.getElementById("main_map").addEventListener("click",() => {
     }
     main_file_m.click();
 });
-//
+// 地図名
 document.getElementById("main_name").addEventListener("click",() => {
     // 消去 地図表示
     cScene.reset("ctrl","flag");
@@ -275,7 +275,10 @@ document.getElementById("main_exe").addEventListener("click",() => {
     }        
 });
 // main_erase 消去
-document.getElementById("main_erase").addEventListener("click",() => cScene.info_clear());
+document.getElementById("main_erase").addEventListener("click",() => {
+    cScene.info_clear();
+    cScene.set("start");
+});
 // main_flag 選択削除 flag
 document.getElementById("main_flag").addEventListener("click",() => {
     if (!confirm('flag 削除 OK')) return;
