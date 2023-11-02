@@ -1,15 +1,15 @@
-const CON_MAIN  = canvas_main.getContext("2d");
-const CON_FLAG  = canvas_flag.getContext("2d");
-const CON_LOG   = canvas_log.getContext("2d");
+const CON_MAIN = canvas_main.getContext("2d");
+const CON_FLAG = canvas_flag.getContext("2d");
+const CON_LOG = canvas_log.getContext("2d");
 const FONT_CHAR = "20px 'UD デジタル 教科書体 NP-B'";
 const FONT_TIME = "16px 'UD デジタル 教科書体 NP-B'";
-const MAP_ALL   = "map.1_";
-const MAP_CTRL  = "map.1_c";
-const MAP_FLAG  = "map.1_f_";
-const MAP_HEAD  = "map.1_h_";
-const MAP_LOG   = "map.1_l_";
-const III_ARROW = document.getElementById("iii_arrow");
-let cImage      = new Image;
+const MAP_ALL = "map.1_";
+const MAP_CTRL = "map.1_c";
+const MAP_FLAG = "map.1_f_";
+const MAP_HEAD = "map.1_h_";
+const MAP_LOG = "map.1_l_";
+const INFO_ARROW = document.getElementById("info_arrow");
+let cImage = new Image;
 // act_ins 追加
 document.getElementById("act_ins").addEventListener("click",() => {
     let key = act_key.value;
@@ -150,8 +150,8 @@ document.getElementById("gps_rec").addEventListener("click",() => {
     // 現在地取得 開始
     con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
 });
-// to config
-document.getElementById("main_c").addEventListener("click",() => cScene.set("ロード"));
+// to start
+document.getElementById("main_s").addEventListener("click",() => cScene.set("start"));
 // to data
 document.getElementById("main_d").addEventListener("click",() => {
     main_sel_d.value = "";
@@ -159,12 +159,6 @@ document.getElementById("main_d").addEventListener("click",() => {
 });
 // to info
 document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
-// to map
-document.getElementById("main_m").addEventListener("click",() => {
-    // 消去 地図表示
-    cScene.reset("ctrl","flag");
-    cScene.set("地図表示");
-});
 // main_map 地図選択
 document.getElementById("main_map").addEventListener("click",() => {
     if (con_timerF) {
@@ -172,6 +166,12 @@ document.getElementById("main_map").addEventListener("click",() => {
         return;
     }
     main_file_m.click();
+});
+//
+document.getElementById("main_name").addEventListener("click",() => {
+    // 消去 地図表示
+    cScene.reset("ctrl","flag");
+    cScene.set("地図表示");
 });
 // main_file_h 保存データ選択
 document.getElementById("main_file_h").addEventListener("change",(e) => {
@@ -218,10 +218,10 @@ document.getElementById("main_file_m").addEventListener("change",(e) => {
     // info 初期化
     info_cnt = 0;
     info_save = "";
-    pre_info.innerHTML = "";
+    info_arrow.innerHTML = "";
     // 地図読込
     cImage.src = file_url;
-    main_name.value = file_name;
+    main_name.innerHTML = file_name;
 });
 // main_exe 実行
 document.getElementById("main_exe").addEventListener("click",() => {
@@ -409,12 +409,14 @@ document.getElementById("iii_gps").addEventListener('click',() => {
     scroll.left = cGen.x - 20;
     window.scrollTo(scroll);
 });
-// iii_config 移動
-document.getElementById("iii_config").addEventListener('click',() => {
+// iii_start 移動
+document.getElementById("iii_start").addEventListener('click',() => {
     main_sel_m.value = "";
-    cScene.set("ロード");
+    cScene.set("start");
     window.scrollTo({top:0,left:0,behavior:'smooth'});
 });
+// iii_log_d log削除
+document.getElementById("iii_log_d").addEventListener("click",() => tbo_iii_log_del());
 // iii_rec 記録 yn
 document.getElementById("iii_rec").addEventListener("click",() => rec_yn());
 // iii_x 消去
@@ -518,7 +520,7 @@ cImage.onload = () => {
     cScene.set("地図表示");
     navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
 }
-// ロード時
+// start時
 window.onload = () => {
     // control 取得
     let ctrl = -1;   
@@ -545,7 +547,7 @@ window.onload = () => {
         cScene.line_set(con_dispLine);
         cScene.info_set(con_dispInfo);
     }
-    cScene.set("ロード");
+    cScene.set("start");
     // headA 作成
     headA_set();
     if (!navigator.geolocation) cScene.info_disp("位置情報取得 不可");
@@ -634,7 +636,7 @@ function gen_ok_timer(gen) {
     cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
     cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");
-    III_ARROW.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
+    INFO_ARROW.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
 }
 // 現在地取得失敗
 function gen_err(err) {
@@ -647,7 +649,7 @@ function gen_err(err) {
 	cGen.m = gen_mess[err.code];
     cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
-    III_ARROW.innerHTML = cArrow.set_str("x");
+    INFO_ARROW.innerHTML = cArrow.set_str("✕");
 }
 // オプション・オブジェクト
 let gen_opt = {
@@ -897,7 +899,7 @@ function tbo_summ_flag_del(k) {
     tbody_detete(tbo_summ);
     tbo_summ_disp();
 }
-// log 削除
+// log 削除 (sum)
 function tbo_summ_log_del(k) {
     if (!confirm(`${k.data} log 削除 OK`)) return;
     let key = k.data.slice(0,11).replace(MAP_HEAD,MAP_LOG);
@@ -909,6 +911,18 @@ function tbo_summ_log_del(k) {
     for (item of logA) localStorage.removeItem(item);
     tbody_detete(tbo_summ);
     tbo_summ_disp();
+}
+// log 削除 (iii)
+function tbo_iii_log_del(k) {
+    if (!confirm(`${cHead.key} log 削除 OK`)) return;
+    let key = cHead.key.slice(0,11).replace(MAP_HEAD,MAP_LOG);
+    logA = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let x = localStorage.key(i);
+        if (x.slice(0,11) == key) logA.push(x);       
+    }
+    for (item of logA) localStorage.removeItem(item);
+    cScene.reset('iii','log');
 }
 // tbo_hfl 表示
 function tbo_hfl_disp() {
