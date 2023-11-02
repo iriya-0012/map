@@ -553,7 +553,7 @@ window.onload = () => {
     cScene.set("start");
     // headA 作成
     headA_set();
-    if (!navigator.geolocation) cScene.info_disp("位置情報取得 不可");
+    // if (!navigator.geolocation) cScene.info_disp("位置情報取得 不可");
 }
 // 丸
 function con_arc(con,x,y,radius,color) {
