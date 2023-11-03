@@ -596,32 +596,32 @@ class Scene {
         div_iii.style.display = "block";
     }
     // info表示・変更
-    info_set(yn) { config_info.innerHTML = (yn == "y") ? "✓" : "-"}
+    info_set(yn) { CONFIG_INFO.innerHTML = (yn == "y") ? "✓" : "-"}
     info_change(yn) {
         con_dispInfo = (yn == "n") ? "y" : "n";
-        config_info.innerHTML = (yn == "n") ? "✓" : "-";
+        CONFIG_INFO.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // info 初期化
-    info_clear() {
-        this.info_cnt = 0;
-        this.info_save = "";
-        INFO_ARROW.innerHTML = "";
-    }
+    // info_clear() {
+    //     this.info_cnt = 0;
+    //     this.info_save = "";
+    //     INFO_ARROW.innerHTML = "";
+    // }
     // info 表示
-    info_disp(info) {
-        if (con_dispInfo == "n") return;
-        if (info == this.info_save && this.info_cnt < 9) {
-            this.info_cnt++;
-            pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
-        } else {
-            let dt = new Date();
-            let HH = ("00" + (dt.getHours())).slice(-2);
-            let MM = ("00" + (dt.getMinutes())).slice(-2);
-            pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
-            this.info_cnt = 0;
-            this.info_save = info;
-        }
-    }
+    // info_disp(info) {
+    //     if (con_dispInfo == "n") return;
+    //     if (info == this.info_save && this.info_cnt < 9) {
+    //         this.info_cnt++;
+    //         pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
+    //     } else {
+    //         let dt = new Date();
+    //         let HH = ("00" + (dt.getHours())).slice(-2);
+    //         let MM = ("00" + (dt.getMinutes())).slice(-2);
+    //         pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
+    //         this.info_cnt = 0;
+    //         this.info_save = info;
+    //     }
+    // }
     // 線表示・変更
     line_set(yn) { config_line.innerHTML = (yn == "y") ? "✓" : "-"}
     line_change(yn) {
