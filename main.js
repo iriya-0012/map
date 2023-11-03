@@ -1,14 +1,25 @@
-const CON_MAIN = canvas_main.getContext("2d");
-const CON_FLAG = canvas_flag.getContext("2d");
-const CON_LOG = canvas_log.getContext("2d");
+const CANVAS_FLAG = document.getElementById("canvas_flag");
+const CANVAS_LOG = document.getElementById("canvas_log");
+const CANVAS_MAIN = document.getElementById("canvas_main");
+const CON_FLAG = CANVAS_FLAG.getContext("2d");
+const CON_LOG = CANVAS_LOG.getContext("2d");
+const CON_MAIN = CANVAS_MAIN.getContext("2d");
+const CONFIG_INFO = document.getElementById("config_info");
+const CONFIG_LINE = document.getElementById("config_line");
+const CONFIG_LONG = document.getElementById("config_long");
+const CONFIG_TIME = document.getElementById("config_time");
+const CONFIG_TIMERG = document.getElementById("config_timerG");
+const CONFIG_TIMERL = document.getElementById("config_timerL");
+const DIV_MAIN = document.getElementById("div_main");
 const FONT_CHAR = "20px 'UD デジタル 教科書体 NP-B'";
 const FONT_TIME = "16px 'UD デジタル 教科書体 NP-B'";
+const INFO_ARROW = document.getElementById("info_arrow");
+const MAIN_SEL_M = document.getElementById("main_sel_m");
 const MAP_ALL = "map.1_";
 const MAP_CTRL = "map.1_c";
 const MAP_FLAG = "map.1_f_";
 const MAP_HEAD = "map.1_h_";
 const MAP_LOG = "map.1_l_";
-const INFO_ARROW = document.getElementById("info_arrow");
 let cImage = new Image;
 // act_ins 追加
 document.getElementById("act_ins").addEventListener("click",() => {
@@ -59,23 +70,23 @@ document.getElementById("act_del").addEventListener("click",() => {
     }
 });
 // config_time 全時間表示 yn
-document.getElementById("config_time").addEventListener("click",() => cScene.time_change(con_dispTime));
+CONFIG_TIME.addEventListener("click",() => cScene.time_change(con_dispTime));
 // config_time 線表示 yn
-document.getElementById("config_line").addEventListener("click",() => cScene.line_change(con_dispLine));
+CONFIG_LINE.addEventListener("click",() => cScene.line_change(con_dispLine));
 // config_time info表示 yn
-document.getElementById("config_info").addEventListener("click",() => cScene.info_change(con_dispInfo));
+CONFIG_INFO.addEventListener("click",() => cScene.info_change(con_dispInfo));
 // config_upd 更新
 document.getElementById("config_upd").addEventListener("click",() => {
-    let long = ("0000" + Number(config_long.value)).slice(-4);
-    let timerG = ("0000" + Number(config_timerG.value)).slice(-4);
-    let timerL = ("0000" + Number(config_timerL.value)).slice(-4);
-    let time = (config_time.innerHTML == "-") ? "n" : "y";
-    let line = (config_line.innerHTML == "-") ? "n" : "y";
-    let info = (config_info.innerHTML == "-") ? "n" : "y";
+    let long = ("0000" + Number(CONFIG_LONG.value)).slice(-4);
+    let timerG = ("0000" + Number(CONFIG_TIMERG.value)).slice(-4);
+    let timerL = ("0000" + Number(CONFIG_TIMERL.value)).slice(-4);
+    let time = (CONFIG_TIME.innerHTML == "-") ? "n" : "y";
+    let line = (CONFIG_LINE.innerHTML == "-") ? "n" : "y";
+    let info = (CONFIG_INFO.innerHTML == "-") ? "n" : "y";
     let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
-    config_long.value = long;
-    config_timerG.value = timerG;
-    config_timerL.value = timerL;
+    CONFIG_LONG.value = long;
+    CONFIG_TIMERG.value = timerG;
+    CONFIG_TIMERL.value = timerL;
     localStorage.setItem(MAP_CTRL,str);
 });
 // fset_ins flag追加
@@ -276,7 +287,8 @@ document.getElementById("main_exe").addEventListener("click",() => {
 });
 // main_erase 消去
 document.getElementById("main_erase").addEventListener("click",() => {
-    cScene.info_clear();
+    cArrow.clear();
+    INFO_ARROW.innerHTML = "";
     cScene.set("start");
 });
 // main_flag 選択削除 flag
@@ -370,8 +382,8 @@ document.getElementById("main_sel_h").addEventListener("change",() => {
     }
 });
 // main_sel_m 地図処理
-document.getElementById("main_sel_m").addEventListener("change",() => {
-    switch (main_sel_m.value) {
+MAIN_SEL_M.addEventListener("change",() => {
+    switch (MAIN_SEL_M.value) {
         // 現在地設定
         case "genSet":
             // 消去・地図表示
@@ -414,7 +426,7 @@ document.getElementById("iii_gps").addEventListener('click',() => {
 });
 // iii_start 移動
 document.getElementById("iii_start").addEventListener('click',() => {
-    main_sel_m.value = "";
+    MAIN_SEL_M.value = "";
     cScene.set("start");
     window.scrollTo({top:0,left:0,behavior:'smooth'});
 });
@@ -425,11 +437,11 @@ document.getElementById("iii_rec").addEventListener("click",() => rec_yn());
 // iii_x 消去
 document.getElementById("iii_x").addEventListener("click",() => cScene.reset('iii'));
 // canvas click
-document.getElementById("canvas_log").addEventListener("click",(e) => {
+CANVAS_LOG.addEventListener("click",(e) => {
     // mouse click 位置
     mouseUpX = e.offsetX;
     mouseUpY = e.offsetY;
-    switch (main_sel_m.value) {
+    switch (MAIN_SEL_M.value) {
         // Flag設定
         case "flagSet":
             // flag配列チェック
@@ -465,7 +477,7 @@ document.getElementById("canvas_log").addEventListener("click",(e) => {
             let long = cConv.px_long(mouseUpX);
             let lat = cConv.py_lat(mouseUpY);
             let str = `位置 X=${mouseUpX},Y=${mouseUpY},経度=${long},緯度=${lat}`;
-            if (mouseUpX < canvas_main.width - 400) {
+            if (mouseUpX < CANVAS_MAIN.width - 400) {
                 con_box(CON_FLAG,mouseUpX,mouseUpY,400,40,"green",str);
             } else {
                 con_box(CON_FLAG,mouseUpX - 400,mouseUpY,400,40,"green",str);
@@ -475,7 +487,7 @@ document.getElementById("canvas_log").addEventListener("click",(e) => {
     }
 });
 // マウスdown
-document.getElementById("canvas_log").addEventListener('mousedown',(e) => {
+CANVAS_LOG.addEventListener('mousedown',(e) => {
     mouseDownDate = new Date();
     // 右クリック
     if (e.button == 2) {
@@ -483,9 +495,9 @@ document.getElementById("canvas_log").addEventListener('mousedown',(e) => {
     }
 });
 // マウスup
-document.getElementById("canvas_log").addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
+CANVAS_LOG.addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
 // タッチstart
-document.getElementById("canvas_log").addEventListener("touchstart",(e) => { 
+CANVAS_LOG.addEventListener("touchstart",(e) => { 
     // 3本指はiii表示
     if (e.targetTouches.length == 3) {
         let obj = e.changedTouches[0];
@@ -496,23 +508,23 @@ document.getElementById("canvas_log").addEventListener("touchstart",(e) => {
     mouseDownDate = new Date();
 });
 // タッチend
-document.getElementById("canvas_log").addEventListener("touchend",(e) => {
+CANVAS_LOG.addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
     mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop);
 });
 // 地図読込完了
 cImage.onload = () => {
-    main_sel_m.value = "genSet";
+    MAIN_SEL_M.value = "genSet";
     // 矢印情報セット
     cArrow.size(cImage.width,cImage.height)
     // 地図情報セット
-    canvas_main.width   = cImage.width;
-    canvas_main.height  = cImage.height;
-    canvas_flag.width   = cImage.width;
-    canvas_flag.height  = cImage.height;
-    canvas_log.width    = cImage.width;
-    canvas_log.height   = cImage.height;
-    div_main.style.width = cImage.width + "px";
+    CANVAS_MAIN.width   = cImage.width;
+    CANVAS_MAIN.height  = cImage.height;
+    CANVAS_FLAG.width   = cImage.width;
+    CANVAS_FLAG.height  = cImage.height;
+    CANVAS_LOG.width    = cImage.width;
+    CANVAS_LOG.height   = cImage.height;
+    DIV_MAIN.style.width = cImage.width + "px";
     storage_get();
     cConv.set(cHead.left,cHead.right,cHead.bottom,cHead.top,cImage.width,cImage.height);
     cGen.clear();
@@ -537,12 +549,12 @@ window.onload = () => {
     //  control 有無確認 
     if (ctrl != -1) {
         let x = localStorage.getItem(MAP_CTRL);
-        config_long.value = x.slice(0,4);
-        config_timerG.value = x.slice(5,9);
-        config_timerL.value = x.slice(10,14);
-        con_long = Number(config_long.value) * 1000;
-        con_timerG = Number(config_timerG.value);
-        con_timerL = Number(config_timerL.value) / 60;
+        CONFIG_LONG.value = x.slice(0,4);
+        CONFIG_TIMERG.value = x.slice(5,9);
+        CONFIG_TIMERL.value = x.slice(10,14);
+        con_long = Number(CONFIG_LONG.value) * 1000;
+        con_timerG = Number(CONFIG_TIMERG.value);
+        con_timerL = Number(CONFIG_TIMERL.value) / 60;
         con_dispTime = x.slice(15,16);
         con_dispLine = x.slice(16,17);
         con_dispInfo = x.slice(17,18);
@@ -551,9 +563,7 @@ window.onload = () => {
         cScene.info_set(con_dispInfo);
     }
     cScene.set("start");
-    // headA 作成
     headA_set();
-    // if (!navigator.geolocation) cScene.info_disp("位置情報取得 不可"); ////
 }
 // 丸
 function con_arc(con,x,y,radius,color) {
@@ -623,7 +633,7 @@ function gen_ok_timer(gen) {
     cGen.set(gen);
     if (cGen.adjL) {
         // 設定地 log 出力
-        cScene.info_disp(`設定:${cGen.long} ${cGen.lat} ${cGen.adjX} ${cGen.adjY}`);
+        // cScene.info_disp(`設定:${cGen.long} ${cGen.lat} ${cGen.adjX} ${cGen.adjY}`);
         cLog.storage(MAP_LOG,cHead.id,cGen.adjMd,cGen.adjHm,"a",cGen.long,cGen.lat,cGen.adjX,cGen.adjY);
         cLog.display(CON_LOG,cGen.adjMd,cGen.adjHm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
         cGen.adjL = false;
@@ -636,7 +646,7 @@ function gen_ok_timer(gen) {
     let MM = ("00" + (dt.getMinutes())).slice(-2);
     let Md = `${mm}${dd}`;
     let Hm = `${HH}${MM}`;
-    cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
+    // cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
     cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");
     INFO_ARROW.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
@@ -650,7 +660,7 @@ function gen_err(err) {
 		3: "位置情報の取得タイムアウト",
 	};
 	cGen.m = gen_mess[err.code];
-    cScene.info_disp(cGen.m);
+    // cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
     INFO_ARROW.innerHTML = cArrow.set_str("✕");
 }
@@ -722,7 +732,7 @@ function mouse_up(x,y) {
     mouseUpDate = new Date();
     if (mouseUpDate.getTime() - mouseDownDate.getTime() < con_long) return;
     // 現在地設定、地図表示は、長押しで現在地取得
-    if (main_sel_m.value == "mapDisp" || main_sel_m.value == "genSet") {
+    if (MAIN_SEL_M.value == "mapDisp" || MAIN_SEL_M.value == "genSet") {
         navigator.geolocation.getCurrentPosition(gen_ok_long,gen_err,gen_opt);
     }
 }
@@ -1025,7 +1035,7 @@ function tbody_detete(...ctrl) {
 // 開始
 let adjX = 0;           // 調整 x
 let adjY = 0;           // 調整 y
-let can_rect = canvas_main.getBoundingClientRect();
+let can_rect = CANVAS_MAIN.getBoundingClientRect();
 let con_file = "";      // 地図file名
 let con_long = 2;       // 長押し(2秒)
 let con_timerId;        // タイマーid
