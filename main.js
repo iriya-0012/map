@@ -1,3 +1,5 @@
+const ACT_KEY = document.getElementById("act_key");
+const ACT_VALUE = document.getElementById("act_value");
 const CANVAS_FLAG = document.getElementById("canvas_flag");
 const CANVAS_LOG = document.getElementById("canvas_log");
 const CANVAS_MAIN = document.getElementById("canvas_main");
@@ -10,62 +12,105 @@ const CONFIG_LONG = document.getElementById("config_long");
 const CONFIG_TIME = document.getElementById("config_time");
 const CONFIG_TIMERG = document.getElementById("config_timerG");
 const CONFIG_TIMERL = document.getElementById("config_timerL");
+const DIV_ACT = document.getElementById("div_act");
+const DIV_ALL = document.getElementById("div_all");
+const DIV_CANVAS = document.getElementById("div_canvas");
+const DIV_CONFIG = document.getElementById("div_config");
+const DIV_CTRL = document.getElementById("div_ctrl");
+const DIV_FLAG = document.getElementById("div_flag");
+const DIV_FSET = document.getElementById("div_fset");
+const DIV_GEN = document.getElementById("div_gen");
+const DIV_GPS = document.getElementById("div_gps");
+const DIV_HEAD = document.getElementById("div_head");
+const DIV_III = document.getElementById("div_iii");
+const DIV_INFO = document.getElementById("div_info");
+const DIV_LOG = document.getElementById("div_log");
 const DIV_MAIN = document.getElementById("div_main");
+const DIV_SUMM = document.getElementById("div_summ");
+const FSET_DEL = document.getElementById("fset_del");
+const FSET_INS = document.getElementById("fset_ins");
+const FSET_TEXT = document.getElementById("fset_text");
+const FSET_UPD = document.getElementById("fset_upd");
 const FONT_CHAR = "20px 'UD デジタル 教科書体 NP-B'";
 const FONT_TIME = "16px 'UD デジタル 教科書体 NP-B'";
+const GEN_NG = document.getElementById("gen_ng");
+const GEN_OK = document.getElementById("gen_ok");
+const III_REC = document.getElementById("iii_rec");
 const INFO_ARROW = document.getElementById("info_arrow");
+const MAIN_CLOSE = document.getElementById("main_close");
+const MAIN_D = document.getElementById("main_d");
+const MAIN_ERASE = document.getElementById("main_erase");
+const MAIN_ERR = document.getElementById("main_err");
+const MAIN_EXE = document.getElementById("main_exe");
+const MAIN_FILE_H = document.getElementById("main_file_h");
+const MAIN_FILE_M = document.getElementById("main_file_m");
+const MAIN_FLAG = document.getElementById("main_flag");
+const MAIN_I = document.getElementById("main_i");
+const MAIN_LOG = document.getElementById("main_log");
+const MAIN_MAP = document.getElementById("main_map");
+const MAIN_NAME = document.getElementById("main_name");
+const MAIN_REC = document.getElementById("main_rec");
+const MAIN_S = document.getElementById("main_s");
+const MAIN_SEL_D = document.getElementById("main_sel_d");
+const MAIN_SEL_H = document.getElementById("main_sel_h");
 const MAIN_SEL_M = document.getElementById("main_sel_m");
 const MAP_ALL = "map.1_";
 const MAP_CTRL = "map.1_c";
 const MAP_FLAG = "map.1_f_";
 const MAP_HEAD = "map.1_h_";
 const MAP_LOG = "map.1_l_";
+const TBO_ALL = document.getElementById("tbo_all");
+const TBO_CTRL = document.getElementById("tbo_ctrl");
+const TBO_FLAG = document.getElementById("tbo_flag");
+const TBO_HEAD = document.getElementById("tbo_head");
+const TBO_LOG = document.getElementById("tbo_log");
+const TBO_SUMM = document.getElementById("tbo_summ");
 let cImage = new Image;
 // act_ins 追加
 document.getElementById("act_ins").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
     let rtn = confirm(`追加 キー:${key},内容:${val}`);
     if (rtn) localStorage.setItem(key,val);
     // 更新後表示
-    if (main_sel_d.value == "addDisp") {
-        tbody_detete(tbo_all);    
+    if (MAIN_SEL_D.value == "addDisp") {
+        tbody_detete(TBO_ALL);    
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
         tbo_hfl_disp();
     }
 });
 // act_upd 修正
 document.getElementById("act_upd").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
     let rtn = confirm(`修正 キー:${key},内容:${val}`);
     if (rtn) {
         localStorage.removeItem(key_save);
         localStorage.setItem(key,val);
     }
     // 更新後表示
-    if (main_sel_d.value == "allDisp") {
-        tbody_detete(tbo_all);  
+    if (MAIN_SEL_D.value == "allDisp") {
+        tbody_detete(TBO_ALL);  
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
         tbo_hfl_disp();
     }
 });
 // act_del 削除
 document.getElementById("act_del").addEventListener("click",() => {
-    let key = act_key.value;
-    let val = act_value.value;
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
     let rtn = confirm(`削除 キー:${key},内容:${val}`);
     if (rtn) {localStorage.removeItem(key)}
     // 更新後表示
-    if (main_sel_d.value == "allDisp") {
-        tbody_detete(tbo_all);  
+    if (MAIN_SEL_D.value == "allDisp") {
+        tbody_detete(TBO_ALL);  
         tbo_all_disp();
     } else {
-        tbody_detete(tbo_head,tbo_flag,tbo_log);
+        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
         tbo_hfl_disp();
     }
 });
@@ -90,7 +135,7 @@ document.getElementById("config_upd").addEventListener("click",() => {
     localStorage.setItem(MAP_CTRL,str);
 });
 // fset_ins flag追加
-document.getElementById("fset_ins").addEventListener("click",() => {
+FSET_INS.addEventListener("click",() => {
     // 追加no検索
     let free = 0;
     for (let i = 0; i < flagT.length; i++) {
@@ -103,22 +148,22 @@ document.getElementById("fset_ins").addEventListener("click",() => {
     // 追加    
     let no  = (`00${free}`).slice(-2);
     let key = `${MAP_FLAG}${cHead.id}_${no}`;
-    localStorage.setItem(key,fset_text.value);
+    localStorage.setItem(key,FSET_TEXT.value);
     storage_get();
     // 再表示
     cScene.reset("ctrl","flag");
     cScene.set("地図表示");
 });
 // fset_upd flag修正
-document.getElementById("fset_upd").addEventListener("click",() => {
-    localStorage.setItem(flagT[flagApos],fset_text.value);
+FSET_UPD.addEventListener("click",() => {
+    localStorage.setItem(flagT[flagApos],FSET_TEXT.value);
     storage_get();
     // 再表示
     cScene.reset("ctrl","flag");
     cScene.set("地図表示");
 });
 // fset_del flag削除
-document.getElementById("fset_del").addEventListener("click",() => {
+FSET_DEL.addEventListener("click",() => {
     localStorage.removeItem(flagT[flagApos]);
     storage_get();
     // 再表示
@@ -126,23 +171,23 @@ document.getElementById("fset_del").addEventListener("click",() => {
     cScene.set("地図表示");
 });
 // gen_ok 現在地の変更 OK
-document.getElementById("gen_ok").addEventListener("click",() => {
+GEN_OK.addEventListener("click",() => {
     // 調整セット
     cGen.adjust(true,true,adjX,adjY);
     // 再表示
     cScene.reset("ctrl","flag","gen","gps");
     cScene.set("地図表示");
-    if (main_rec.value == "") cScene.rec_set_n();
+    if (MAIN_REC.value == "") cScene.rec_set_n();
 });
 // gen_ng 現在地の変更 NG
-document.getElementById("gen_ng").addEventListener("click",() => cScene.reset("ctrl","flag","gen","gps"));
+GEN_NG.addEventListener("click",() => cScene.reset("ctrl","flag","gen","gps"));
 // gps_ok GPSの値に変更 OK
 document.getElementById("gps_ok").addEventListener("click",() => {
     // 調整セット
     cGen.adjust(true,true,0,0);
     // 再表示
     cScene.reset("ctrl","flag","gen","gps");
-    if (main_rec.value == "") cScene.rec_set_n();
+    if (MAIN_REC.value == "") cScene.rec_set_n();
 });
 // gps_get GPS再取得
 document.getElementById("gps_get").addEventListener("click",() => {
@@ -162,30 +207,30 @@ document.getElementById("gps_rec").addEventListener("click",() => {
     con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
 });
 // to start
-document.getElementById("main_s").addEventListener("click",() => cScene.set("start"));
+MAIN_S.addEventListener("click",() => cScene.set("start"));
 // to data
-document.getElementById("main_d").addEventListener("click",() => {
-    main_sel_d.value = "";
+MAIN_D.addEventListener("click",() => {
+    MAIN_SEL_D.value = "";
     cScene.set("データ")
 });
 // to info
-document.getElementById("main_i").addEventListener("click",() => cScene.set("info"));
+MAIN_I.addEventListener("click",() => cScene.set("info"));
 // main_map 地図選択
-document.getElementById("main_map").addEventListener("click",() => {
+MAIN_MAP.addEventListener("click",() => {
     if (con_timerF) {
         cScene.err_disp("記録中は地図の選択不可");
         return;
     }
-    main_file_m.click();
+    MAIN_FILE_M.click();
 });
 // 地図名
-document.getElementById("main_name").addEventListener("click",() => {
+MAIN_NAME.addEventListener("click",() => {
     // 消去 地図表示
     cScene.reset("ctrl","flag");
     cScene.set("地図表示");
 });
 // main_file_h 保存データ選択
-document.getElementById("main_file_h").addEventListener("change",(e) => {
+MAIN_FILE_H.addEventListener("change",(e) => {
     if (e.target.files.length == 0) return;
     // ファイルのブラウザ上でのURLを取得する
     let file = e.target.files[0];
@@ -201,13 +246,13 @@ document.getElementById("main_file_h").addEventListener("change",(e) => {
             if (text.length == 2) {
                 key_all.push(text[0]);
                 val_all.push(text[1]);
-                tbody_append(tbo_all,text[0],text[1]);
+                tbody_append(TBO_ALL,text[0],text[1]);
             }
         }
     }
 });
 // main_file_m 地図データ選択
-document.getElementById("main_file_m").addEventListener("change",(e) => {
+MAIN_FILE_M.addEventListener("change",(e) => {
     if (e.target.files.length == 0) return;
     // ファイルのブラウザ上でのURLを取得する
     let file = e.target.files[0];
@@ -229,14 +274,14 @@ document.getElementById("main_file_m").addEventListener("change",(e) => {
     // info 初期化
     info_cnt = 0;
     info_save = "";
-    info_arrow.innerHTML = "";
+    INFO_ARROW.innerHTML = "";
     // 地図読込
     cImage.src = file_url;
-    main_name.innerHTML = file_name;
+    MAIN_NAME.innerHTML = file_name;
 });
 // main_exe 実行
-document.getElementById("main_exe").addEventListener("click",() => {
-    switch (main_sel_d.value) {
+MAIN_EXE.addEventListener("click",() => {
+    switch (MAIN_SEL_D.value) {
         // 全保存
         case "allSave":
             key_all = [];
@@ -261,8 +306,8 @@ document.getElementById("main_exe").addEventListener("click",() => {
             break;      
         // 選択保存
         case "selSave":
-            let id  = main_sel_h.value.slice(8,10);
-            let txt = main_sel_h.value.slice(11);
+            let id  = MAIN_SEL_H.value.slice(8,10);
+            let txt = MAIN_SEL_H.value.slice(11);
             key_all = [];
             val_all = [];
             // 登録データ取得
@@ -281,40 +326,40 @@ document.getElementById("main_exe").addEventListener("click",() => {
         case "fileAdd":
             for (let i = 0; i < key_all.length; i++) localStorage.setItem(key_all[i],val_all[i]);
             cScene.set("終了");
-            main_sel_d.value = "";
+            MAIN_SEL_D.value = "";
             break;
     }        
 });
 // main_erase 消去
-document.getElementById("main_erase").addEventListener("click",() => {
+MAIN_ERASE.addEventListener("click",() => {
     cArrow.clear();
     INFO_ARROW.innerHTML = "";
     cScene.set("start");
 });
 // main_flag 選択削除 flag
-document.getElementById("main_flag").addEventListener("click",() => {
+MAIN_FLAG.addEventListener("click",() => {
     if (!confirm('flag 削除 OK')) return;
     for (item of flagT) localStorage.removeItem(item);
-    tbody_detete(tbo_head,tbo_flag,tbo_log);
+    tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
     tbo_hfl_disp();
 });
 // main_log 選択削除 log
-document.getElementById("main_log").addEventListener("click",() => {
+MAIN_LOG.addEventListener("click",() => {
     if (!confirm('log 削除 OK')) return;
     for (item of logT) localStorage.removeItem(item);
-    tbody_detete(tbo_head,tbo_flag,tbo_log);
+    tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
     tbo_hfl_disp();
 });
 // main_rec 記録 yn
-document.getElementById("main_rec").addEventListener("click",() => rec_yn());
+MAIN_REC.addEventListener("click",() => rec_yn());
 // main_err エラー消去
-document.getElementById("main_err").addEventListener("click",() => cScene.err_clear());
+MAIN_ERR.addEventListener("click",() => cScene.err_clear());
 // main_sel_d Data処理
-document.getElementById("main_sel_d").addEventListener("change",() => {
-    switch (main_sel_d.value) {
+MAIN_SEL_D.addEventListener("change",() => {
+    switch (MAIN_SEL_D.value) {
         // 全表示
         case "allDisp":
-            tbody_detete(tbo_all);
+            tbody_detete(TBO_ALL);
             cScene.set("全表示");
             tbo_all_disp();
             break;
@@ -325,32 +370,32 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
             break;
         // 集計表示
         case "sumDisp":
-            tbody_detete(tbo_summ);
+            tbody_detete(TBO_SUMM);
             cScene.set("集計表示");
             tbo_summ_disp();
             break;
         // 全保存
         case "allSave":
-            tbody_detete(tbo_all);
+            tbody_detete(TBO_ALL);
             cScene.set("全保存");
             tbo_all_disp();
             break;
         // cfh保存
         case "cfhSave":
-            tbody_detete(tbo_ctrl,tbo_head,tbo_flag);
+            tbody_detete(TBO_CTRL,TBO_HEAD,TBO_FLAG);
             cScene.set("cfh保存");
             tbo_cfh_disp();
             break;
         // 選択保存
         case "selSave":
-            tbody_detete(tbo_head,tbo_flag,tbo_log);
+            tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
             cScene.set("選択保存");
             main_sel_h_disp();
             break;
         // 保存追加
         case "fileAdd":
-            main_file_h.click();
-            tbody_detete(tbo_all);
+            MAIN_FILE_H.click();
+            tbody_detete(TBO_ALL);
             cScene.set("保存追加");
             break;
         // 選択削除
@@ -361,9 +406,9 @@ document.getElementById("main_sel_d").addEventListener("change",() => {
     }        
 });
 // main_sel_h Data処理2
-document.getElementById("main_sel_h").addEventListener("change",() => {
-    tbody_detete(tbo_head,tbo_flag,tbo_log);    
-    switch (main_sel_d.value) {
+MAIN_SEL_H.addEventListener("change",() => {
+    tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);    
+    switch (MAIN_SEL_D.value) {
         // 選択表示
         case "selDisp":
             cScene.set("選択表示2");
@@ -454,21 +499,21 @@ CANVAS_LOG.addEventListener("click",(e) => {
             // Flag設定
             if (flagApos == -1) {
                 con_arc(CON_FLAG,mouseUpX,mouseUpY,5,"green");
-                div_fset.style.left = mouseUpX - 60 + "px";
-                div_fset.style.top  = mouseUpY + 50 + "px";
-                div_fset.style.display = "block";    
-                fset_text.value = `${mouseUpX} ${mouseUpY} seg Memo`;
-                fset_ins.style.display = "inline";
-                fset_upd.style.display = "none";
-                fset_del.style.display = "none";
+                DIV_FSET.style.left = mouseUpX - 60 + "px";
+                DIV_FSET.style.top  = mouseUpY + 50 + "px";
+                DIV_FSET.style.display = "block";    
+                FSET_TEXT.value = `${mouseUpX} ${mouseUpY} seg Memo`;
+                FSET_INS.style.display = "inline";
+                FSET_UPD.style.display = "none";
+                FSET_DEL.style.display = "none";
             } else {
-                div_fset.style.left = mouseUpX - 60 + "px";
-                div_fset.style.top  = mouseUpY + 50 + "px";
-                div_fset.style.display = "block";
-                fset_text.value = flagA[flagApos].value;
-                fset_ins.style.display = "inline";
-                fset_upd.style.display = "inline";
-                fset_del.style.display = "inline";
+                DIV_FSET.style.left = mouseUpX - 60 + "px";
+                DIV_FSET.style.top  = mouseUpY + 50 + "px";
+                DIV_FSET.style.display = "block";
+                FSET_TEXT.value = flagA[flagApos].value;
+                FSET_INS.style.display = "inline";
+                FSET_UPD.style.display = "inline";
+                FSET_DEL.style.display = "inline";
             }
             break;
         // 位置計測
@@ -503,14 +548,14 @@ CANVAS_LOG.addEventListener("touchstart",(e) => {
         let obj = e.changedTouches[0];
         let x = Math.round(obj.pageX);
         let y = Math.round(obj.pageY);
-        cScene.iii(x,y - div_canvas.offsetTop);
+        cScene.iii(x,y - DIV_CANVAS.offsetTop);
     }
     mouseDownDate = new Date();
 });
 // タッチend
 CANVAS_LOG.addEventListener("touchend",(e) => {
     let obj = e.changedTouches[0];
-    mouse_up(obj.pageX,obj.pageY - div_canvas.offsetTop);
+    mouse_up(obj.pageX,obj.pageY - DIV_CANVAS.offsetTop);
 });
 // 地図読込完了
 cImage.onload = () => {
@@ -608,17 +653,14 @@ function con_box(con,x,y,w,h,color,text) {
 function gen_get() {navigator.geolocation.getCurrentPosition(gen_ok_timer,gen_err,gen_opt)}
 // 現在地取得成功 マウスup 長押
 function gen_ok_long(gen) {
-    let long = Math.round(gen.coords.longitude * 1000000) / 1000000;
-    let lat  = Math.round(gen.coords.latitude * 1000000) / 1000000;
-    let x    = cConv.long_px(long);
-    let y    = cConv.lat_py(lat);
-    adjX     = mouseUpX - x; // 調整 x
-    adjY     = mouseUpY - y; // 調整 y
+    cGen.set(gen);
+    adjX = mouseUpX - cGen.x; // 調整 x
+    adjY = mouseUpY - cGen.y; // 調整 y
     cScene.reset("flag","gps","gen");
-    cScene.gps(CON_FLAG,x,y);
+    cScene.gps(CON_FLAG,cGen.x,cGen.y);
     cScene.gen(CON_FLAG,mouseUpX,mouseUpY);
 }
-// 現在地取得成功 M クリック時
+// 現在地取得成功 地図読込完了、GPS再取得
 function gen_ok_m(gen) {
     cGen.set(gen);
     cScene.reset("gps");
@@ -704,9 +746,9 @@ function main_sel_h_disp() {
     }
     key_all.sort();
     // option削除
-    let sel = main_sel_h.options;
+    let sel = MAIN_SEL_H.options;
     for (let i = sel.length - 1; i > -1; i--) {
-        if (!sel[i].selectid) main_sel_h.removeChild(sel[i]);
+        if (!sel[i].selectid) MAIN_SEL_H.removeChild(sel[i]);
     }
     // option追加         
     for (item of key_all) {
@@ -720,9 +762,9 @@ function main_sel_h_disp() {
             opt.text = item;           
         }
         opt.value = item;
-        main_sel_h.appendChild(opt);
+        MAIN_SEL_H.appendChild(opt);
     }
-    main_sel_h.value = "";
+    MAIN_SEL_H.value = "";
 }
 // マウスup
 function mouse_up(x,y) {
@@ -739,13 +781,13 @@ function mouse_up(x,y) {
 // 記録 yn
 function rec_yn() {
     // 初期状態時は記録n
-    if (main_rec.value == "") {
+    if (MAIN_REC.value == "") {
         cScene.rec_set_n();
         return;
     }
     // 記録状態変更
     cScene.rec_change();
-    if (main_rec.value == "y") {
+    if (MAIN_REC.value == "y") {
         let timerG = Number(con_timerG);
         if (timerG < 1) timerG = 1;
         // 現在地取得 開始
@@ -794,24 +836,24 @@ function tbo_all_disp() {
     for (let i = 0; i < localStorage.length; i++) key_all.push(localStorage.key(i));    
     key_all.sort();
     // 行追加
-    for (item of key_all) tbody_append(tbo_all,item,localStorage.getItem(item));
+    for (item of key_all) tbody_append(TBO_ALL,item,localStorage.getItem(item));
     // onclick イベント追加
-    for (let r = 0; r < tbo_all.rows.length; r++) {
-        for (let c = 0; c < tbo_all.rows[r].cells.length; c++) {
-            let rc = tbo_all.rows[r].cells[c];
+    for (let r = 0; r < TBO_ALL.rows.length; r++) {
+        for (let c = 0; c < TBO_ALL.rows[r].cells.length; c++) {
+            let rc = TBO_ALL.rows[r].cells[c];
             rc.onclick = function() {tbo_all_click(this)}
         }
     }
-    act_key.value = "";
-    act_value.value = "";    
+    ACT_KEY.value = "";
+    ACT_VALUE.value = "";    
 }
 // tbo_all クリック
 function tbo_all_click(x) {
     let r = x.parentNode.rowIndex - 1;
-    act_key.value = tbo_all.rows[r].cells[0].innerHTML;
-    act_value.value = tbo_all.rows[r].cells[1].innerHTML;
-    key_save = act_key.value;
-    val_save = act_value.value;    
+    ACT_KEY.value = TBO_ALL.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_ALL.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;    
 }
 // tbo_cfh 表示
 function tbo_cfh_disp() {
@@ -831,13 +873,13 @@ function tbo_cfh_disp() {
     }
     // 行追加 ctrl
     ctrlT.sort();
-    for (item of ctrlT) tbody_append(tbo_ctrl,item,localStorage.getItem(item));
+    for (item of ctrlT) tbody_append(TBO_CTRL,item,localStorage.getItem(item));
     // 行追加 head
     headT.sort();
-    for (item of headT) tbody_append(tbo_head,item,localStorage.getItem(item));
+    for (item of headT) tbody_append(TBO_HEAD,item,localStorage.getItem(item));
     // 行追加 flag
     flagT.sort();
-    for (item of flagT) tbody_append(tbo_flag,item,localStorage.getItem(item));
+    for (item of flagT) tbody_append(TBO_FLAG,item,localStorage.getItem(item));
 }
 // tbo_summ 表示
 function tbo_summ_disp() {
@@ -882,7 +924,7 @@ function tbo_summ_disp() {
         let fx = document.createTextNode(xHead.flagCount > 0 ? "d" : "");
         let l = document.createTextNode(xHead.logCount > 0 ? xHead.logCount : "");
         let lx = document.createTextNode(xHead.logCount > 0 ? "d" : "");
-        let row = document.getElementById("tbo_summ").insertRow();
+        let row = TBO_SUMM.insertRow();
         row.insertCell().appendChild(k);
         row.insertCell().appendChild(f);
         row.insertCell().appendChild(fx);
@@ -890,11 +932,11 @@ function tbo_summ_disp() {
         row.insertCell().appendChild(lx);
         // onclick イベント追加
         if (fx.data == "d") {
-            let rc = tbo_summ.rows[row.sectionRowIndex].cells[2];
+            let rc = TBO_SUMM.rows[row.sectionRowIndex].cells[2];
             rc.onclick = function() {tbo_summ_flag_del(k)}
         }
         if (lx.data == "d") {
-            let rc = tbo_summ.rows[row.sectionRowIndex].cells[4];
+            let rc = TBO_SUMM.rows[row.sectionRowIndex].cells[4];
             rc.onclick = function() {tbo_summ_log_del(k)}
         }
     }
@@ -909,7 +951,7 @@ function tbo_summ_flag_del(k) {
         if (x.slice(0,11) == key) flagA.push(x);       
     }
     for (item of flagA) localStorage.removeItem(item);
-    tbody_detete(tbo_summ);
+    tbody_detete(TBO_SUMM);
     tbo_summ_disp();
 }
 // log 削除 (sum)
@@ -922,7 +964,7 @@ function tbo_summ_log_del(k) {
         if (x.slice(0,11) == key) logA.push(x);       
     }
     for (item of logA) localStorage.removeItem(item);
-    tbody_detete(tbo_summ);
+    tbody_detete(TBO_SUMM);
     tbo_summ_disp();
 }
 // log 削除 (iii)
@@ -943,9 +985,9 @@ function tbo_hfl_disp() {
     headT = [];
     flagT = [];
     logT = [];
-    let strHead = MAP_HEAD + main_sel_h.value.substr(8,2);
-    let strFlag = MAP_FLAG + main_sel_h.value.substr(8,2);
-    let strLog = MAP_LOG + main_sel_h.value.substr(8,2);
+    let strHead = MAP_HEAD + MAIN_SEL_H.value.substr(8,2);
+    let strFlag = MAP_FLAG + MAIN_SEL_H.value.substr(8,2);
+    let strLog = MAP_LOG + MAIN_SEL_H.value.substr(8,2);
     for (let i = 0; i < localStorage.length; i++) {
         let x = localStorage.key(i);
         switch (x.slice(0,10)) {
@@ -961,60 +1003,60 @@ function tbo_hfl_disp() {
     }
     // 行追加 head
     headT.sort();
-    for (item of headT) tbody_append(tbo_head,item,localStorage.getItem(item));
+    for (item of headT) tbody_append(TBO_HEAD,item,localStorage.getItem(item));
     // onclick イベント追加 flag
-    for (let r = 0; r < tbo_head.rows.length; r++) {
-        for (let c = 0; c < tbo_head.rows[r].cells.length; c++) {
-            let rc = tbo_head.rows[r].cells[c];
+    for (let r = 0; r < TBO_HEAD.rows.length; r++) {
+        for (let c = 0; c < TBO_HEAD.rows[r].cells.length; c++) {
+            let rc = TBO_HEAD.rows[r].cells[c];
             rc.onclick = function() {tbo_head_click(this)}
         }
     }
     // 行追加 flag
     flagT.sort();
-    for (item of flagT) tbody_append(tbo_flag,item,localStorage.getItem(item));
+    for (item of flagT) tbody_append(TBO_FLAG,item,localStorage.getItem(item));
     // onclick イベント追加 flag
-    for (let r = 0; r < tbo_flag.rows.length; r++) {
-        for (let c = 0; c < tbo_flag.rows[r].cells.length; c++) {
-            let rc = tbo_flag.rows[r].cells[c];
+    for (let r = 0; r < TBO_FLAG.rows.length; r++) {
+        for (let c = 0; c < TBO_FLAG.rows[r].cells.length; c++) {
+            let rc = TBO_FLAG.rows[r].cells[c];
             rc.onclick = function() {tbo_flag_click(this)}
         }
     }
     // 行追加 log
     logT.sort();
-    for (item of logT) tbody_append(tbo_log,item,localStorage.getItem(item));
+    for (item of logT) tbody_append(TBO_LOG,item,localStorage.getItem(item));
     // onclick イベント追加 log
-    for (let r = 0; r < tbo_log.rows.length; r++) {
-        for (let c = 0; c < tbo_log.rows[r].cells.length; c++) {
-            let rc = tbo_log.rows[r].cells[c];
+    for (let r = 0; r < TBO_LOG.rows.length; r++) {
+        for (let c = 0; c < TBO_LOG.rows[r].cells.length; c++) {
+            let rc = TBO_LOG.rows[r].cells[c];
             rc.onclick = function() {tbo_log_click(this)}
         }
     }
-    act_key.value = "";
-    act_value.value = "";    
+    ACT_KEY.value = "";
+    ACT_VALUE.value = "";    
 }
 // tbo_head クリック
 function tbo_head_click(x) {
     let r = x.parentNode.rowIndex - 1;
-    act_key.value = tbo_head.rows[r].cells[0].innerHTML;
-    act_value.value = tbo_head.rows[r].cells[1].innerHTML;
-    key_save = act_key.value;
-    val_save = act_value.value;        
+    ACT_KEY.value = TBO_HEAD.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_HEAD.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;        
 }
 // tbo_flag クリック
 function tbo_flag_click(x) {
     let r = x.parentNode.rowIndex - 1;
-    act_key.value = tbo_flag.rows[r].cells[0].innerHTML;
-    act_value.value = tbo_flag.rows[r].cells[1].innerHTML;
-    key_save = act_key.value;
-    val_save = act_value.value;    
+    ACT_KEY.value = TBO_FLAG.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_FLAG.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;    
 }
 // tbo_log クリック
 function tbo_log_click(x) {
     let r = x.parentNode.rowIndex - 1;
-    act_key.value = tbo_log.rows[r].cells[0].innerHTML;
-    act_value.value = tbo_log.rows[r].cells[1].innerHTML;
-    key_save = act_key.value;
-    val_save = act_value.value;    
+    ACT_KEY.value = TBO_LOG.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_LOG.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;    
 }
 // tbody 行追加
 function tbody_append(ctrl,key,value) {
