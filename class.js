@@ -258,8 +258,8 @@ class Genzai {
     // 現在地 描画
     display(con,dx,dy,color) {
         this.view = true;
-        this.mapX = Math.min(Math.max(0,dx),canvas_main.width);
-        this.mapY = Math.min(Math.max(0,dy),canvas_main.height);
+        this.mapX = Math.min(Math.max(0,dx),CANVAS_MAIN.width);
+        this.mapY = Math.min(Math.max(0,dy),CANVAS_MAIN.height);
         let background = "white";
         switch (color) {
             case "green":
@@ -525,13 +525,13 @@ class Scene {
     }
     // エラー消去
     err_clear() {
-        main_err.value = "";
-        main_err.style.display = "none";
+        MAIN_ERR.value = "";
+        MAIN_ERR.style.display = "none";
     }
     // エラー表示
     err_disp(mess) {
-        main_err.textContent = mess;
-        main_err.style.display = "inline";
+        MAIN_ERR.textContent = mess;
+        MAIN_ERR.style.display = "inline";
     }
     // 現在地
     gen(con,x,y) {
@@ -554,16 +554,16 @@ class Scene {
         con.fill();
         con.stroke();
         // div_gen 表示
-        div_gen.style.left = x + "px";
-        div_gen.style.top  = y + 50 + "px";
-        div_gen.style.display = "block";
-        gen_ok.style.display = "inline";
-        gen_ng.style.display = "inline";
+        DIV_GEN.style.left = x + "px";
+        DIV_GEN.style.top  = y + 50 + "px";
+        DIV_GEN.style.display = "block";
+        GEN_OK.style.display = "inline";
+        GEN_NG.style.display = "inline";
     }
     // GPS
     gps(con,x,y) {
-        let xx = Math.min(Math.max(0,x),canvas_main.width);
-        let yy = Math.min(Math.max(0,y),canvas_main.height);
+        let xx = Math.min(Math.max(0,x),CANVAS_MAIN.width);
+        let yy = Math.min(Math.max(0,y),CANVAS_MAIN.height);
         // scroll
         window.scrollTo(xx - 20,yy + 7);
         // 丸
@@ -585,15 +585,15 @@ class Scene {
         con.fill();
         con.stroke();
         // div_gps 表示
-        div_gps.style.left = xx + "px";
-        div_gps.style.top  = yy + 50 + "px";
-        div_gps.style.display = "block";
+        DIV_GPS.style.left = xx + "px";
+        DIV_GPS.style.top  = yy + 50 + "px";
+        DIV_GPS.style.display = "block";
     }
     // iii
     iii(x,y) {
-        div_iii.style.left = x + "px";
-        div_iii.style.top  = y + "px";
-        div_iii.style.display = "block";
+        DIV_III.style.left = x + "px";
+        DIV_III.style.top  = y + "px";
+        DIV_III.style.display = "block";
     }
     // info表示・変更
     info_set(yn) { CONFIG_INFO.innerHTML = (yn == "y") ? "✓" : "-"}
@@ -623,40 +623,40 @@ class Scene {
     //     }
     // }
     // 線表示・変更
-    line_set(yn) { config_line.innerHTML = (yn == "y") ? "✓" : "-"}
+    line_set(yn) { CONFIG_LINE.innerHTML = (yn == "y") ? "✓" : "-"}
     line_change(yn) {
         con_dispLine = (yn == "n") ? "y" : "n";
-        config_line.innerHTML = (yn == "n") ? "✓" : "-";
+        CONFIG_LINE.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // 全時間表示・変更
-    time_set(yn) { config_time.innerHTML = (yn == "y") ? "✓" : "-"}
+    time_set(yn) { CONFIG_TIME.innerHTML = (yn == "y") ? "✓" : "-"}
     time_change(yn) {
         con_dispTime = (yn == "n") ? "y" : "n";
-        config_time.innerHTML = (yn == "n") ? "✓" : "-";
+        CONFIG_TIME.innerHTML = (yn == "n") ? "✓" : "-";
     }
     // 記録変更
-    rec_change() {(main_rec.value == "y") ? this.rec_set_n() : this.rec_set_y()}
+    rec_change() {(MAIN_REC.value == "y") ? this.rec_set_n() : this.rec_set_y()}
     // 記録初期化
     rec_clear() {
-        main_rec.value = "";
-        main_rec.style.display = "none";
-        iii_rec.style.display = "none";
+        MAIN_REC.value = "";
+        MAIN_REC.style.display = "none";
+        III_REC.style.display = "none";
     }
     // 記録n
     rec_set_n() {
-        main_rec.value ="n";
-        main_rec.innerHTML = "🔵";
-        main_rec.style.display = "inline";
-        iii_rec.innerHTML = "🔵";
-        iii_rec.style.display = "inline";
+        MAIN_REC.value ="n";
+        MAIN_REC.innerHTML = "🔵";
+        MAIN_REC.style.display = "inline";
+        III_REC.innerHTML = "🔵";
+        III_REC.style.display = "inline";
     }
     // 記録y
     rec_set_y() {
-        main_rec.value ="y";
-        main_rec.innerHTML = "🔴";
-        main_rec.style.display = "inline";
-        iii_rec.innerHTML = "🔴";
-        iii_rec.style.display = "inline";
+        MAIN_REC.value ="y";
+        MAIN_REC.innerHTML = "🔴";
+        MAIN_REC.style.display = "inline";
+        III_REC.innerHTML = "🔴";
+        III_REC.style.display = "inline";
     }
     // セット
     set(key) {
@@ -806,72 +806,72 @@ class Scene {
                 break;
         }
         // main
-        main_s.style.display     = this.m_s;
-        main_d.style.display     = this.m_d;
-        main_i.style.display     = this.m_i;
-        main_sel_d.style.display = this.m_sel_d;
-        main_sel_h.style.display = this.m_sel_h;
-        main_exe.style.display   = this.m_exe;
-        main_close.style.display = this.m_close;        
-        main_erase.style.display = this.m_erase;
-        main_flag.style.display  = this.m_flag;
-        main_log.style.display   = this.m_log;
-        main_map.style.display   = this.m_map;
-        main_name.style.display  = this.m_name;
-        main_sel_m.style.display = this.m_sel_m;
-        main_err.style.display   = (main_err.value == "") ? "none" : "inline";
+        MAIN_S.style.display     = this.m_s;
+        MAIN_D.style.display     = this.m_d;
+        MAIN_I.style.display     = this.m_i;
+        MAIN_SEL_D.style.display = this.m_sel_d;
+        MAIN_SEL_H.style.display = this.m_sel_h;
+        MAIN_EXE.style.display   = this.m_exe;
+        MAIN_CLOSE.style.display = this.m_close;        
+        MAIN_ERASE.style.display = this.m_erase;
+        MAIN_FLAG.style.display  = this.m_flag;
+        MAIN_LOG.style.display   = this.m_log;
+        MAIN_MAP.style.display   = this.m_map;
+        MAIN_NAME.style.display  = this.m_name;
+        MAIN_SEL_M.style.display = this.m_sel_m;
+        MAIN_ERR.style.display   = (MAIN_ERR.value == "") ? "none" : "inline";
         // canvas
-        div_canvas.style.display = this.d_canvas;
+        DIV_CANVAS.style.display = this.d_canvas;
         // config
-        div_config.style.display = this.d_config;
+        DIV_CONFIG.style.display = this.d_config;
         // data
-        div_act.style.display    = this.d_act;
-        div_all.style.display    = this.d_all;
-        div_ctrl.style.display   = this.d_ctrl;
-        div_head.style.display   = this.d_head;
-        div_flag.style.display   = this.d_flag;
-        div_log.style.display    = this.d_log;
-        div_summ.style.display   = this.d_summ;
+        DIV_ACT.style.display    = this.d_act;
+        DIV_ALL.style.display    = this.d_all;
+        DIV_CTRL.style.display   = this.d_ctrl;
+        DIV_HEAD.style.display   = this.d_head;
+        DIV_FLAG.style.display   = this.d_flag;
+        DIV_LOG.style.display    = this.d_log;
+        DIV_SUMM.style.display   = this.d_summ;
         // info
-        div_info.style.display   = this.d_info;
+        DIV_INFO.style.display   = this.d_info;
         // fset
-        div_fset.style.display   = this.d_fset;
+        DIV_FSET.style.display   = this.d_fset;
         // gen
-        div_gen.style.display    = this.d_gen;
+        DIV_GEN.style.display    = this.d_gen;
         // gps
-        div_gps.style.display    = this.d_gps;
+        DIV_GPS.style.display    = this.d_gps;
         // iii
-        div_iii.style.display    = this.d_iii;
+        DIV_III.style.display    = this.d_iii;
     }   
     // リセット
-    reset(...act) {       
+    reset(...act) {
         for (let i = 0 ; i < act.length ; i++){
             switch (act[i]) {
                 case "ctrl":
-                    div_ctrl.style.display = "none";
+                    DIV_CTRL.style.display = "none";
                     break;
                 case "flag":
-                    CON_FLAG.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    CON_FLAG.clearRect(0,0,CANVAS_MAIN.width, CANVAS_MAIN.height);
                     for (item of flagA) cFlag.display(CON_FLAG,item.px,item.py,item.tx,item.ty,item.color,item.text);
                     break;
                 case "gen":
-                    div_gen.style.display = "none";
+                    DIV_GEN.style.display = "none";
                     break;
                 case "gps":
-                    div_gps.style.display = "none";
+                    DIV_GPS.style.display = "none";
                     break;
                 case "iii":
-                    div_iii.style.display = "none";
+                    DIV_III.style.display = "none";
                     break;
                 case "log":
-                    CON_LOG.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    CON_LOG.clearRect(0,0,CANVAS_MAIN.width, CANVAS_MAIN.height);
                     break;
                 case "main":
-                    CON_MAIN.clearRect(0,0,canvas_main.width, canvas_main.height);
+                    CON_MAIN.clearRect(0,0,CANVAS_MAIN.width, CANVAS_MAIN.height);
                     CON_MAIN.drawImage(cImage,0,0);
                     break;
                 case "fset":
-                    div_fset.style.display = "none";
+                    DIV_FSET.style.display = "none";
                     break;
             }
         }
