@@ -501,6 +501,7 @@ class Scene {
         this.m_i;
         this.m_sel_d;
         this.m_sel_h;
+        this.m_span_a;
         this.m_exe;
         this.m_flag;
         this.m_log;
@@ -515,6 +516,7 @@ class Scene {
         this.d_head;
         this.d_flag;
         this.d_log;
+        this.d_etc;
         this.d_summ;
         this.d_iii;
         this.d_info;
@@ -601,27 +603,6 @@ class Scene {
         con_dispInfo = (yn == "n") ? "y" : "n";
         CONFIG_INFO.innerHTML = (yn == "n") ? "✓" : "-";
     }
-    // info 初期化
-    // info_clear() {
-    //     this.info_cnt = 0;
-    //     this.info_save = "";
-    //     INFO_ARROW.innerHTML = "";
-    // }
-    // info 表示
-    // info_disp(info) {
-    //     if (con_dispInfo == "n") return;
-    //     if (info == this.info_save && this.info_cnt < 9) {
-    //         this.info_cnt++;
-    //         pre_info.innerHTML = pre_info.innerHTML.substring(0,pre_info.innerHTML.length - 1) + "↑\n";
-    //     } else {
-    //         let dt = new Date();
-    //         let HH = ("00" + (dt.getHours())).slice(-2);
-    //         let MM = ("00" + (dt.getMinutes())).slice(-2);
-    //         pre_info.innerHTML += `${HH}:${MM} ${info}\n`;
-    //         this.info_cnt = 0;
-    //         this.info_save = info;
-    //     }
-    // }
     // 線表示・変更
     line_set(yn) { CONFIG_LINE.innerHTML = (yn == "y") ? "✓" : "-"}
     line_change(yn) {
@@ -665,6 +646,7 @@ class Scene {
         this.m_d      = "none";
         this.m_i      = "none";
         this.m_sel_d  = "none";
+        this.m_span_a = "none";
         this.m_sel_h  = "none";
         this.m_exe    = "none";
         this.m_close  = "none";
@@ -682,6 +664,7 @@ class Scene {
         this.d_head   = "none";
         this.d_flag   = "none";
         this.d_log    = "none";
+        this.d_etc    = "none";
         this.d_summ   = "none";
         this.d_info   = "none";
         this.d_fset   = "none";
@@ -705,8 +688,13 @@ class Scene {
                 this.m_s      = "inline";
                 this.m_i      = "inline";
                 this.m_sel_d  = "inline";
+                this.m_span_a = "inline";
                 this.d_act    = "block";
-                this.d_all    = "block";
+                this.d_ctrl   = "block";
+                this.d_head   = "block";
+                this.d_flag   = "block";
+                this.d_log    = "block";
+                this.d_etc    = "block";
                 break;
             case "選択表示":
                 this.m_s      = "inline";
@@ -742,7 +730,7 @@ class Scene {
                 this.m_i      = "inline";
                 this.m_sel_d  = "inline";
                 this.m_exe    = "inline";
-                this.d_ctrl   = "block";             
+                this.d_ctrl   = "block";
                 this.d_head   = "block";
                 this.d_flag   = "block";               
                 break;
@@ -811,6 +799,7 @@ class Scene {
         MAIN_I.style.display     = this.m_i;
         MAIN_SEL_D.style.display = this.m_sel_d;
         MAIN_SEL_H.style.display = this.m_sel_h;
+        MAIN_SPAN_A.style.display = this.m_span_a;
         MAIN_EXE.style.display   = this.m_exe;
         MAIN_CLOSE.style.display = this.m_close;        
         MAIN_ERASE.style.display = this.m_erase;
@@ -831,6 +820,7 @@ class Scene {
         DIV_HEAD.style.display   = this.d_head;
         DIV_FLAG.style.display   = this.d_flag;
         DIV_LOG.style.display    = this.d_log;
+        DIV_ETC.style.display    = this.d_etc;
         DIV_SUMM.style.display   = this.d_summ;
         // info
         DIV_INFO.style.display   = this.d_info;
