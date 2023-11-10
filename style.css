@@ -116,6 +116,13 @@ select {
     width: 140px;
     margin: 0;
 }
+#main_span_a {
+    display: none;
+}
+.span_xxx {
+    display: inline;
+    display: none;
+}
 .text_a {
     height: 20px;
     width: 80px;
