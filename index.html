@@ -22,6 +22,13 @@
       <option value="fileAdd">保存追加</option>
       <option value="selDel">選択削除</option>
     </select>
+    <span id="main_span_a">
+      <label><input id="main_check_c" type="checkbox" checked>control</label>
+      <label><input id="main_check_h" type="checkbox" checked>head</label>
+      <label><input id="main_check_f" type="checkbox">flag</label>
+      <label><input id="main_check_l" type="checkbox">log</label>
+      <label><input id="main_check_e" type="checkbox">etc</label>
+    </span>
     <select id="main_sel_h"></select>
     <button id="main_exe" class="button_a" value="">実行</button>
     <button id="main_close" class="button_b100" value="">終了</button>
@@ -137,6 +144,18 @@
         </tr>
       </thead>
       <tbody id="tbo_log"></tbody>
+    </table>
+  </div>
+  <!-- etc -->
+  <div id="div_etc">
+    <table class="border-solid">
+      <thead>
+        <tr>
+          <th>key</th>
+          <th>value (etc)</th>
+        </tr>
+      </thead>
+      <tbody id="tbo_etc"></tbody>
     </table>
   </div>
   <!-- summ -->
