@@ -17,6 +17,7 @@ const DIV_ALL = document.getElementById("div_all");
 const DIV_CANVAS = document.getElementById("div_canvas");
 const DIV_CONFIG = document.getElementById("div_config");
 const DIV_CTRL = document.getElementById("div_ctrl");
+const DIV_ETC = document.getElementById("div_etc");
 const DIV_FLAG = document.getElementById("div_flag");
 const DIV_FSET = document.getElementById("div_fset");
 const DIV_GEN = document.getElementById("div_gen");
@@ -37,6 +38,11 @@ const GEN_NG = document.getElementById("gen_ng");
 const GEN_OK = document.getElementById("gen_ok");
 const III_REC = document.getElementById("iii_rec");
 const INFO_ARROW = document.getElementById("info_arrow");
+const MAIN_CHECK_C = document.getElementById("main_check_c");
+const MAIN_CHECK_F = document.getElementById("main_check_f");
+const MAIN_CHECK_H = document.getElementById("main_check_h");
+const MAIN_CHECK_L = document.getElementById("main_check_l");
+const MAIN_CHECK_E = document.getElementById("main_check_e");
 const MAIN_CLOSE = document.getElementById("main_close");
 const MAIN_D = document.getElementById("main_d");
 const MAIN_ERASE = document.getElementById("main_erase");
@@ -54,6 +60,7 @@ const MAIN_S = document.getElementById("main_s");
 const MAIN_SEL_D = document.getElementById("main_sel_d");
 const MAIN_SEL_H = document.getElementById("main_sel_h");
 const MAIN_SEL_M = document.getElementById("main_sel_m");
+const MAIN_SPAN_A = document.getElementById("main_span_a");
 const MAP_ALL = "map.1_";
 const MAP_CTRL = "map.1_c";
 const MAP_FLAG = "map.1_f_";
@@ -61,6 +68,7 @@ const MAP_HEAD = "map.1_h_";
 const MAP_LOG = "map.1_l_";
 const TBO_ALL = document.getElementById("tbo_all");
 const TBO_CTRL = document.getElementById("tbo_ctrl");
+const TBO_ETC = document.getElementById("tbo_etc");
 const TBO_FLAG = document.getElementById("tbo_flag");
 const TBO_HEAD = document.getElementById("tbo_head");
 const TBO_LOG = document.getElementById("tbo_log");
@@ -72,14 +80,8 @@ document.getElementById("act_ins").addEventListener("click",() => {
     let val = ACT_VALUE.value;
     let rtn = confirm(`追加 キー:${key},内容:${val}`);
     if (rtn) localStorage.setItem(key,val);
-    // 更新後表示
-    if (MAIN_SEL_D.value == "addDisp") {
-        tbody_detete(TBO_ALL);    
-        tbo_all_disp();
-    } else {
-        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
-        tbo_hfl_disp();
-    }
+    // 更新後再表示
+    tbo_redisp();
 });
 // act_upd 修正
 document.getElementById("act_upd").addEventListener("click",() => {
@@ -90,14 +92,8 @@ document.getElementById("act_upd").addEventListener("click",() => {
         localStorage.removeItem(key_save);
         localStorage.setItem(key,val);
     }
-    // 更新後表示
-    if (MAIN_SEL_D.value == "allDisp") {
-        tbody_detete(TBO_ALL);  
-        tbo_all_disp();
-    } else {
-        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
-        tbo_hfl_disp();
-    }
+    // 更新後再表示
+    tbo_redisp();
 });
 // act_del 削除
 document.getElementById("act_del").addEventListener("click",() => {
@@ -105,14 +101,8 @@ document.getElementById("act_del").addEventListener("click",() => {
     let val = ACT_VALUE.value;
     let rtn = confirm(`削除 キー:${key},内容:${val}`);
     if (rtn) {localStorage.removeItem(key)}
-    // 更新後表示
-    if (MAIN_SEL_D.value == "allDisp") {
-        tbody_detete(TBO_ALL);  
-        tbo_all_disp();
-    } else {
-        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
-        tbo_hfl_disp();
-    }
+    // 更新後再表示
+    tbo_redisp();
 });
 // config_time 全時間表示 yn
 CONFIG_TIME.addEventListener("click",() => cScene.time_change(con_dispTime));
@@ -229,6 +219,16 @@ MAIN_NAME.addEventListener("click",() => {
     cScene.reset("ctrl","flag");
     cScene.set("地図表示");
 });
+// main_check_c control表示
+MAIN_CHECK_C.addEventListener("change",() => DIV_CTRL.style.display = (MAIN_CHECK_C.checked) ? "block" : "none");
+// main_check_f flag表示
+MAIN_CHECK_F.addEventListener("change",() => DIV_FLAG.style.display = (MAIN_CHECK_F.checked) ? "block" : "none");
+// main_check_h head表示
+MAIN_CHECK_H.addEventListener("change",() => DIV_HEAD.style.display = (MAIN_CHECK_H.checked) ? "block" : "none");
+// main_check_l log表示
+MAIN_CHECK_L.addEventListener("change",() => DIV_LOG.style.display = (MAIN_CHECK_L.checked) ? "block" : "none");
+// main_check_e etc表示
+MAIN_CHECK_E.addEventListener("change",() => DIV_ETC.style.display = (MAIN_CHECK_E.checked) ? "block" : "none");
 // main_file_h 保存データ選択
 MAIN_FILE_H.addEventListener("change",(e) => {
     if (e.target.files.length == 0) return;
@@ -359,9 +359,9 @@ MAIN_SEL_D.addEventListener("change",() => {
     switch (MAIN_SEL_D.value) {
         // 全表示
         case "allDisp":
-            tbody_detete(TBO_ALL);
+            tbody_detete(TBO_CTRL,TBO_HEAD,TBO_FLAG,TBO_LOG,TBO_ETC);
             cScene.set("全表示");
-            tbo_all_disp();
+            tbo_cfhle_disp();
             break;
         // 選択表示
         case "selDisp":
@@ -675,7 +675,6 @@ function gen_ok_timer(gen) {
     cGen.set(gen);
     if (cGen.adjL) {
         // 設定地 log 出力
-        // cScene.info_disp(`設定:${cGen.long} ${cGen.lat} ${cGen.adjX} ${cGen.adjY}`);
         cLog.storage(MAP_LOG,cHead.id,cGen.adjMd,cGen.adjHm,"a",cGen.long,cGen.lat,cGen.adjX,cGen.adjY);
         cLog.display(CON_LOG,cGen.adjMd,cGen.adjHm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");    
         cGen.adjL = false;
@@ -688,7 +687,6 @@ function gen_ok_timer(gen) {
     let MM = ("00" + (dt.getMinutes())).slice(-2);
     let Md = `${mm}${dd}`;
     let Hm = `${HH}${MM}`;
-    // cScene.info_disp(`現在:${cGen.long} ${cGen.lat}`);
     cLog.storage(MAP_LOG,cHead.id,Md,Hm,"g",cGen.long,cGen.lat,"","");
     cLog.display(CON_LOG,Md,Hm,cGen.long,cGen.adjX,cGen.lat,cGen.adjY,"r");
     INFO_ARROW.innerHTML = cArrow.set_ok(cGen.x,cGen.y);
@@ -702,7 +700,6 @@ function gen_err(err) {
 		3: "位置情報の取得タイムアウト",
 	};
 	cGen.m = gen_mess[err.code];
-    // cScene.info_disp(cGen.m);
     cScene.err_disp(cGen.m);
     INFO_ARROW.innerHTML = cArrow.set_str("✕");
 }
@@ -837,15 +834,6 @@ function tbo_all_disp() {
     key_all.sort();
     // 行追加
     for (item of key_all) tbody_append(TBO_ALL,item,localStorage.getItem(item));
-    // onclick イベント追加
-    for (let r = 0; r < TBO_ALL.rows.length; r++) {
-        for (let c = 0; c < TBO_ALL.rows[r].cells.length; c++) {
-            let rc = TBO_ALL.rows[r].cells[c];
-            rc.onclick = function() {tbo_all_click(this)}
-        }
-    }
-    ACT_KEY.value = "";
-    ACT_VALUE.value = "";    
 }
 // tbo_all クリック
 function tbo_all_click(x) {
@@ -863,13 +851,9 @@ function tbo_cfh_disp() {
     flagT = [];
     for (let i = 0; i < localStorage.length; i++) {
         let x = localStorage.key(i);
-        if (x.slice(0,7) == MAP_CTRL) {
-            ctrlT.push(x);
-        } else if (x.slice(0,8) == MAP_FLAG) {
-            flagT.push(x);
-        } else if (x.slice(0,8) == MAP_HEAD) {
-            headT.push(x);
-        }
+        if      (x.slice(0,7) == MAP_CTRL) {ctrlT.push(x)}
+        else if (x.slice(0,8) == MAP_FLAG) {flagT.push(x)}
+        else if (x.slice(0,8) == MAP_HEAD) {headT.push(x)}
     }
     // 行追加 ctrl
     ctrlT.sort();
@@ -880,6 +864,79 @@ function tbo_cfh_disp() {
     // 行追加 flag
     flagT.sort();
     for (item of flagT) tbody_append(TBO_FLAG,item,localStorage.getItem(item));
+}
+// tbo_cfhle 表示
+function tbo_cfhle_disp() {
+    // con,flag,head,log,etc 取得
+    ctrlT = [];
+    flagT = [];
+    headT = [];
+    logT = [];
+    etcT = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let x = localStorage.key(i);
+        if      (x.slice(0,7) == MAP_CTRL) {ctrlT.push(x)}
+        else if (x.slice(0,8) == MAP_FLAG) {flagT.push(x)}
+        else if (x.slice(0,8) == MAP_HEAD) {headT.push(x)}
+        else if (x.slice(0,8) == MAP_LOG) {logT.push(x)}
+        else {etcT.push(x)}
+    }
+    // 行追加 ctrl
+    ctrlT.sort();
+    for (item of ctrlT) tbody_append(TBO_CTRL,item,localStorage.getItem(item));
+    for (let r = 0; r < TBO_CTRL.rows.length; r++) {
+        for (let c = 0; c < 2; c++) {
+            TBO_CTRL.rows[r].cells[c].onclick = function() {tbody_click(TBO_CTRL,this)}
+        }
+    }
+    // 行追加 flag
+    flagT.sort();
+    for (item of flagT) tbody_append(TBO_FLAG,item,localStorage.getItem(item));
+    for (let r = 0; r < TBO_FLAG.rows.length; r++) {
+        for (let c = 0; c < 2; c++) {
+            TBO_FLAG.rows[r].cells[c].onclick = function() {tbody_click(TBO_FLAG,this)}
+        }
+    }
+    // 行追加 head
+    headT.sort();
+    for (item of headT) tbody_append(TBO_HEAD,item,localStorage.getItem(item));
+    for (let r = 0; r < TBO_HEAD.rows.length; r++) {
+        for (let c = 0; c < 2; c++) {
+            TBO_HEAD.rows[r].cells[c].onclick = function() {tbody_click(TBO_HEAD,this)}
+        }
+    }
+    // 行追加 log
+    logT.sort();
+    for (item of logT) tbody_append(TBO_LOG,item,localStorage.getItem(item));
+    for (let r = 0; r < TBO_LOG.rows.length; r++) {
+        for (let c = 0; c < 2; c++) {
+            TBO_LOG.rows[r].cells[c].onclick = function() {tbody_click(TBO_LOG,this)}
+        }
+    }
+    // 行追加 etc
+    etcT.sort();
+    for (item of etcT) tbody_append(TBO_ETC,item,localStorage.getItem(item));
+    for (let r = 0; r < TBO_ETC.rows.length; r++) {
+        for (let c = 0; c < 2; c++) {
+            TBO_ETC.rows[r].cells[c].onclick = function() {tbody_click(TBO_ETC,this)}
+        }
+    }
+    // 表示
+    DIV_CTRL.style.display = (MAIN_CHECK_C.checked) ? "block" : "none";
+    DIV_FLAG.style.display = (MAIN_CHECK_F.checked) ? "block" : "none";
+    DIV_HEAD.style.display = (MAIN_CHECK_H.checked) ? "block" : "none";
+    DIV_LOG.style.display = (MAIN_CHECK_L.checked) ? "block" : "none";
+    DIV_ETC.style.display = (MAIN_CHECK_E.checked) ? "block" : "none";
+}
+// tbo 再表示
+function tbo_redisp() {
+    if (MAIN_SEL_D.value == "allDisp") {
+        tbody_detete(TBO_CTRL,TBO_HEAD,TBO_FLAG,TBO_LOG,TBO_ETC);
+        tbo_cfhle_disp();
+    } else {
+        tbody_detete(TBO_HEAD,TBO_FLAG,TBO_LOG);
+        tbo_hfl_disp();
+    }
 }
 // tbo_summ 表示
 function tbo_summ_disp() {
@@ -990,49 +1047,44 @@ function tbo_hfl_disp() {
     let strLog = MAP_LOG + MAIN_SEL_H.value.substr(8,2);
     for (let i = 0; i < localStorage.length; i++) {
         let x = localStorage.key(i);
-        switch (x.slice(0,10)) {
-            case strFlag:
-                flagT.push(x);
-                break;
-            case strHead:
-                headT.push(x);
-                break;
-            case strLog:
-                logT.push(x);
-        }
+        if      (x.slice(0,10) == strFlag) {flagT.push(x)}
+        else if (x.slice(0,10) == strHead) {headT.push(x)}
+        else if (x.slice(0,10) == strLog) {logT.push(x)}
     }
     // 行追加 head
     headT.sort();
     for (item of headT) tbody_append(TBO_HEAD,item,localStorage.getItem(item));
-    // onclick イベント追加 flag
     for (let r = 0; r < TBO_HEAD.rows.length; r++) {
-        for (let c = 0; c < TBO_HEAD.rows[r].cells.length; c++) {
-            let rc = TBO_HEAD.rows[r].cells[c];
-            rc.onclick = function() {tbo_head_click(this)}
+        for (let c = 0; c < 2; c++) {
+            TBO_HEAD.rows[r].cells[c].onclick = function() {tbody_click(TBO_HEAD,this)}
         }
     }
     // 行追加 flag
     flagT.sort();
     for (item of flagT) tbody_append(TBO_FLAG,item,localStorage.getItem(item));
-    // onclick イベント追加 flag
     for (let r = 0; r < TBO_FLAG.rows.length; r++) {
-        for (let c = 0; c < TBO_FLAG.rows[r].cells.length; c++) {
-            let rc = TBO_FLAG.rows[r].cells[c];
-            rc.onclick = function() {tbo_flag_click(this)}
+        for (let c = 0; c < 2; c++) {
+            TBO_FLAG.rows[r].cells[c].onclick = function() {tbody_click(TBO_FLAG,this)}
         }
     }
     // 行追加 log
     logT.sort();
     for (item of logT) tbody_append(TBO_LOG,item,localStorage.getItem(item));
-    // onclick イベント追加 log
     for (let r = 0; r < TBO_LOG.rows.length; r++) {
-        for (let c = 0; c < TBO_LOG.rows[r].cells.length; c++) {
-            let rc = TBO_LOG.rows[r].cells[c];
-            rc.onclick = function() {tbo_log_click(this)}
+        for (let c = 0; c < 2; c++) {
+            TBO_LOG.rows[r].cells[c].onclick = function() {tbody_click(TBO_LOG,this)}
         }
     }
     ACT_KEY.value = "";
     ACT_VALUE.value = "";    
+}
+// tbo_ctrl クリック
+function tbo_ctrl_click(x) {
+    let r = x.parentNode.rowIndex - 1;
+    ACT_KEY.value = TBO_CTRL.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_CTRL.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;
 }
 // tbo_head クリック
 function tbo_head_click(x) {
@@ -1040,7 +1092,7 @@ function tbo_head_click(x) {
     ACT_KEY.value = TBO_HEAD.rows[r].cells[0].innerHTML;
     ACT_VALUE.value = TBO_HEAD.rows[r].cells[1].innerHTML;
     key_save = ACT_KEY.value;
-    val_save = ACT_VALUE.value;        
+    val_save = ACT_VALUE.value;
 }
 // tbo_flag クリック
 function tbo_flag_click(x) {
@@ -1048,7 +1100,7 @@ function tbo_flag_click(x) {
     ACT_KEY.value = TBO_FLAG.rows[r].cells[0].innerHTML;
     ACT_VALUE.value = TBO_FLAG.rows[r].cells[1].innerHTML;
     key_save = ACT_KEY.value;
-    val_save = ACT_VALUE.value;    
+    val_save = ACT_VALUE.value;
 }
 // tbo_log クリック
 function tbo_log_click(x) {
@@ -1056,7 +1108,15 @@ function tbo_log_click(x) {
     ACT_KEY.value = TBO_LOG.rows[r].cells[0].innerHTML;
     ACT_VALUE.value = TBO_LOG.rows[r].cells[1].innerHTML;
     key_save = ACT_KEY.value;
-    val_save = ACT_VALUE.value;    
+    val_save = ACT_VALUE.value;
+}
+// tbo_etc クリック
+function tbo_etc_click(x) {
+    let r = x.parentNode.rowIndex - 1;
+    ACT_KEY.value = TBO_ETC.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = TBO_ETC.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;
 }
 // tbody 行追加
 function tbody_append(ctrl,key,value) {
@@ -1067,6 +1127,14 @@ function tbody_append(ctrl,key,value) {
     cell.appendChild(k);
     cell = row.insertCell();
     cell.appendChild(v);
+}
+// tbody クリックイベント追加
+function tbody_click(ctrl,x) {
+    let r = x.parentNode.rowIndex - 1;
+    ACT_KEY.value = ctrl.rows[r].cells[0].innerHTML;
+    ACT_VALUE.value = ctrl.rows[r].cells[1].innerHTML;
+    key_save = ACT_KEY.value;
+    val_save = ACT_VALUE.value;
 }
 // tbody 行削除
 function tbody_detete(...ctrl) {
