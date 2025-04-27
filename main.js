@@ -74,35 +74,81 @@ const TBO_HEAD = document.getElementById("tbo_head");
 const TBO_LOG = document.getElementById("tbo_log");
 const TBO_SUMM = document.getElementById("tbo_summ");
 let cImage = new Image;
-// act_ins 追加
-document.getElementById("act_ins").addEventListener("click",() => {
-    let key = ACT_KEY.value;
-    let val = ACT_VALUE.value;
-    let rtn = confirm(`追加 キー:${key},内容:${val}`);
-    if (rtn) localStorage.setItem(key,val);
-    // 更新後再表示
-    tbo_redisp();
-});
-// act_upd 修正
-document.getElementById("act_upd").addEventListener("click",() => {
-    let key = ACT_KEY.value;
-    let val = ACT_VALUE.value;
-    let rtn = confirm(`修正 キー:${key},内容:${val}`);
-    if (rtn) {
-        localStorage.removeItem(key_save);
-        localStorage.setItem(key,val);
+// canvas click
+CANVAS_LOG.addEventListener("click",(e) => {
+    // mouse click 位置
+    mouseUpX = e.offsetX;
+    mouseUpY = e.offsetY;
+    switch (MAIN_SEL_M.value) {
+        // Flag設定
+        case "flagSet":
+            // flag配列チェック
+            flagApos = -1;
+            for (let i = 0; i < flagA.length; i++) {
+                let x = Math.abs(mouseUpX - flagA[i].px);
+                let y = Math.abs(mouseUpY - flagA[i].py);
+                if (x < 10 && y < 10) flagApos = i;
+            }
+            // Flag設定
+            if (flagApos == -1) {
+                con_arc(CON_FLAG,mouseUpX,mouseUpY,5,"green");
+                DIV_FSET.style.left = mouseUpX - 60 + "px";
+                DIV_FSET.style.top  = mouseUpY + 50 + "px";
+                DIV_FSET.style.display = "block";    
+                FSET_TEXT.value = `${mouseUpX} ${mouseUpY} seg Memo`;
+                FSET_INS.style.display = "inline";
+                FSET_UPD.style.display = "none";
+                FSET_DEL.style.display = "none";
+            } else {
+                DIV_FSET.style.left = mouseUpX - 60 + "px";
+                DIV_FSET.style.top  = mouseUpY + 50 + "px";
+                DIV_FSET.style.display = "block";
+                FSET_TEXT.value = flagA[flagApos].value;
+                FSET_INS.style.display = "inline";
+                FSET_UPD.style.display = "inline";
+                FSET_DEL.style.display = "inline";
+            }
+            break;
+        // 位置計測
+        case "genGet":
+            // 位置計測、表示
+            let long = cConv.px_long(mouseUpX);
+            let lat = cConv.py_lat(mouseUpY);
+            let str = `位置 X=${mouseUpX},Y=${mouseUpY},経度=${long},緯度=${lat}`;
+            if (mouseUpX < CANVAS_MAIN.width - 400) {
+                con_box(CON_FLAG,mouseUpX,mouseUpY,400,40,"green",str);
+            } else {
+                con_box(CON_FLAG,mouseUpX - 400,mouseUpY,400,40,"green",str);
+            }
+            con_arc(CON_FLAG,mouseUpX,mouseUpY,1,"black"); 
+            break;
     }
-    // 更新後再表示
-    tbo_redisp();
 });
-// act_del 削除
-document.getElementById("act_del").addEventListener("click",() => {
-    let key = ACT_KEY.value;
-    let val = ACT_VALUE.value;
-    let rtn = confirm(`削除 キー:${key},内容:${val}`);
-    if (rtn) {localStorage.removeItem(key)}
-    // 更新後再表示
-    tbo_redisp();
+// canvas マウスdown
+CANVAS_LOG.addEventListener('mousedown',(e) => {
+    mouseDownDate = new Date();
+    // 右クリック
+    if (e.button == 2) {
+        cScene.iii(e.offsetX,e.offsetY + 100);
+    }
+});
+// canvas マウスup
+CANVAS_LOG.addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
+// canvas タッチstart
+CANVAS_LOG.addEventListener("touchstart",(e) => { 
+    // 3本指はiii表示
+    if (e.targetTouches.length == 3) {
+        let obj = e.changedTouches[0];
+        let x = Math.round(obj.pageX);
+        let y = Math.round(obj.pageY);
+        cScene.iii(x,y - DIV_CANVAS.offsetTop);
+    }
+    mouseDownDate = new Date();
+});
+// canvas タッチend
+CANVAS_LOG.addEventListener("touchend",(e) => {
+    let obj = e.changedTouches[0];
+    mouse_up(obj.pageX,obj.pageY - DIV_CANVAS.offsetTop);
 });
 // config_time 全時間表示 yn
 CONFIG_TIME.addEventListener("click",() => cScene.time_change(con_dispTime));
@@ -110,20 +156,6 @@ CONFIG_TIME.addEventListener("click",() => cScene.time_change(con_dispTime));
 CONFIG_LINE.addEventListener("click",() => cScene.line_change(con_dispLine));
 // config_time info表示 yn
 CONFIG_INFO.addEventListener("click",() => cScene.info_change(con_dispInfo));
-// config_upd 更新
-document.getElementById("config_upd").addEventListener("click",() => {
-    let long = ("0000" + Number(CONFIG_LONG.value)).slice(-4);
-    let timerG = ("0000" + Number(CONFIG_TIMERG.value)).slice(-4);
-    let timerL = ("0000" + Number(CONFIG_TIMERL.value)).slice(-4);
-    let time = (CONFIG_TIME.innerHTML == "-") ? "n" : "y";
-    let line = (CONFIG_LINE.innerHTML == "-") ? "n" : "y";
-    let info = (CONFIG_INFO.innerHTML == "-") ? "n" : "y";
-    let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
-    CONFIG_LONG.value = long;
-    CONFIG_TIMERG.value = timerG;
-    CONFIG_TIMERL.value = timerL;
-    localStorage.setItem(MAP_CTRL,str);
-});
 // fset_ins flag追加
 FSET_INS.addEventListener("click",() => {
     // 追加no検索
@@ -171,31 +203,6 @@ GEN_OK.addEventListener("click",() => {
 });
 // gen_ng 現在地の変更 NG
 GEN_NG.addEventListener("click",() => cScene.reset("ctrl","flag","gen","gps"));
-// gps_ok GPSの値に変更 OK
-document.getElementById("gps_ok").addEventListener("click",() => {
-    // 調整セット
-    cGen.adjust(true,true,0,0);
-    // 再表示
-    cScene.reset("ctrl","flag","gen","gps");
-    if (MAIN_REC.value == "") cScene.rec_set_n();
-});
-// gps_get GPS再取得
-document.getElementById("gps_get").addEventListener("click",() => {
-    navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
-});
-// gps_rec GPSの値に変更 OK+地図表示+🔴
-document.getElementById("gps_rec").addEventListener("click",() => {
-    // 調整セット
-    cGen.adjust(true,true,0,0);
-    // 再表示
-    cScene.reset("ctrl","flag","gen","gps");
-    // 記録状態 y
-    cScene.rec_set_y();
-    let timerG = Number(con_timerG);
-    if (timerG < 1) timerG = 1;
-    // 現在地取得 開始
-    con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
-});
 // to start
 MAIN_S.addEventListener("click",() => cScene.set("start"));
 // to data
@@ -456,6 +463,77 @@ MAIN_SEL_M.addEventListener("change",() => {
             break;
     }
 });
+// act_ins 追加
+document.getElementById("act_ins").addEventListener("click",() => {
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
+    let rtn = confirm(`追加 キー:${key},内容:${val}`);
+    if (rtn) localStorage.setItem(key,val);
+    // 更新後再表示
+    tbo_redisp();
+});
+// act_upd 修正
+document.getElementById("act_upd").addEventListener("click",() => {
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
+    let rtn = confirm(`修正 キー:${key},内容:${val}`);
+    if (rtn) {
+        localStorage.removeItem(key_save);
+        localStorage.setItem(key,val);
+    }
+    // 更新後再表示
+    tbo_redisp();
+});
+// act_del 削除
+document.getElementById("act_del").addEventListener("click",() => {
+    let key = ACT_KEY.value;
+    let val = ACT_VALUE.value;
+    let rtn = confirm(`削除 キー:${key},内容:${val}`);
+    if (rtn) {localStorage.removeItem(key)}
+    // 更新後再表示
+    tbo_redisp();
+});
+// config_upd 更新
+document.getElementById("config_upd").addEventListener("click",() => {
+    let long = ("0000" + Number(CONFIG_LONG.value)).slice(-4);
+    let timerG = ("0000" + Number(CONFIG_TIMERG.value)).slice(-4);
+    let timerL = ("0000" + Number(CONFIG_TIMERL.value)).slice(-4);
+    let time = (CONFIG_TIME.innerHTML == "-") ? "n" : "y";
+    let line = (CONFIG_LINE.innerHTML == "-") ? "n" : "y";
+    let info = (CONFIG_INFO.innerHTML == "-") ? "n" : "y";
+    let str = `${long} ${timerG} ${timerL} ${time}${line}${info}`;
+    CONFIG_LONG.value = long;
+    CONFIG_TIMERG.value = timerG;
+    CONFIG_TIMERL.value = timerL;
+    localStorage.setItem(MAP_CTRL,str);
+});
+// gps_ok GPSの値に変更 OK
+document.getElementById("gps_ok").addEventListener("click",() => {
+    // 調整セット
+    cGen.adjust(true,true,0,0);
+    // 再表示
+    cScene.reset("ctrl","flag","gen","gps");
+    if (MAIN_REC.value == "") cScene.rec_set_n();
+});
+// gps_get GPS再取得
+document.getElementById("gps_get").addEventListener("click",() => {
+    navigator.geolocation.getCurrentPosition(gen_ok_m,gen_err,gen_opt);
+});
+// gps_log_d log削除
+document.getElementById("gps_log_d").addEventListener("click",() => tbo_iii_log_del());
+// gps_rec GPSの値に変更 OK+地図表示+🔴
+document.getElementById("gps_rec").addEventListener("click",() => {
+    // 調整セット
+    cGen.adjust(true,true,0,0);
+    // 再表示
+    cScene.reset("ctrl","flag","gen","gps");
+    // 記録状態 y
+    cScene.rec_set_y();
+    let timerG = Number(con_timerG);
+    if (timerG < 1) timerG = 1;
+    // 現在地取得 開始
+    con_timerId = setInterval(gen_get,timerG * 1000); // 秒→ミリ秒
+});
 // iii_00 移動
 document.getElementById("iii_00").addEventListener('click',() => {
     cScene.set("地図表示");
@@ -481,82 +559,6 @@ document.getElementById("iii_log_d").addEventListener("click",() => tbo_iii_log_
 document.getElementById("iii_rec").addEventListener("click",() => rec_yn());
 // iii_x 消去
 document.getElementById("iii_x").addEventListener("click",() => cScene.reset('iii'));
-// canvas click
-CANVAS_LOG.addEventListener("click",(e) => {
-    // mouse click 位置
-    mouseUpX = e.offsetX;
-    mouseUpY = e.offsetY;
-    switch (MAIN_SEL_M.value) {
-        // Flag設定
-        case "flagSet":
-            // flag配列チェック
-            flagApos = -1;
-            for (let i = 0; i < flagA.length; i++) {
-                let x = Math.abs(mouseUpX - flagA[i].px);
-                let y = Math.abs(mouseUpY - flagA[i].py);
-                if (x < 10 && y < 10) flagApos = i;
-            }
-            // Flag設定
-            if (flagApos == -1) {
-                con_arc(CON_FLAG,mouseUpX,mouseUpY,5,"green");
-                DIV_FSET.style.left = mouseUpX - 60 + "px";
-                DIV_FSET.style.top  = mouseUpY + 50 + "px";
-                DIV_FSET.style.display = "block";    
-                FSET_TEXT.value = `${mouseUpX} ${mouseUpY} seg Memo`;
-                FSET_INS.style.display = "inline";
-                FSET_UPD.style.display = "none";
-                FSET_DEL.style.display = "none";
-            } else {
-                DIV_FSET.style.left = mouseUpX - 60 + "px";
-                DIV_FSET.style.top  = mouseUpY + 50 + "px";
-                DIV_FSET.style.display = "block";
-                FSET_TEXT.value = flagA[flagApos].value;
-                FSET_INS.style.display = "inline";
-                FSET_UPD.style.display = "inline";
-                FSET_DEL.style.display = "inline";
-            }
-            break;
-        // 位置計測
-        case "genGet":
-            // 位置計測、表示
-            let long = cConv.px_long(mouseUpX);
-            let lat = cConv.py_lat(mouseUpY);
-            let str = `位置 X=${mouseUpX},Y=${mouseUpY},経度=${long},緯度=${lat}`;
-            if (mouseUpX < CANVAS_MAIN.width - 400) {
-                con_box(CON_FLAG,mouseUpX,mouseUpY,400,40,"green",str);
-            } else {
-                con_box(CON_FLAG,mouseUpX - 400,mouseUpY,400,40,"green",str);
-            }
-            con_arc(CON_FLAG,mouseUpX,mouseUpY,1,"black"); 
-            break;
-    }
-});
-// マウスdown
-CANVAS_LOG.addEventListener('mousedown',(e) => {
-    mouseDownDate = new Date();
-    // 右クリック
-    if (e.button == 2) {
-        cScene.iii(e.offsetX,e.offsetY + 100);
-    }
-});
-// マウスup
-CANVAS_LOG.addEventListener('mouseup',(e) => mouse_up(e.offsetX,e.offsetY));
-// タッチstart
-CANVAS_LOG.addEventListener("touchstart",(e) => { 
-    // 3本指はiii表示
-    if (e.targetTouches.length == 3) {
-        let obj = e.changedTouches[0];
-        let x = Math.round(obj.pageX);
-        let y = Math.round(obj.pageY);
-        cScene.iii(x,y - DIV_CANVAS.offsetTop);
-    }
-    mouseDownDate = new Date();
-});
-// タッチend
-CANVAS_LOG.addEventListener("touchend",(e) => {
-    let obj = e.changedTouches[0];
-    mouse_up(obj.pageX,obj.pageY - DIV_CANVAS.offsetTop);
-});
 // 地図読込完了
 cImage.onload = () => {
     MAIN_SEL_M.value = "genSet";
@@ -1025,7 +1027,7 @@ function tbo_summ_log_del(k) {
     tbo_summ_disp();
 }
 // log 削除 (iii)
-function tbo_iii_log_del(k) {
+function tbo_iii_log_del() {
     if (!confirm(`${cHead.key} log 削除 OK`)) return;
     let key = cHead.key.slice(0,11).replace(MAP_HEAD,MAP_LOG);
     logA = [];
