@@ -79,17 +79,17 @@ select {
     border-style: none;
     height: 25px;
 }
-.button_r84 {
+.button_r87 {
     background:#f6d9f0;
     color:red;
     height: 27px;
-    width: 84px;
+    width: 87px;
 }
-.button_r120 {
+.button_r174 {
     background:#f6d9f0;
     color:red;
     height: 27px;
-    width: 120px;
+    width: 174px;
 }
 .button_a:hover, .button_a30:hover, .button_a60:hover {
     background:#70ffff;
